@@ -1,0 +1,84 @@
+ 
+
+DECLARACION => Var LDECLARACION
+            | const identificador = EXPLOGICA ;
+
+LDECLARACION => identificador  ASIGNACION 
+
+LDECLARACIONP => LDECLARACION
+                |epsilon
+
+
+ 
+MULTIDECLARACION => , identificador MULTIDECLARACIONP
+
+MULTIDECLARACIONP => MULTIDECLARACION
+                    | epsilon
+
+TIPO => String
+        |integer
+        |Real
+        |Boolean
+        |Void
+        |identificador
+
+TYPE => Type  identificador = TYPEP 
+
+TYPEP => OBJECT
+        | ARRAY
+
+OBJECT => object DECLARACION end ;
+
+ARRAY => array [ E . . E ] of TIPO ;  
+
+ASIGNACION =>  : TIPOP ; LDECLARACIONP
+            | MULTIDECLARACION : TIPO ; LDECLARACIONP
+
+TIPOP => = EXPLOGICA
+        | TIPO ASIGNACIONP
+
+ASIGNACIONP => = EXPLOGICA 
+            | epsilon
+
+EXPLOGICA => EXPREL EXPLOGICAP
+
+EXPLOGICAP => and EXREL EXPLOGICAP
+            | or EXREL EXPLOGICAP
+            | not EXREL EXPLOGICAP
+            | epsilon
+
+EXREL => E EXRELP
+
+EXRELP => > C
+        | < DIF
+        | = E EXRELP 
+        | epsilon
+
+C => E EXRELP
+    | = E EXRELP
+
+DIF => > E EXRELP
+    | C
+
+E => T EP
+
+EP => + T EP
+    | - T EP
+
+T => F TP
+
+TP => * F TP 
+    | / F TP 
+    | % F TP
+    | epsilon
+
+
+F => ( EXPLOGICA )
+    | real
+    | entero
+    | cadena
+    | identificador
+    | false
+    | true
+    | -
+

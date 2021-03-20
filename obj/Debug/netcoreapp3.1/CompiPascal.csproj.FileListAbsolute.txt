@@ -1,0 +1,17 @@
+C:\Users\Luis Fernando\source\repos\CompiPascal\bin\Debug\netcoreapp3.1\CompiPascal.exe
+C:\Users\Luis Fernando\source\repos\CompiPascal\bin\Debug\netcoreapp3.1\CompiPascal.deps.json
+C:\Users\Luis Fernando\source\repos\CompiPascal\bin\Debug\netcoreapp3.1\CompiPascal.runtimeconfig.json
+C:\Users\Luis Fernando\source\repos\CompiPascal\bin\Debug\netcoreapp3.1\CompiPascal.runtimeconfig.dev.json
+C:\Users\Luis Fernando\source\repos\CompiPascal\bin\Debug\netcoreapp3.1\CompiPascal.dll
+C:\Users\Luis Fernando\source\repos\CompiPascal\bin\Debug\netcoreapp3.1\CompiPascal.pdb
+C:\Users\Luis Fernando\source\repos\CompiPascal\bin\Debug\netcoreapp3.1\Irony.dll
+C:\Users\Luis Fernando\source\repos\CompiPascal\obj\Debug\netcoreapp3.1\CompiPascal.csprojAssemblyReference.cache
+C:\Users\Luis Fernando\source\repos\CompiPascal\obj\Debug\netcoreapp3.1\CompiPascal.Form1.resources
+C:\Users\Luis Fernando\source\repos\CompiPascal\obj\Debug\netcoreapp3.1\CompiPascal.csproj.GenerateResource.cache
+C:\Users\Luis Fernando\source\repos\CompiPascal\obj\Debug\netcoreapp3.1\CompiPascal.AssemblyInfoInputs.cache
+C:\Users\Luis Fernando\source\repos\CompiPascal\obj\Debug\netcoreapp3.1\CompiPascal.AssemblyInfo.cs
+C:\Users\Luis Fernando\source\repos\CompiPascal\obj\Debug\netcoreapp3.1\CompiPascal.csproj.CoreCompileInputs.cache
+C:\Users\Luis Fernando\source\repos\CompiPascal\obj\Debug\netcoreapp3.1\CompiPascal.csproj.CopyComplete
+C:\Users\Luis Fernando\source\repos\CompiPascal\obj\Debug\netcoreapp3.1\CompiPascal.dll
+C:\Users\Luis Fernando\source\repos\CompiPascal\obj\Debug\netcoreapp3.1\CompiPascal.pdb
+C:\Users\Luis Fernando\source\repos\CompiPascal\obj\Debug\netcoreapp3.1\CompiPascal.genruntimeconfig.cache

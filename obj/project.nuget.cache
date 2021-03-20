@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "dgSpecHash": "inZxb+hGfNZjkIp2k2EjsTkXVgJjALt7tVddTEgH+cqu0X5UK8HifxhtSdhW1hHUKE124RIueUYCp2+nJnNGZQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\juan_\\Documents\\USAC\\4.Cuarto Año\\1. SEPTIMO SEMESTRE\\COMPILADORES 2\\Lab\\-OLC2-CompiPascalC3D\\CompiPascalC3D.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\juan_\\.nuget\\packages\\materialskin\\0.2.1\\materialskin.0.2.1.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'MaterialSkin 0.2.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
+      "libraryId": "MaterialSkin",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    }
+  ]
+}
