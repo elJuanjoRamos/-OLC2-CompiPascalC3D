@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MaterialSkin" Version="0.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Irony">
       <HintPath>..\..\..\..\..\compiladores2\Irony.dll</HintPath>
     </Reference>

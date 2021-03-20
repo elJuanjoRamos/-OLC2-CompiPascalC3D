@@ -1,0 +1,55 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "CompiPascalC3D/1.0.0": {
+        "dependencies": {
+          "MaterialSkin": "0.2.1",
+          "Irony": "1.1.0.0"
+        },
+        "runtime": {
+          "CompiPascalC3D.dll": {}
+        }
+      },
+      "MaterialSkin/0.2.1": {
+        "runtime": {
+          "lib/MaterialSkin.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Irony/1.1.0.0": {
+        "runtime": {
+          "Irony.dll": {
+            "assemblyVersion": "1.1.0.0",
+            "fileVersion": "1.1.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "CompiPascalC3D/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MaterialSkin/0.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/6AEh6qIeNKbxsha7IHBb5s50tyvB0iZuGQPB9mjyR+mRdfQ7vnKTklwI26Y/DbrymTcg+aBHSgCgAT7/qLIrQ==",
+      "path": "materialskin/0.2.1",
+      "hashPath": "materialskin.0.2.1.nupkg.sha512"
+    },
+    "Irony/1.1.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
