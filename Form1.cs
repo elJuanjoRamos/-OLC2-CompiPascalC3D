@@ -1,4 +1,5 @@
-﻿using MaterialSkin.Controls;
+﻿using CompiPascalC3D.Analizer.Syntactic;
+using MaterialSkin.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -36,6 +37,12 @@ namespace CompiPascal
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void compilar_Click(object sender, EventArgs e)
+        {
+            Syntactic s = new Syntactic();
+            s.analizer(areaanalizar.Text, "");
         }
     }
 }
