@@ -321,11 +321,12 @@ namespace CompiPascalC3D.Analizer.Grammar
             VAR_ASSIGNATE.Rule = IDENTIFIER + DOS_PUNTOS + EQUALS + EXPRESION + PUNTO_COMA;
 
 
-            DATA_TYPE.Rule = RESERV_REAL
+            DATA_TYPE.Rule 
+                = RESERV_REAL
                 | RESERV_STR
-                | RESERV_TYPE
                 | RESERV_INT
                 | RESERV_BOL
+                | IDENTIFIER_ARRAY_TYPE
                 | IDENTIFIER
                 ;
 
