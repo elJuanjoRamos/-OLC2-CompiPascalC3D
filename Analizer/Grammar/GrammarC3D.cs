@@ -7,8 +7,9 @@ namespace CompiPascalC3D.Analizer.Grammar
 {
     class GrammarC3D : Irony.Parsing.Grammar
     {
+
         public GrammarC3D()
-         : base(caseSensitive: false)
+            : base(caseSensitive: false)
         {
             #region Lexical structure
 
@@ -30,10 +31,13 @@ namespace CompiPascalC3D.Analizer.Grammar
             #region ER
             var REAL = new RegexBasedTerminal("REAL", "[0-9]+[.][0-9]+");
             var NUMERO = new NumberLiteral("NUMERO");
+            //var IDENTIFIER = new IdentifierTerminal("IDENTIFIER", "[_a-zA-Z][_a-zA-Z0-9]");
             var IDENTIFIER = TerminalFactory.CreateCSharpIdentifier("IDENTIFIER");
             var IDENTIFIER_ARRAY_TYPE = TerminalFactory.CreateCSharpIdentifier("IDENTIFIER_ARRAY_TYPE");
             var CADENA = new StringLiteral("CADENA", "\'");
             #endregion
+
+
 
             #region Terminales
             var PUNTO_COMA = ToTerm(";", "TK_PUNTO_COMA");
@@ -67,7 +71,6 @@ namespace CompiPascalC3D.Analizer.Grammar
             var RESERV_STR = ToTerm("string", "RESERV_STR");
             var RESERV_REAL = ToTerm("real", "RESERV_REAL");
             var RESERV_BOL = ToTerm("boolean", "RESERV_BOL");
-            var RESERV_TYPE = ToTerm("type", "RESERV_TYPE");
             var RESERV_OBJ = ToTerm("object", "RESERV_OBJ");
             var RESERV_PROGRAM = ToTerm("program", "RESERV_PROGRAM");
             var RESERV_VAR = ToTerm("var", "RESERV_VAR");
@@ -76,8 +79,17 @@ namespace CompiPascalC3D.Analizer.Grammar
             var RESERV_CONST = ToTerm("const", "RESERV_CONST");
             var RESERV_TRUE = ToTerm("true", "RESERV_TRUE");
             var RESERV_FALSE = ToTerm("false", "RESERV_FALSE");
+
+            #region ARRAYS Y TYPES TERMINALES
+            var RESERV_TYPE = ToTerm("type", "RESERV_TYPE");
             var RESERV_ARRAY = ToTerm("array", "RESERV_ARRAY");
             var RESERV_OF = ToTerm("of", "RESERV_OF");
+
+
+
+            #endregion
+
+
 
             #region IF TERMINALES
             var RESERV_IF = ToTerm("if", "RESERV_IF");
@@ -119,9 +131,9 @@ namespace CompiPascalC3D.Analizer.Grammar
             var RESERV_WRITE = ToTerm("write", "RESERV_WRITE");
             var RESERV_WRITEN = ToTerm("writeln", "RESERV_WRITEN");
             var RESERV_EXIT = ToTerm("exit", "RESERV_EXIT");
-            var RESERV_GRAF = ToTerm("graficar_ts", "RESERV_GRAFICAR");
 
             #endregion
+
 
 
             RegisterOperators(1, Associativity.Left, PLUS, MIN);
@@ -140,7 +152,6 @@ namespace CompiPascalC3D.Analizer.Grammar
             NonTerminal INSTRUCTIONS = new NonTerminal("INSTRUCTIONS");
             NonTerminal INSTRUCTIONS_BODY = new NonTerminal("INSTRUCTIONS_BODY");
             NonTerminal PROGRAM_BODY = new NonTerminal("PROGRAM_BODY", "PROGRAM_BODY");
-
             NonTerminal start = new NonTerminal("start");
 
             #region EXPLOGICA
@@ -164,17 +175,16 @@ namespace CompiPascalC3D.Analizer.Grammar
             NonTerminal VAR_DECLARATION = new NonTerminal("VAR_DECLARATION", "VAR_DECLARATION");
             NonTerminal CONST_DECLARATION = new NonTerminal("CONST_DECLARATION", "CONST_DECLARATION");
 
-            NonTerminal DECLARATION = new NonTerminal("DECLARATION", "DECLARATION");
             NonTerminal DECLARATION_BODY = new NonTerminal("DECLARATION_BODY", "DECLARATION_BODY");
             NonTerminal MORE_ID = new NonTerminal("MORE_ID", "MORE_ID");
 
             NonTerminal ASSIGNATION = new NonTerminal("ASSIGNATION", "ASSIGNATION");
             NonTerminal VAR_ASSIGNATE = new NonTerminal("VAR_ASSIGNATE", "VAR_ASSIGNATE");
-
+            NonTerminal VAR_ASSIGNATE_EXP = new NonTerminal("VAR_ASSIGNATE_EXP", "VAR_ASSIGNATE_EXP");
 
             #endregion
 
-            #region TYPES Y ARREGLOS
+            #region ARRAY Y TYPES NO TERMINALES
             NonTerminal TYPE_LIST = new NonTerminal("TYPE_LIST", "TYPE_LIST");
             NonTerminal TYPE = new NonTerminal("TYPE", "TYPE");
             NonTerminal TYPE_P = new NonTerminal("TYPE_P", "TYPE_P");
@@ -182,12 +192,14 @@ namespace CompiPascalC3D.Analizer.Grammar
             NonTerminal OBJECT = new NonTerminal("OBJECT", "OBJECT");
             NonTerminal MORE_ARRAY = new NonTerminal("MORE_ARRAY", "MORE_ARRAY");
             NonTerminal MORE_ACCES = new NonTerminal("MORE_ACCES", "MORE_ACCES");
+
             #endregion
 
             #region IF-THEN NO TERMINALES
             NonTerminal IFTHEN = new NonTerminal("IF-THEN", "IF-THEN");
             NonTerminal IF_SENTENCE = new NonTerminal("IF_SENTENCE", "IF_SENTENCE");
             NonTerminal ELIF = new NonTerminal("ELIF", "ELIF");
+
             #endregion
 
             #region CASE NO TERMINALES
@@ -221,7 +233,7 @@ namespace CompiPascalC3D.Analizer.Grammar
             NonTerminal WRHITE_PARAMETER = new NonTerminal("WRHITE_PARAMETER", "WRHITE_PARAMETER");
             NonTerminal MORE_WRHITE_PARAMETER = new NonTerminal("WRHITE_PARAMETER", "WRHITE_PARAMETER");
             NonTerminal EXIT = new NonTerminal("EXIT", "EXIT");
-
+            NonTerminal EXIT_EXP = new NonTerminal("EXIT_EXP", "EXIT_EXP");
             #endregion
 
             #region FUNCIONS NO TERMINALES
@@ -236,12 +248,10 @@ namespace CompiPascalC3D.Analizer.Grammar
             NonTerminal CALL_PARAMETERS = new NonTerminal("CALL_PARAMETERS", "CALL_PARAMETERS");
             NonTerminal FUNCION_HIJA = new NonTerminal("FUNCION_HIJA", "FUNCION_HIJA");
             NonTerminal DECLARATION_LIST_HIJA = new NonTerminal("DECLARATION_LIST", "DECLARATION_LIST");
-
             //NonTerminal ARGUMENTS = new NonTerminal("ARGUMENTS", "ARGUMENTS");
             //NonTerminal REFERENCIA_VALOR = new NonTerminal("REFERENCIA_VALOR", "REFERENCIA_VALOR");
             #endregion
 
-            
             #endregion
 
             #region Gramatica
@@ -274,6 +284,7 @@ namespace CompiPascalC3D.Analizer.Grammar
                 | WRITE
                 | CALL
                 | EXIT
+                | TYPE
                 ;
 
             INSTRUCTION.ErrorRule
@@ -286,7 +297,7 @@ namespace CompiPascalC3D.Analizer.Grammar
 
             DECLARATION_LIST.Rule
                = RESERV_VAR + IDENTIFIER + DECLARATION_BODY + VAR_DECLARATION + DECLARATION_LIST
-               | RESERV_CONST + IDENTIFIER + EQUALS + EXPRESION + PUNTO_COMA + CONST_DECLARATION + DECLARATION_LIST
+               | RESERV_CONST + IDENTIFIER + EQUALS + EXPLOGICA + PUNTO_COMA + CONST_DECLARATION + DECLARATION_LIST
                | Empty
                ;
 
@@ -298,7 +309,7 @@ namespace CompiPascalC3D.Analizer.Grammar
                 | Empty
                 ;
 
-            CONST_DECLARATION.Rule = IDENTIFIER + EQUALS + EXPRESION + PUNTO_COMA + CONST_DECLARATION
+            CONST_DECLARATION.Rule = IDENTIFIER + EQUALS + EXPLOGICA + PUNTO_COMA + CONST_DECLARATION
                 | Empty
                 ;
 
@@ -308,7 +319,7 @@ namespace CompiPascalC3D.Analizer.Grammar
                 ;
 
             ASSIGNATION.Rule
-                = EQUALS + EXPRESION
+                = EQUALS + EXPLOGICA
                 | Empty;
             ;
 
@@ -318,19 +329,30 @@ namespace CompiPascalC3D.Analizer.Grammar
 
 
 
-            VAR_ASSIGNATE.Rule = IDENTIFIER + DOS_PUNTOS + EQUALS + EXPRESION + PUNTO_COMA;
+            VAR_ASSIGNATE.Rule
+                = IDENTIFIER + VAR_ASSIGNATE_EXP
+                ;
+            VAR_ASSIGNATE_EXP.Rule
+                = DOS_PUNTOS + EQUALS + EXPLOGICA + PUNTO_COMA
+                | COR_IZQ + EXPLOGICA + COR_DER + MORE_ACCES + DOS_PUNTOS + EQUALS + EXPLOGICA + PUNTO_COMA
+                ;
 
-
-            DATA_TYPE.Rule 
+            MORE_ACCES.Rule
+                = COR_IZQ + EXPLOGICA + COR_DER + MORE_ACCES
+                | Empty
+                ;
+            DATA_TYPE.Rule
                 = RESERV_REAL
                 | RESERV_STR
+                | IDENTIFIER_ARRAY_TYPE
                 | RESERV_INT
                 | RESERV_BOL
-                | IDENTIFIER_ARRAY_TYPE
                 | IDENTIFIER
                 ;
 
             #endregion
+
+
 
 
 
@@ -350,201 +372,18 @@ namespace CompiPascalC3D.Analizer.Grammar
 
 
             ARRAY.Rule = RESERV_ARRAY
-                + COR_IZQ + EXPLOGICA + PUNTO + PUNTO + EXPLOGICA + MORE_ARRAY + COR_DER + RESERV_OF + DATA_TYPE + PUNTO_COMA;
-            
+                + COR_IZQ + EXPLOGICA + PUNTO + PUNTO + EXPLOGICA + COR_DER + RESERV_OF + MORE_ARRAY + PUNTO_COMA;
+            ;
+
             MORE_ARRAY.Rule
-                = COMA +  EXPLOGICA + PUNTO + PUNTO + EXPLOGICA + MORE_ARRAY
-                | Empty;
-            
+                = DATA_TYPE
+                | RESERV_ARRAY + COR_IZQ + EXPLOGICA + PUNTO + PUNTO + EXPLOGICA + COR_DER + RESERV_OF + MORE_ARRAY;
+            ;
 
             OBJECT.Rule =
                 RESERV_OBJ + DECLARATION_LIST + RESERV_END + PUNTO_COMA;
 
             #endregion
-
-
-
-
-
-
-            #endregion
-
-            #region SENTENCIAS DE CONTROL
-
-            #region IF-THEN
-            IFTHEN.Rule
-                = RESERV_IF + EXPRESION
-                    + RESERV_THEN
-                        + IF_SENTENCE
-                    + ELIF;
-
-            IF_SENTENCE.Rule = INSTRUCTIONS_BODY
-                | Empty
-                ;
-
-            ELIF.Rule
-                = RESERV_ELSE + IF_SENTENCE + PUNTO_COMA
-                | RESERV_ELSE + IFTHEN
-                | Empty
-                ;
-
-
-            #endregion
-
-            #region CASE
-            SENTENCE_CASE.Rule = RESERV_CASE + EXPRESION + RESERV_OF + CASES + CASE_ELSE + RESERV_END + PUNTO_COMA;
-
-            CASES.Rule
-                = CASE + CASES
-                | Empty
-                ;
-            CASE.Rule = EXPRESION + DOS_PUNTOS + INSTRUCTIONS;
-
-
-            CASE_ELSE.Rule = RESERV_ELSE + INSTRUCTIONS
-                | Empty
-                ;
-            #endregion
-
-            #region WHILE DO
-            WHILE.Rule = RESERV_WHILE + EXPRESION + RESERV_DO + INSTRUCTIONS_BODY + PUNTO_COMA;
-            #endregion
-
-            #region REPEAT UNTIL
-            REPEAT_UNTIL.Rule = RESERV_REPEAT + INSTRUCTIONS + RESERV_UNTIL + EXPRESION + PUNTO_COMA;
-            #endregion
-
-            #region FOR
-            FOR.Rule
-                = RESERV_FOR + IDENTIFIER + DOS_PUNTOS + EQUALS + EXPRESION + TODOWN + EXPRESION
-                    + RESERV_DO
-                        + INSTRUCTIONS_BODY + PUNTO_COMA
-                ;
-
-            TODOWN.Rule
-                = RESERV_TO
-                | RESERV_DOWN
-                ;
-            #endregion
-
-            #endregion
-
-            #region SENTENCIAS DE TRANSFERENCIA
-            CONTINUE.Rule
-               = RESERV_CONTINUE + PUNTO_COMA
-               ;
-
-            BREAK.Rule
-               = RESERV_BREAK + PUNTO_COMA
-               ;
-
-
-            #endregion
-
-            #region FUNCIONES Y PROCEDIMIENTOS
-
-
-
-            FUNCTION_LIST.Rule
-                = RESERV_FUNCTION + IDENTIFIER + PAR_IZQ + PARAMETER + PAR_DER + DOS_PUNTOS + DATA_TYPE + PUNTO_COMA
-                + DECLARATION_LIST_HIJA
-                + FUNCION_HIJA
-                + INSTRUCTIONS_BODY
-                + PUNTO_COMA
-                + FUNCTION_LIST
-
-                | RESERV_PROCEDURE + IDENTIFIER + PAR_IZQ + PARAMETER + PAR_DER + PUNTO_COMA
-                + DECLARATION_LIST_HIJA
-                + FUNCION_HIJA
-                + INSTRUCTIONS_BODY
-                + PUNTO_COMA
-                + FUNCTION_LIST
-                | Empty
-                ;
-            FUNCTION_LIST.ErrorRule
-                = SyntaxError + PUNTO_COMA;
-
-            PARAMETER.Rule
-                = RESERV_VAR + IDENTIFIER + PARAMETER_BODY + DOS_PUNTOS + DATA_TYPE + PARAMETER_END
-                | IDENTIFIER + PARAMETER_BODY + DOS_PUNTOS + DATA_TYPE + PARAMETER_END
-                | Empty;
-
-            PARAMETER_BODY.Rule
-                = COMA + IDENTIFIER + PARAMETER_BODY
-                | Empty
-                ;
-            PARAMETER_END.Rule = PUNTO_COMA + PARAMETER
-                | Empty
-                ;
-
-
-            CALL.Rule = IDENTIFIER + PAR_IZQ + CALL_PARAMETERS + PAR_DER + PUNTO_COMA;
-
-            CALL_PARAMETERS.Rule
-                = EXPRESION + CALL_PARAMETERS
-                | COMA + EXPRESION + CALL_PARAMETERS
-                | Empty
-                ;
-
-            CALL_FUNCTION_PROCEDURE.Rule = IDENTIFIER + PAR_IZQ + CALL_PARAMETERS + PAR_DER;
-
-
-
-            FUNCTION.Rule =
-                RESERV_FUNCTION + IDENTIFIER + PAR_IZQ + PARAMETER + PAR_DER + DOS_PUNTOS + DATA_TYPE + PUNTO_COMA
-                + INSTRUCTIONS_BODY
-                + PUNTO_COMA
-                ;
-
-            PROCEDURE.Rule =
-                RESERV_PROCEDURE + IDENTIFIER + PAR_IZQ + PARAMETER + PAR_DER + PUNTO_COMA
-                + INSTRUCTIONS_BODY
-                + PUNTO_COMA
-                ;
-
-            FUNCION_HIJA.Rule
-                = RESERV_FUNCTION + IDENTIFIER + PAR_IZQ + PARAMETER + PAR_DER + DOS_PUNTOS + DATA_TYPE + PUNTO_COMA
-                + DECLARATION_LIST_HIJA
-                + FUNCION_HIJA
-                + INSTRUCTIONS_BODY
-                + PUNTO_COMA
-                + FUNCION_HIJA
-
-                | RESERV_PROCEDURE + IDENTIFIER + PAR_IZQ + PARAMETER + PAR_DER + PUNTO_COMA
-                + DECLARATION_LIST_HIJA
-                + FUNCION_HIJA
-                + INSTRUCTIONS_BODY
-                + PUNTO_COMA
-                + FUNCION_HIJA
-                | Empty
-                ;
-
-            DECLARATION_LIST_HIJA.Rule
-               = RESERV_VAR + IDENTIFIER + DECLARATION_BODY + VAR_DECLARATION + DECLARATION_LIST_HIJA
-               | RESERV_CONST + IDENTIFIER + EQUALS + EXPRESION + PUNTO_COMA + CONST_DECLARATION + DECLARATION_LIST_HIJA
-               | Empty
-               ;
-            #endregion
-
-            #region FUNCIONES NATIVAS
-
-            WRITE.Rule = RESERV_WRITE + PAR_IZQ + WRHITE_PARAMETER + PAR_DER + PUNTO_COMA
-                | RESERV_WRITEN + PAR_IZQ + WRHITE_PARAMETER + PAR_DER + PUNTO_COMA
-                ;
-
-            WRHITE_PARAMETER.Rule
-                = EXPRESION + MORE_WRHITE_PARAMETER
-                | Empty
-                ;
-            MORE_WRHITE_PARAMETER.Rule
-                = COMA + EXPRESION + MORE_WRHITE_PARAMETER
-                | Empty
-                ;
-
-            EXIT.Rule = RESERV_EXIT + PAR_IZQ + EXPRESION + PAR_DER + PUNTO_COMA;
-
-            #endregion
-
 
             #region EXPRESION
 
@@ -605,7 +444,7 @@ namespace CompiPascalC3D.Analizer.Grammar
                 ;
 
             ID_TIPE.Rule
-                = COR_IZQ + EXPLOGICA + COR_DER
+                = COR_IZQ + EXPLOGICA + COR_DER + MORE_ACCES
                 | Empty;
 
             /*EXPRESION.Rule
@@ -635,10 +474,195 @@ namespace CompiPascalC3D.Analizer.Grammar
             #endregion
 
 
+
+
+
+
+
+            #endregion
+
+            #region SENTENCIAS DE CONTROL
+
+            #region IF-THEN
+            IFTHEN.Rule
+                = RESERV_IF + EXPLOGICA
+                    + RESERV_THEN
+                        + IF_SENTENCE
+                    + ELIF;
+
+            IF_SENTENCE.Rule = INSTRUCTIONS_BODY
+                | Empty
+                ;
+
+            ELIF.Rule
+                = RESERV_ELSE + IF_SENTENCE + PUNTO_COMA
+                | RESERV_ELSE + IFTHEN
+                | Empty
+                ;
+
+
+            #endregion
+
+            #region CASE
+            SENTENCE_CASE.Rule = RESERV_CASE + EXPLOGICA + RESERV_OF + CASES + CASE_ELSE + RESERV_END + PUNTO_COMA;
+
+            CASES.Rule
+                = CASE + CASES
+                | Empty
+                ;
+            CASE.Rule = EXPLOGICA + DOS_PUNTOS + INSTRUCTIONS;
+
+
+            CASE_ELSE.Rule = RESERV_ELSE + INSTRUCTIONS
+                | Empty
+                ;
+            #endregion
+
+            #region WHILE DO
+            WHILE.Rule = RESERV_WHILE + EXPLOGICA + RESERV_DO + INSTRUCTIONS_BODY + PUNTO_COMA;
+            #endregion
+
+            #region REPEAT UNTIL
+            REPEAT_UNTIL.Rule = RESERV_REPEAT + INSTRUCTIONS + RESERV_UNTIL + EXPLOGICA + PUNTO_COMA;
+            #endregion
+
+            #region FOR
+            FOR.Rule
+                = RESERV_FOR + IDENTIFIER + DOS_PUNTOS + EQUALS + EXPLOGICA + TODOWN + EXPLOGICA
+                    + RESERV_DO
+                        + INSTRUCTIONS_BODY + PUNTO_COMA
+                ;
+
+            TODOWN.Rule
+                = RESERV_TO
+                | RESERV_DOWN
+                ;
+            #endregion
+
+            #endregion
+
+            #region SENTENCIAS DE TRANSFERENCIA
+            CONTINUE.Rule
+               = RESERV_CONTINUE + PUNTO_COMA
+               ;
+
+            BREAK.Rule
+               = RESERV_BREAK + PUNTO_COMA
+               ;
+
+
+            #endregion
+
+            #region FUNCIONES Y PROCEDIMIENTOS
+            FUNCTION_LIST.Rule
+               = RESERV_FUNCTION + IDENTIFIER + PAR_IZQ + PARAMETER + PAR_DER + DOS_PUNTOS + DATA_TYPE + PUNTO_COMA
+               + DECLARATION_LIST_HIJA
+               + FUNCION_HIJA
+               + INSTRUCTIONS_BODY
+               + PUNTO_COMA
+               + FUNCTION_LIST
+
+               | RESERV_PROCEDURE + IDENTIFIER + PAR_IZQ + PARAMETER + PAR_DER + PUNTO_COMA
+               + DECLARATION_LIST_HIJA
+               + FUNCION_HIJA
+               + INSTRUCTIONS_BODY
+               + PUNTO_COMA
+               + FUNCTION_LIST
+               | Empty
+               ;
+            FUNCTION_LIST.ErrorRule
+                = SyntaxError + PUNTO_COMA;
+
+
+            PARAMETER.Rule
+                = RESERV_VAR + IDENTIFIER + PARAMETER_BODY + DOS_PUNTOS + DATA_TYPE + PARAMETER_END
+                | IDENTIFIER + PARAMETER_BODY + DOS_PUNTOS + DATA_TYPE + PARAMETER_END
+                | Empty;
+
+            PARAMETER_BODY.Rule
+                = COMA + IDENTIFIER + PARAMETER_BODY
+                | Empty
+                ;
+            PARAMETER_END.Rule = PUNTO_COMA + PARAMETER
+                | Empty
+                ;
+
+
+            CALL.Rule = IDENTIFIER + PAR_IZQ + CALL_PARAMETERS + PAR_DER + PUNTO_COMA;
+
+            CALL_PARAMETERS.Rule
+                = EXPLOGICA + CALL_PARAMETERS
+                | COMA + EXPLOGICA + CALL_PARAMETERS
+                | Empty
+                ;
+
+            CALL_FUNCTION_PROCEDURE.Rule = IDENTIFIER + PAR_IZQ + CALL_PARAMETERS + PAR_DER;
+
+            FUNCTION.Rule =
+               RESERV_FUNCTION + IDENTIFIER + PAR_IZQ + PARAMETER + PAR_DER + DOS_PUNTOS + DATA_TYPE + PUNTO_COMA
+               + INSTRUCTIONS_BODY
+               + PUNTO_COMA
+               ;
+
+            PROCEDURE.Rule =
+                RESERV_PROCEDURE + IDENTIFIER + PAR_IZQ + PARAMETER + PAR_DER + PUNTO_COMA
+                + INSTRUCTIONS_BODY
+                + PUNTO_COMA
+                ;
+
+            FUNCION_HIJA.Rule
+                = RESERV_FUNCTION + IDENTIFIER + PAR_IZQ + PARAMETER + PAR_DER + DOS_PUNTOS + DATA_TYPE + PUNTO_COMA
+                + DECLARATION_LIST_HIJA
+                + FUNCION_HIJA
+                + INSTRUCTIONS_BODY
+                + PUNTO_COMA
+                + FUNCION_HIJA
+
+                | RESERV_PROCEDURE + IDENTIFIER + PAR_IZQ + PARAMETER + PAR_DER + PUNTO_COMA
+                + DECLARATION_LIST_HIJA
+                + FUNCION_HIJA
+                + INSTRUCTIONS_BODY
+                + PUNTO_COMA
+                + FUNCION_HIJA
+                | Empty
+                ;
+
+            DECLARATION_LIST_HIJA.Rule
+               = RESERV_VAR + IDENTIFIER + DECLARATION_BODY + VAR_DECLARATION + DECLARATION_LIST_HIJA
+               | RESERV_CONST + IDENTIFIER + EQUALS + EXPRESION + PUNTO_COMA + CONST_DECLARATION + DECLARATION_LIST_HIJA
+               | Empty
+               ;
+            #endregion
+
+            #region FUNCIONES NATIVAS
+
+            WRITE.Rule = RESERV_WRITE + PAR_IZQ + WRHITE_PARAMETER + PAR_DER + PUNTO_COMA
+                | RESERV_WRITEN + PAR_IZQ + WRHITE_PARAMETER + PAR_DER + PUNTO_COMA
+                ;
+
+            WRHITE_PARAMETER.Rule
+                = EXPLOGICA + MORE_WRHITE_PARAMETER
+                | Empty
+                ;
+            MORE_WRHITE_PARAMETER.Rule
+                = COMA + EXPLOGICA + MORE_WRHITE_PARAMETER
+                | Empty
+                ;
+
+            EXIT.Rule = RESERV_EXIT + PAR_IZQ + EXIT_EXP + PAR_DER + PUNTO_COMA;
+
+            EXIT_EXP.Rule = EXPLOGICA
+                | Empty
+                ;
+
+            #endregion
+
             #region Preferencias
             this.Root = init;
             #endregion
 
         }
+
+
     }
 }

@@ -36,7 +36,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.button2 = new System.Windows.Forms.Button();
             this.compilar = new System.Windows.Forms.Button();
-            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.consola = new System.Windows.Forms.RichTextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.contextMenuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -80,7 +80,7 @@
             // 
             this.tabPage1.Controls.Add(this.button2);
             this.tabPage1.Controls.Add(this.compilar);
-            this.tabPage1.Controls.Add(this.richTextBox2);
+            this.tabPage1.Controls.Add(this.consola);
             this.tabPage1.Controls.Add(this.areaanalizar);
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
@@ -109,13 +109,13 @@
             this.compilar.UseVisualStyleBackColor = true;
             this.compilar.Click += new System.EventHandler(this.compilar_Click);
             // 
-            // richTextBox2
+            // consola
             // 
-            this.richTextBox2.Location = new System.Drawing.Point(775, 93);
-            this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(709, 648);
-            this.richTextBox2.TabIndex = 3;
-            this.richTextBox2.Text = "";
+            this.consola.Location = new System.Drawing.Point(775, 93);
+            this.consola.Name = "consola";
+            this.consola.Size = new System.Drawing.Size(709, 648);
+            this.consola.TabIndex = 3;
+            this.consola.Text = "";
             // 
             // tabPage2
             // 
@@ -151,7 +151,7 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.RichTextBox consola;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button compilar;
     }

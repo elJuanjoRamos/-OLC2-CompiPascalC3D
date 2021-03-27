@@ -1,4 +1,5 @@
-﻿using CompiPascalC3D.Analizer.Syntactic;
+﻿using CompiPascalC3D.Analizer.C3D;
+using CompiPascalC3D.Analizer.Syntactic;
 using MaterialSkin.Controls;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,9 @@ namespace CompiPascal
         {
             Syntactic s = new Syntactic();
             s.analizer(areaanalizar.Text, "");
+            //C3DController.Instance.clearCode();
+            consola.Text = "";
+            consola.Text = C3DController.Instance.getCode();
         }
     }
 }
