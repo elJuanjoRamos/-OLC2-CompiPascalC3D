@@ -9,16 +9,14 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
     class Sentence : Instruction
     {
         private LinkedList<Instruction> list;
-        private int row;
-        private int column;
         private bool isNull;
+
+        public bool IsNull { get => isNull; set => isNull = value; }
 
         public Sentence(LinkedList<Instruction> list)
            : base("Sentence")
         {
             this.list = list;
-            this.row = 0;
-            this.column = 0;
             this.isNull = false;
         }
         public Sentence()
@@ -66,9 +64,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             foreach (var inst in list)
             {
                 var res = inst.Execute(ambit);
-                if (res == "null")
+                if (res == null)
                 {
-                    return "null";
+                    return null;
                 }
                 response = response + res;
             }

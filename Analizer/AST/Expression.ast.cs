@@ -18,14 +18,14 @@ namespace CompiPascalC3D.Analizer.AST
         #region EXPRESIONES
 
 
-        public Expresion getExpresion(ParseTreeNode actual)
+        public Expresion getExpresion(ParseTreeNode actual, int cant_tabs)
         {
 
-            return EXPLOGICA(actual);
+            return EXPLOGICA(actual, cant_tabs);
 
         }
 
-        public Expresion GetLiteral(ParseTreeNode node)
+        public Expresion GetLiteral(ParseTreeNode node, int cant_Tabs)
         {
             var row = node.Token.Location.Line;
             var column = node.Token.Location.Column;
@@ -56,7 +56,7 @@ namespace CompiPascalC3D.Analizer.AST
             }
             else if (node.Term.ToString().Equals("IDENTIFIER"))
             {
-                return new Access(node.Token.Value.ToString(), row, column);
+                return new Access(node.Token.Value.ToString(), row, column, cant_Tabs);
             }
 
             return null;
@@ -65,7 +65,7 @@ namespace CompiPascalC3D.Analizer.AST
 
 
 
-        public Expresion EXPLOGICA(ParseTreeNode actual)
+        public Expresion EXPLOGICA(ParseTreeNode actual, int cant_tabs)
         {
             /*
               EXPLOGICA.Rule 
@@ -75,24 +75,24 @@ namespace CompiPascalC3D.Analizer.AST
 
             if (actual.ChildNodes.Count == 2)
             {
-                var relacional = EXPRELACIONAL(actual.ChildNodes[0]);
-                return EXPLOGICA_PRIMA(actual.ChildNodes[1], relacional);
+                var relacional = EXPRELACIONAL(actual.ChildNodes[0], cant_tabs);
+                return EXPLOGICA_PRIMA(actual.ChildNodes[1], relacional, cant_tabs);
             }
             else
             {
                 var not = actual.ChildNodes[0].Token.Text.ToLower();
-                var izq = EXPRELACIONAL(actual.ChildNodes[1]);
+                var izq = EXPRELACIONAL(actual.ChildNodes[1], cant_tabs);
                 var row = actual.ChildNodes[0].Token.Location.Line;
                 var col = actual.ChildNodes[0].Token.Location.Column;
 
-                //var relacional = new Logical(izq, null, not, row, col);
-                //return EXPLOGICA_PRIMA(actual.ChildNodes[2], relacional);
-                return null;
+                var logical = new Logical(izq, null, not, row, col, cant_tabs);
+                return EXPLOGICA_PRIMA(actual.ChildNodes[2], logical, cant_tabs);
+                
             }
 
         }
 
-        public Expresion EXPLOGICA_PRIMA(ParseTreeNode actual, Expresion izq)
+        public Expresion EXPLOGICA_PRIMA(ParseTreeNode actual, Expresion izq, int cant_Tabs)
         {
             /*
               EXPLOGICA_PRIMA.Rule
@@ -105,37 +105,37 @@ namespace CompiPascalC3D.Analizer.AST
             if (actual.ChildNodes.Count > 0)
             {
                 var simb = actual.ChildNodes[0].Token.Text.ToLower();
-                var derecho = EXPRELACIONAL(actual.ChildNodes[1]);
+                var derecho = EXPRELACIONAL(actual.ChildNodes[1], cant_Tabs);
                 var row = actual.ChildNodes[0].Token.Location.Line;
                 var col = actual.ChildNodes[0].Token.Location.Column;
 
-                //var relacional = new Logical(izq, derecho, simb, row, col);
-                //return EXPLOGICA_PRIMA(actual.ChildNodes[2], relacional);
-                return null;
+                var logica = new Logical(izq, derecho, simb, row, col, cant_Tabs);
+                return EXPLOGICA_PRIMA(actual.ChildNodes[2], logica, cant_Tabs);
+                
             }
             return izq;
         }
 
 
 
-        public Expresion EXPRELACIONAL(ParseTreeNode actual)
+        public Expresion EXPRELACIONAL(ParseTreeNode actual, int cant_tabs)
         {
             //EXPRELACIONAL.Rule = EXPRESION + EXPRELACIONAL_PRIMA;
 
-            var exp = EXPRESION(actual.ChildNodes[0]);
+            var exp = EXPRESION(actual.ChildNodes[0], cant_tabs);
 
-            return EXPRELACIONAL_PRIMA(actual.ChildNodes[1], exp);
+            return EXPRELACIONAL_PRIMA(actual.ChildNodes[1], exp, cant_tabs);
         }
 
-        public Expresion EXPRESION(ParseTreeNode actual)
+        public Expresion EXPRESION(ParseTreeNode actual, int cant_tabs)
         {
             //EXPRESION.Rule = TERMINO + EXPRESION_PRIMA;
-            var exp = TERMINO(actual.ChildNodes[0]);
-            return EXPRESION_PRIMA(actual.ChildNodes[1], exp);
+            var exp = TERMINO(actual.ChildNodes[0], cant_tabs);
+            return EXPRESION_PRIMA(actual.ChildNodes[1], exp, cant_tabs);
 
         }
 
-        public Expresion EXPRELACIONAL_PRIMA(ParseTreeNode actual, Expresion izq)
+        public Expresion EXPRELACIONAL_PRIMA(ParseTreeNode actual, Expresion izq, int cant_tabs)
         {
             /*
               EXPRELACIONAL_PRIMA.Rule
@@ -152,28 +152,28 @@ namespace CompiPascalC3D.Analizer.AST
             {
                 var simb = actual.ChildNodes[0].Token.Text;
 
-                var derecho = EXPRESION(actual.ChildNodes[1]);
+                var derecho = EXPRESION(actual.ChildNodes[1], cant_tabs);
 
                 int row = actual.ChildNodes[0].Token.Location.Line;
                 int col = actual.ChildNodes[0].Token.Location.Column;
 
-                var relacional = new Relational(izq, derecho, simb, row, col);
+                var relacional = new Relational(izq, derecho, simb, row, col, cant_tabs);
 
-                return EXPRELACIONAL_PRIMA(actual.ChildNodes[2], relacional);
+                return EXPRELACIONAL_PRIMA(actual.ChildNodes[2], relacional, cant_tabs);
             }
             return izq;
         }
 
 
-        public Expresion TERMINO(ParseTreeNode actual)
+        public Expresion TERMINO(ParseTreeNode actual, int cant_tabs)
         {
             //TERMINO.Rule = FACTOR + TERMINO_PRIMA;
-            var fac = FACTOR(actual.ChildNodes[0]);
-            return TERMINO_PRIMA(actual.ChildNodes[1], fac);
+            var fac = FACTOR(actual.ChildNodes[0], cant_tabs);
+            return TERMINO_PRIMA(actual.ChildNodes[1], fac, cant_tabs);
 
         }
 
-        public Expresion EXPRESION_PRIMA(ParseTreeNode actual, Expresion izq)
+        public Expresion EXPRESION_PRIMA(ParseTreeNode actual, Expresion izq, int cant_tabs)
         {
             /*
              EXPRESION_PRIMA.Rule
@@ -185,19 +185,19 @@ namespace CompiPascalC3D.Analizer.AST
             {
                 var simb = actual.ChildNodes[0].Token.Text;
 
-                var derecho = TERMINO(actual.ChildNodes[1]);
+                var derecho = TERMINO(actual.ChildNodes[1], cant_tabs);
                 var row = actual.ChildNodes[0].Token.Location.Line;
                 var col = actual.ChildNodes[0].Token.Location.Column;
 
-                var aritmetica = new Arithmetic(izq, derecho, simb, row, col);
+                var aritmetica = new Arithmetic(izq, derecho, simb, row, col, cant_tabs);
 
-                return EXPRESION_PRIMA(actual.ChildNodes[2], aritmetica);
+                return EXPRESION_PRIMA(actual.ChildNodes[2], aritmetica, cant_tabs);
 
             }
             return izq;
         }
 
-        public Expresion TERMINO_PRIMA(ParseTreeNode actual, Expresion izq)
+        public Expresion TERMINO_PRIMA(ParseTreeNode actual, Expresion izq, int cant_tabs)
         {
             /*
              TERMINO_PRIMA.Rule
@@ -211,17 +211,17 @@ namespace CompiPascalC3D.Analizer.AST
             if (actual.ChildNodes.Count > 0)
             {
                 var simb = actual.ChildNodes[0].Token.Text;
-                var derecho = FACTOR(actual.ChildNodes[1]);
+                var derecho = FACTOR(actual.ChildNodes[1], cant_tabs);
                 var row = actual.ChildNodes[0].Token.Location.Line;
                 var col = actual.ChildNodes[0].Token.Location.Column;
 
-                var aritmetica = new Arithmetic(izq, derecho, simb, row, col);
-                return TERMINO_PRIMA(actual.ChildNodes[2], aritmetica);
+                var aritmetica = new Arithmetic(izq, derecho, simb, row, col, cant_tabs);
+                return TERMINO_PRIMA(actual.ChildNodes[2], aritmetica, cant_tabs);
             }
             return izq;
         }
 
-        public Expresion FACTOR(ParseTreeNode actual)
+        public Expresion FACTOR(ParseTreeNode actual, int cant_tabs)
         {
 
             /*
@@ -247,14 +247,14 @@ namespace CompiPascalC3D.Analizer.AST
             if (actual.ChildNodes.Count == 3)
             {
                 var izq = actual.ChildNodes[0];
-                return getExpresion(actual.ChildNodes[1]);
+                return getExpresion(actual.ChildNodes[1], cant_tabs);
             }
             else if (actual.ChildNodes.Count == 2)
             {
 
                 if (actual.ChildNodes[0].Term.ToString().Equals("IDENTIFIER"))
                 {
-                    return getAccess(actual);
+                    return getAccess(actual, cant_tabs);
                 }
                 else
                 {
@@ -263,11 +263,11 @@ namespace CompiPascalC3D.Analizer.AST
 
                     if (simb.Equals("-"))
                     {
-                        var iz = FACTOR(actual.ChildNodes[1]);
+                        var iz = FACTOR(actual.ChildNodes[1], cant_tabs);
                         var row = actual.ChildNodes[0].Token.Location.Line;
                         var col = actual.ChildNodes[0].Token.Location.Column;
 
-                        return new Arithmetic(new Literal("0", 1, row, col), iz, "-", row, col);
+                        return new Arithmetic(new Literal("0", 1, row, col), iz, "-", row, col, cant_tabs);
                     }
                 }
 
@@ -282,14 +282,14 @@ namespace CompiPascalC3D.Analizer.AST
                 }
                 else
                 {
-                    return GetLiteral(actual.ChildNodes[0]);
+                    return GetLiteral(actual.ChildNodes[0], cant_tabs);
                 }
 
             }
             return null;
         }
 
-        public Expresion getAccess(ParseTreeNode actual)
+        public Expresion getAccess(ParseTreeNode actual, int cant_tabs)
         {
             /*
                  ID_TIPE.rule
@@ -299,7 +299,7 @@ namespace CompiPascalC3D.Analizer.AST
                  */
             if (actual.ChildNodes[1].ChildNodes.Count == 0)
             {
-                return GetLiteral(actual.ChildNodes[0]);
+                return GetLiteral(actual.ChildNodes[0], cant_tabs);
             }
 
             

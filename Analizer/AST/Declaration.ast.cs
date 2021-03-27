@@ -34,15 +34,17 @@ namespace CompiPascalC3D.Analizer.AST
             if (actual.ChildNodes.Count != 0)
             {
 
-
+                int row = actual.ChildNodes[0].Token.Location.Line;
+                int col = actual.ChildNodes[0].Token.Location.Column;
                 //VERIFICA SI ES VAR O CONST
                 var tipo = actual.ChildNodes[0];
 
                 //ES CONST
                 if (tipo.Term.ToString().Equals("RESERV_CONST"))
                 {
+
                     var identifier = actual.ChildNodes[1].Token.Text;
-                    lista_actual.AddLast(new Declaration(identifier, expressionAST.getExpresion(actual.ChildNodes[3]), 0, 0, true));
+                    lista_actual.AddLast(new Declaration(identifier, expressionAST.getExpresion(actual.ChildNodes[3], 0), row, col, true));
                     lista_actual = CONST_DECLARATION(actual.ChildNodes[5], lista_actual, elementos_her);
                     lista_actual = LIST_DECLARATIONS(actual.ChildNodes[6], lista_actual, elementos_her);
                 }
@@ -142,8 +144,10 @@ namespace CompiPascalC3D.Analizer.AST
              */
             if (actual.ChildNodes.Count > 0)
             {
+                int row = actual.ChildNodes[0].Token.Location.Line;
+                int col = actual.ChildNodes[0].Token.Location.Column;
                 var identifier = actual.ChildNodes[0].Token.Text;
-                lista_actual.AddLast(new Declaration(identifier, expressionAST.getExpresion(actual.ChildNodes[2]), 0, 0, true));
+                lista_actual.AddLast(new Declaration(identifier, expressionAST.getExpresion(actual.ChildNodes[2], 0), row, col, true));
                 lista_actual = CONST_DECLARATION(actual.ChildNodes[4], lista_actual, elementos_her);
             }
             return lista_actual;
@@ -160,7 +164,7 @@ namespace CompiPascalC3D.Analizer.AST
             {
                 row = actual.ChildNodes[0].Token.Location.Line;
                 col = actual.ChildNodes[0].Token.Location.Column;
-                var exp = expressionAST.getExpresion(actual.ChildNodes[1]);
+                var exp = expressionAST.getExpresion(actual.ChildNodes[1], 0);
                 lista_actual.AddLast(new Declaration(elementos_her[0].ToString(), elementos_her[1].ToString(), exp, row, col, true, false));
                 elementos_her.Clear();
             }

@@ -97,37 +97,37 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                                 if (this.type == DataType.BOOLEAN)
                                 {
                                     var templabel = generator.newLabel();
-                                    generator.addLabel(val.TrueLabel);
-                                    generator.set_stack(variable.Position.ToString(), "1");
-                                    generator.add_Goto(templabel);
-                                    generator.addLabel(val.FalseLabel);
-                                    generator.set_stack(variable.Position.ToString(), "0");
-                                    generator.addLabel(templabel);
+                                    generator.addLabel(val.TrueLabel, 0);
+                                    generator.set_stack(variable.Position.ToString(), "1", 0);
+                                    generator.add_Goto(templabel,0);
+                                    generator.addLabel(val.FalseLabel,0);
+                                    generator.set_stack(variable.Position.ToString(), "0",0);
+                                    generator.addLabel(templabel,0);
                                 }
                                 else
                                 {
-                                    generator.set_stack(variable.Position.ToString(), val.getValue());
+                                    generator.set_stack(variable.Position.ToString(), val.getValue(),0);
                                 }
                             } else
                             {
                                 var temp = generator.newTemporal(); 
                                 generator.freeTemp(temp);
                                 
-                                generator.addExpression(temp, "p", variable.Position.ToString(), "+");
+                                generator.addExpression(temp, "p", variable.Position.ToString(), "+",0);
 
                                 if (variable.DataType == DataType.BOOLEAN)
                                 {
                                     var templabel = generator.newLabel();
-                                    generator.addLabel(val.TrueLabel);
-                                    generator.set_stack(temp, "1");
-                                    generator.add_Goto(templabel);
-                                    generator.addLabel(val.FalseLabel);
-                                    generator.set_stack(temp, "0");
-                                    generator.addLabel(templabel);
+                                    generator.addLabel(val.TrueLabel,0);
+                                    generator.set_stack(temp, "1",0);
+                                    generator.add_Goto(templabel,0);
+                                    generator.addLabel(val.FalseLabel,0);
+                                    generator.set_stack(temp, "0",0);
+                                    generator.addLabel(templabel,0);
                                 }
                                 else
                                 {
-                                    generator.set_stack(temp, val.getValue());
+                                    generator.set_stack(temp, val.getValue(),0);
                                 }
                             }
                         }

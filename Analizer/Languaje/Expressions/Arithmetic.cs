@@ -16,7 +16,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
         private string type;
         private int row;
         private int column;
-        public Arithmetic(Expresion l, Expresion ri, String t, int r, int c)
+        private int cant_tabs;
+        public Arithmetic(Expresion l, Expresion ri, String t, int r, int c, int ct)
        : base("Arithmetic")
         {
             this.right = ri;
@@ -24,11 +25,11 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             this.type = t;
             this.row = r;
             this.column = c;
+            this.cant_tabs = ct;
         }
 
         public override Returned Execute(Ambit ambit)
         {
-            var result = "";
             var varIz = this.left.Execute(ambit);
             var valDer = this.right.Execute(ambit);
 
@@ -40,7 +41,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             {
                 if (valDer.getDataType == DataType.INTEGER || valDer.getDataType == DataType.REAL)
                 {
-                    generator.addExpression(temp, varIz.Value, valDer.Value, type);
+                    generator.addExpression(temp, varIz.Value, valDer.Value, type, cant_tabs);
 
                     if (valDer.getDataType == DataType.REAL || varIz.getDataType == DataType.REAL)
                     {

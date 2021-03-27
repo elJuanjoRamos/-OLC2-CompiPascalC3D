@@ -45,16 +45,17 @@ namespace CompiPascalC3D.Analizer.C3D
             this.tempStorage.Clear();
         }
 
-        public void save_comment(string comment)
+        public void save_comment(string comment, int cant_tabs)
         {
-            this.code.Add(this.isFunc + "/***** "+ comment +" *****/");
+            this.code.Add(getTabs(cant_tabs, false) + "/***** "+ comment +" *****/");
         }
 
         //TEMPORALES
 
         public string newTemporal() {
-            var temp = "T" + this.temporal_number++;
+            var temp = "T" + this.temporal_number;
             this.tempStorage.Add(temp);
+            this.temporal_number++;
             return temp;
         }
 
@@ -75,7 +76,7 @@ namespace CompiPascalC3D.Analizer.C3D
             }
         }
 
-        public int save_Temps(Ambit ambit){
+        public int save_Temps(Ambit ambit, int cant_tabs){
 
             if(this.tempStorage.Count > 0){
 
@@ -84,22 +85,22 @@ namespace CompiPascalC3D.Analizer.C3D
             
                 var size = 0;
 
-                this.save_comment("Inicia guardado de temporales");
+                this.save_comment("Inicia guardado de temporales", cant_tabs);
 
                 
-                this.addExpression(temp, "p", ambit.Size.ToString(), "+");
+                this.addExpression(temp, "p", ambit.Size.ToString(), "+", cant_tabs);
 
                 foreach (var item in this.tempStorage)
                 {
                     size++;
-                    this.set_stack(temp, item.ToString());
+                    this.set_stack(temp, item.ToString(), cant_tabs);
                     if (size != this.tempStorage.Count)
                     {
-                        this.addExpression(temp, temp, "1", "+");
+                        this.addExpression(temp, temp, "1", "+", cant_tabs);
                     }
                         
                 }
-                this.save_comment("Fin guardado de temporales");
+                this.save_comment("Fin guardado de temporales", cant_tabs);
             }
             var ptr = ambit.Size;
             ambit.Size = ptr + this.tempStorage.Count;
@@ -119,44 +120,74 @@ namespace CompiPascalC3D.Analizer.C3D
         }
 
 
-        public void addLabel(string label)
+        public void addLabel(string label, int cant_tabs)
         {
-            var text = this.isFunc + label + ":";
+            var text = getTabs(cant_tabs, true) + label + ":";
             this.code.Add(text);
         }
 
 
         ///STACK
-        public void set_stack(string index, string value)
+        public void set_stack(string index, string value, int cant_tabs)
         {
-            var texto = this.isFunc + "Stack[" + index + "] = " + value;
+            var texto = getTabs(cant_tabs, false) + "Stack[" + index + "] = " + value;
 
             this.code.Add(texto);
         }
-        public void get_stack(string target, string index)
+        public void get_stack(string target, string index,  int cant_tabs)
         {
-            var texto = this.isFunc + target + " = Stack[" + index + "]"; 
+            var texto = getTabs(cant_tabs, false) + target + " = Stack[" + index + "]"; 
             this.code.Add(texto);
         }
 
         //IF
-        public void add_If(string left, string right, string operatorr, string label)
+        public void add_If(string left, string right, string operatorr, string label, int cant_tabs)
         {
-            this.code.Add(this.isFunc+ "if (" + left + " " + operatorr  + " "  + right + ") goto " + label);
+            this.code.Add(getTabs(cant_tabs, false) + "if (" + left + " " + operatorr  + " "  + right + ") goto " + label);
         }
         //GOTO
-        public void add_Goto(string label)
+        public void add_Goto(string label, int cant_tabs)
         {
-            this.code.Add(this.isFunc + "goto " + label);
+            this.code.Add(getTabs(cant_tabs, false) + "goto " + label);
         }
 
-        public void addExpression(string target, string left, string right, string symbol_operator)
+
+        //EXPRESION
+        public void addExpression(string target, string left, string right, string symbol_operator, int cant_tabs)
         {
-            var text = this.isFunc + target + " = " + left + " " + symbol_operator + " " + right ;
+            var text = getTabs(cant_tabs, false) + target + " = " + left + " " + symbol_operator + " " + right ;
             this.code.Add(text);
         }
 
+        //PRINT
+        public void generate_print(string format, string value, string type, int cant_tabs)
+        {
+            var texto = getTabs(cant_tabs, false) + "printf(%" + format + "," + type +  value + ");";  
+            this.code.Add(texto);
+        }
 
+        // OBTIENE LOS TEMPORALES
+        public string getTemps()
+        {
+            var text = "";
+            var cont = 0;
+
+            foreach (var item in tempStorage)
+            {
+                text += item.ToString();
+                cont++;
+                if (cont != tempStorage.Count)
+                {
+                    text += ",";
+                } else
+                {
+                    text += ";";
+                }
+            }
+            return "Int " +  text + "\n\n";
+        }
+
+        /// OBTIENE TODO EL CODIGO
         public string getCode()
         {
             var texto = "";
@@ -169,7 +200,19 @@ namespace CompiPascalC3D.Analizer.C3D
             return texto;
         }
 
+        private string getTabs(int cant_tabs, bool islabel)
+        {
+            this.isFunc = "";
+            if (cant_tabs > 0)
+            {
+                for (int i = 0; i < cant_tabs; i++)
+                {
+                    this.isFunc += " ";
+                }
+            }
 
+            return this.isFunc;
+        }
 
     }
 }

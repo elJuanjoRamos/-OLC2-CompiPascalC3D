@@ -18,7 +18,7 @@ namespace CompiPascalC3D.Analizer.AST
         ExpresionAST expressionAST = new ExpresionAST();
 
         #region ASIGNACION
-        public object VAR_ASSIGNATE(ParseTreeNode actual)
+        public object VAR_ASSIGNATE(ParseTreeNode actual, int cant_tabs)
         {
             /*
              VAR_ASSIGNATE.Rule 
@@ -30,14 +30,14 @@ namespace CompiPascalC3D.Analizer.AST
             var row = actual.ChildNodes[0].Token.Location.Line;
             var column = actual.ChildNodes[0].Token.Location.Column;
 
-            return VAR_ASSIGNATE_EXP(identifier, row, column, actual.ChildNodes[1]);
+            return VAR_ASSIGNATE_EXP(identifier, row, column, actual.ChildNodes[1], cant_tabs);
 
 
 
         }
 
 
-        public object VAR_ASSIGNATE_EXP(string identifier, int row, int column, ParseTreeNode actual)
+        public object VAR_ASSIGNATE_EXP(string identifier, int row, int column, ParseTreeNode actual, int cant_tabs)
         {
             /*
              
@@ -64,9 +64,9 @@ namespace CompiPascalC3D.Analizer.AST
                 //SOLO ES UNA EXPRESION
                 if (!encontrado)
                 {
-                    exp = (new ExpresionAST()).getExpresion(actual.ChildNodes[2]);
+                    exp = (new ExpresionAST()).getExpresion(actual.ChildNodes[2], cant_tabs);
 
-                    return new Assignation(identifier, exp, row, column);
+                    return new Assignation(identifier, exp, row, column, cant_tabs);
                 }
                 //ES UNA LLAMADA
                 /*else
@@ -79,12 +79,12 @@ namespace CompiPascalC3D.Analizer.AST
             {
 
 
-                var index = (expressionAST).getExpresion(actual.ChildNodes[1]);
+                var index = (expressionAST).getExpresion(actual.ChildNodes[1], cant_tabs);
 
 
                 ArrayList arrays = new ArrayList();
 
-                arrays = MORE_ACCES(actual.ChildNodes[3], arrays);
+                arrays = MORE_ACCES(actual.ChildNodes[3], arrays, cant_tabs);
 
 
                 Expresion exp = null;
@@ -135,7 +135,7 @@ namespace CompiPascalC3D.Analizer.AST
             return null;
         }
 
-        public ArrayList MORE_ACCES(ParseTreeNode actual, ArrayList lista)
+        public ArrayList MORE_ACCES(ParseTreeNode actual, ArrayList lista, int cant_Tabs)
         {
             /*
              MORE_ACCES.Rule
@@ -146,10 +146,10 @@ namespace CompiPascalC3D.Analizer.AST
 
             if (actual.ChildNodes.Count > 0)
             {
-                var exp = expressionAST.EXPLOGICA(actual.ChildNodes[1]);
+                var exp = expressionAST.EXPLOGICA(actual.ChildNodes[1], cant_Tabs);
                 lista.Add(exp);
 
-                lista = MORE_ACCES(actual.ChildNodes[3], lista);
+                lista = MORE_ACCES(actual.ChildNodes[3], lista, cant_Tabs);
 
             }
             return lista;

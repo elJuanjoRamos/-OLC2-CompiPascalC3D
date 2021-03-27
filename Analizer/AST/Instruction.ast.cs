@@ -71,13 +71,13 @@ namespace CompiPascalC3D.Analizer.AST
             }
             else if (actual.Term.ToString().Equals("WHILE"))
             {
-                //While _while = (new WhileAST()).WHILE(actual);
-                //return _while;
+                While _while = (new WhileAST()).WHILE(actual, cant_tabs);
+                return _while;
             }
             else if (actual.Term.ToString().Equals("VAR_ASSIGNATE"))
             {
                 AssignationAST assignationAST = new AssignationAST();
-                var _assignation = (new AssignationAST()).VAR_ASSIGNATE(actual);
+                var _assignation = (new AssignationAST()).VAR_ASSIGNATE(actual, cant_tabs);
 
                 if (_assignation is Assignation)
                 {

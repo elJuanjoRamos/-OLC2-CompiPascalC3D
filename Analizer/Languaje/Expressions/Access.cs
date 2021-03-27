@@ -14,15 +14,16 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
         private string id;
         public int row;
         public int column;
-
+        private int cant_Tabs;
         public string Id { get => id; set => id = value; }
 
-        public Access(string id, int r, int c)
+        public Access(string id, int r, int c, int ct)
             : base("Access")
         {
             this.id = id;
             this.row = r;
             this.column = c;
+            this.cant_Tabs = ct;
         }
 
         public override Returned Execute(Ambit ambit)
@@ -40,7 +41,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             var temp = generator.newTemporal();
             if (variable.IsGlobal)
             {
-                generator.get_stack(temp, variable.Position.ToString());
+                generator.get_stack(temp, variable.Position.ToString(), cant_Tabs);
 
                 if (variable.DataType!= DataType.BOOLEAN) {
                     return new Returned(temp, variable.DataType, true);
@@ -67,9 +68,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 var tempAux = generator.newTemporal(); 
                 generator.freeTemp(tempAux);
                 
-                generator.addExpression(tempAux, "p", variable.Position.ToString(), "+");
+                generator.addExpression(tempAux, "p", variable.Position.ToString(), "+", cant_Tabs);
 
-                generator.get_stack(temp, tempAux);
+                generator.get_stack(temp, tempAux, cant_Tabs);
 
 
                 if (variable.DataType != DataType.BOOLEAN)

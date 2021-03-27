@@ -11,19 +11,22 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
     class If : Instruction
     {
         private Expresion condition;
-        private Instruction sentences;
-        private Instruction elif;
+        private Sentence sentences;
+        private Sentence elif;
         private bool isNull;
         public int row;
         public int column;
         public int tabs;
-        public If(Expresion condition, Instruction sentences, Instruction elif, int ro, int co, int ct)
+
+        public bool IsNull { get => isNull; set => isNull = value; }
+
+        public If(Expresion condition, Sentence sentences, Sentence elif, int ro, int co, int ct)
            : base("If")
         {
             this.condition = condition;
             this.sentences = sentences;
             this.elif = elif;
-            this.IsNull = false;
+            this.isNull = false;
             this.row = ro;
             this.column = co;
             this.tabs = ct;
@@ -39,7 +42,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         public override string Execute(Ambit ambit)
         {
             var generator = C3DController.Instance;
-            generator.save_comment("Inicia If");
+            generator.save_comment("Inicia If", tabs);
 
             
             //AMBITO IF
@@ -53,7 +56,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 return "null";
             }
 
-            generator.addLabel(condicion.TrueLabel);
+            generator.addLabel(condicion.TrueLabel, tabs);
 
             if (sentences.IsNull)
             {
@@ -61,26 +64,26 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             }
             //SENTENCIAS
             var if_sentencias = this.sentences.Execute(ifAmbit);
-            if (if_sentencias == "null")
+            if (if_sentencias ==null)
             {
-                return "null";
+                return null;
             }
 
             if (!this.elif.IsNull)
             {
                 var tempLbl = generator.newLabel();
-                generator.add_Goto(tempLbl);
-                generator.addLabel(condicion.FalseLabel);
+                generator.add_Goto(tempLbl, tabs);
+                generator.addLabel(condicion.FalseLabel, tabs);
 
                 var else_sentence = this.elif.Execute(ifAmbit);
-                generator.addLabel(tempLbl);
-                if (else_sentence == "null")
+                generator.addLabel(tempLbl,tabs);
+                if (else_sentence == null)
                 {
-                    return "null";
+                    return null;
                 }
             } else
             {
-                generator.addLabel(condicion.FalseLabel);
+                generator.addLabel(condicion.FalseLabel, tabs);
             }
 
             return "executed";
@@ -90,14 +93,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             ErrorController.Instance.SemantycErrors(text, row, column);
             ConsolaController.Instance.Add(text + " - Row: " + row + " - Col: " + column + "\n");
         }
-        public string add_tabs(string text)
-        {
-            var tabu = "";
-            for (int i = 0; i < tabs; i++)
-            {
-                tabu = tabu + " ";
-            }
-            return tabu + text;
-        }
+        
     }
 }

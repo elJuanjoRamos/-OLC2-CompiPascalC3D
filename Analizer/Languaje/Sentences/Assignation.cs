@@ -16,15 +16,15 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         private DataType type;
         private int row;
         private int column;
-
-        public Assignation(string id, Expresion value, int row, int column) :
+        private int tabs;
+        public Assignation(string id, Expresion value, int row, int column, int cantTabs) :
             base("Assignation")
         {
             this.id = id;
             this.value = value;
             this.row = row;
             this.column = column;
-
+            this.tabs = cantTabs;
         }
         public override string Execute(Ambit ambit)
         {
@@ -67,16 +67,16 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                                 if (variable.DataType == DataType.BOOLEAN)
                                 {
                                     var templabel = generator.newLabel();
-                                    generator.addLabel(val.TrueLabel);
-                                    generator.set_stack(variable.Position.ToString(), "1");
-                                    generator.add_Goto(templabel);
-                                    generator.addLabel(val.FalseLabel);
-                                    generator.set_stack(variable.Position.ToString(), "0");
-                                    generator.addLabel(templabel);
+                                    generator.addLabel(val.TrueLabel, tabs);
+                                    generator.set_stack(variable.Position.ToString(), "1", tabs);
+                                    generator.add_Goto(templabel, tabs);
+                                    generator.addLabel(val.FalseLabel, tabs);
+                                    generator.set_stack(variable.Position.ToString(), "0", tabs);
+                                    generator.addLabel(templabel, tabs);
                                 }
                                 else
                                 {
-                                    generator.set_stack(variable.Position.ToString(), val.getValue());
+                                    generator.set_stack(variable.Position.ToString(), val.getValue(), tabs);
                                 }
                             }
 

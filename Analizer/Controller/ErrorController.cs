@@ -83,9 +83,10 @@ namespace CompiPascalC3D.Analizer.Controller
 
 
 
-            public void getSemantycError(string startup_path)
+            public string getSemantycError(string startup_path)
             {
                 //GraphController.Instance.printError(semantycErrors, startup_path, "Semantico", "error_semantico");
+                return getText(semantycErrors, "Sintactico");
             }
             public bool containSemantycError()
             {

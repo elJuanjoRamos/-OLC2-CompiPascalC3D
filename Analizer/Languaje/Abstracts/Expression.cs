@@ -10,14 +10,20 @@ namespace CompiPascalC3D.Analizer.Languaje.Abstracts
     {
         
         public string name;
+        private string trueLabel;
+        private string falseLabel;
+
+        public string TrueLabel { get => trueLabel; set => trueLabel = value; }
+        public string FalseLabel { get => falseLabel; set => falseLabel = value; }
+
         public Expresion(string n)
         {
-            //this.row = r;
-            //this.column = c;
             this.name = n;
+            this.trueLabel = this.falseLabel = "";
         }
         public Expresion()
         {
+            this.trueLabel = this.falseLabel = "";
         }
 
         public abstract Returned Execute(Ambit ambit);

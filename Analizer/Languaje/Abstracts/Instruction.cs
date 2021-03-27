@@ -7,7 +7,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Abstracts
     public abstract class Instruction
     {
         private string name;
-        private bool isNull;
         public Instruction(string name)
         {
             this.Name = name;
@@ -17,7 +16,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Abstracts
         }
 
         public string Name { get => name; set => name = value; }
-        public bool IsNull { get => isNull; set => isNull = value; }
         public abstract string Execute(Ambit ambit);
     }
 }

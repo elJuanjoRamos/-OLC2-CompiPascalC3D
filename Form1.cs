@@ -1,4 +1,5 @@
 ﻿using CompiPascalC3D.Analizer.C3D;
+using CompiPascalC3D.Analizer.Controller;
 using CompiPascalC3D.Analizer.Syntactic;
 using MaterialSkin.Controls;
 using System;
@@ -45,8 +46,19 @@ namespace CompiPascal
             Syntactic s = new Syntactic();
             s.analizer(areaanalizar.Text, "");
             //C3DController.Instance.clearCode();
-            consola.Text = "";
-            consola.Text = C3DController.Instance.getCode();
+            if (ErrorController.Instance.containSemantycError())
+            {
+                consola.Text = ErrorController.Instance.getSemantycError(""); 
+
+            } else
+            {
+                consola.Text = "";
+                consola.Text = "#include <stdio.h>\nInt Heap[100000]; //estructura heap\nInt Stack[100000]; //estructura stack\n\n";
+                consola.Text += "Int SP; //puntero Stack pointer\nInt HP; //puntero Heap pointer\n\n";
+                consola.Text += C3DController.Instance.getTemps();
+                consola.Text += C3DController.Instance.getCode();
+            }
+            
         }
     }
 }

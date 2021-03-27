@@ -7,6 +7,7 @@ using CompiPascalC3D.Analizer.Grammar;
 using CompiPascalC3D.Analizer.Languaje.Abstracts;
 using CompiPascalC3D.Analizer.AST;
 using CompiPascalC3D.Analizer.Languaje.Ambits;
+using CompiPascalC3D.Analizer.Controller;
 
 namespace CompiPascalC3D.Analizer.Syntactic
 {
@@ -41,13 +42,12 @@ namespace CompiPascalC3D.Analizer.Syntactic
                     if (err.Message.Contains("Invalid character"))
                     {
 
-                        //ErrorController.Instance.LexicalError(err.Message, err.Location.Line + 1, err.Location.Column);
+                        ErrorController.Instance.LexicalError(err.Message, err.Location.Line + 1, err.Location.Column);
                     }
                     //Errores sintacticos
                     else
                     {
-                        System.Diagnostics.Debug.WriteLine(err);
-                        //ErrorController.Instance.SyntacticError(err.Message, err.Location.Line + 1, err.Location.Column);
+                        ErrorController.Instance.SyntacticError(err.Message, err.Location.Line + 1, err.Location.Column);
                     }
                 }
                 return;
