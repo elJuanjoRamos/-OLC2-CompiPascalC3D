@@ -44,8 +44,10 @@ namespace CompiPascal
         private void compilar_Click(object sender, EventArgs e)
         {
             Syntactic s = new Syntactic();
+            C3DController.Instance.clearCode();
+            
             s.analizer(areaanalizar.Text, "");
-            //C3DController.Instance.clearCode();
+            
             if (ErrorController.Instance.containSemantycError())
             {
                 consola.Text = ErrorController.Instance.getSemantycError(""); 
@@ -53,12 +55,17 @@ namespace CompiPascal
             } else
             {
                 consola.Text = "";
-                consola.Text = "#include <stdio.h>\nInt Heap[100000]; //estructura heap\nInt Stack[100000]; //estructura stack\n\n";
-                consola.Text += "Int SP; //puntero Stack pointer\nInt HP; //puntero Heap pointer\n\n";
+                consola.Text = "#include <stdio.h>\nfloat Heap[100000]; //estructura heap\nfloat Stack[100000]; //estructura stack\n\n";
+                consola.Text += "float SP; //puntero Stack pointer\nfloat HP; //puntero Heap pointer\n\n";
                 consola.Text += C3DController.Instance.getTemps();
+
+                consola.Text += "int main()\n{\n";
+
                 consola.Text += C3DController.Instance.getCode();
+
+                consola.Text += "\nreturn 0;\n}";
             }
-            
+
         }
     }
 }

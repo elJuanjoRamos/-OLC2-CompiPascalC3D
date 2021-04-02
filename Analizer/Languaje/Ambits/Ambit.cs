@@ -16,6 +16,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         private string actualfunc = "";
         private string unicId = "";
         private string idParent = "";
+        private string _break = "";
+        private string _continue = "";
+
         private string ambit_name_inmediato = "";
         private Ambit anterior;
         private int size;
@@ -111,5 +114,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         internal Dictionary<string, Identifier> Variables { get => variables; set => variables = value; }
         public string Ambit_name_inmediato { get => ambit_name_inmediato; set => ambit_name_inmediato = value; }
         public string Ambit_name { get => ambit_name; set => ambit_name = value; }
+        public string Break { get => _break; set => _break = value; }
+        public string Continue { get => _continue; set => _continue = value; }
     }
 }

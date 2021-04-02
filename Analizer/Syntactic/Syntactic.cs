@@ -69,7 +69,7 @@ namespace CompiPascalC3D.Analizer.Syntactic
             lista_declaraciones = (new DeclarationAST()).LIST_DECLARATIONS(program_body.ChildNodes[1], lista_declaraciones, elemetos_heredados);
 
             //LISTADO DE SENTENCIAS SENTENCIAS
-            LinkedList<Instruction> listaInstrucciones = (new InstructionAST()).INSTRUCTIONS_BODY(program_body.ChildNodes[3], 0);
+            LinkedList<Instruction> listaInstrucciones = (new InstructionAST()).INSTRUCTIONS_BODY(program_body.ChildNodes[3], 1);
 
 
             execute(lista_declaraciones, listaInstrucciones);

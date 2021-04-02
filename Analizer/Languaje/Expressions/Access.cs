@@ -47,20 +47,20 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     return new Returned(temp, variable.DataType, true);
                 }
 
-
-                /*var retorno = new Returned("", variable.DataType, false);
                 
-                var trueLabel = generator.newLabel();
-                var falseLabel = generator.newLabel();
-                
+                if (this.TrueLabel == "")
+                {
+                    this.TrueLabel = generator.newLabel();
+                }
+                if (this.FalseLabel == "")
+                {
+                    this.FalseLabel = generator.newLabel();
+                }
+                generator.add_If(temp, "1", "==", this.TrueLabel, cant_Tabs);
+                generator.add_Goto(this.FalseLabel, cant_Tabs);
 
-                
-                generator.add_If(temp, "1", "==", trueLabel);
-                generator.add_Goto(falseLabel);
+                return new Returned("", variable.DataType, false, this.TrueLabel, this.FalseLabel);
 
-                retorno.TrueLabel = trueLabel;
-                retorno.FalseLabel = falseLabel;
-                return retorno;*/
 
             }
             else
@@ -79,22 +79,19 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 }
 
 
-                /*const retorno = new Retorno('', false, symbol.type);
-                this.trueLabel = this.trueLabel == '' ? generator.newLabel() : this.trueLabel;
-                this.falseLabel = this.falseLabel == '' ? generator.newLabel() : this.falseLabel;
-                generator.addIf(temp, '1', '==', this.trueLabel);
-                generator.addGoto(this.falseLabel);
-                retorno.trueLabel = this.trueLabel;
-                retorno.falseLabel = this.falseLabel;
-                return retorno;*/
+                if (this.TrueLabel == "")
+                {
+                    this.TrueLabel = generator.newLabel();
+                }
+                if (this.FalseLabel == "")
+                {
+                    this.FalseLabel = generator.newLabel();
+                }
+
+                generator.add_If(temp, "1", "==", this.TrueLabel, cant_Tabs);
+                generator.add_Goto(this.FalseLabel, cant_Tabs);
+                return new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel);
             }
-
-
-
-
-            return new Returned();
-
-
         }
 
         public void set_error(string texto, int row, int column)

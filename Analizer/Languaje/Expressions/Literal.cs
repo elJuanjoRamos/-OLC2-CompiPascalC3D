@@ -14,7 +14,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
         private bool isNull;
         private int row;
         private int column;
-        public Literal(Object v, int t, int r, int c) :
+        private int cant_tabs;
+        public Literal(Object v, int t, int r, int c, int ct) :
             base("Literal")
         {
             this.value = v;
@@ -22,7 +23,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             this.isNull = false;
             this.row = r;
             this.column = c;
-
+            this.cant_tabs = ct;
         }
         public Literal(int r, int c) :
             base("Literal")
@@ -51,13 +52,27 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
             else if (this.type == 3)
             {
+
+                var generator = C3D.C3DController.Instance;
+
+                if (this.TrueLabel == "")
+                {
+                    this.TrueLabel = generator.newLabel();
+                }
+                if (this.FalseLabel == "")
+                {
+                    this.FalseLabel = generator.newLabel();
+                }
+
                 if (this.value.ToString() == "false")
                 {
-                    returned = new Returned("false", DataType.BOOLEAN, false);
+                    generator.add_Goto(this.FalseLabel, cant_tabs+1);
+                    returned = new Returned("false", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel);
                 }
                 else
                 {
-                    returned = new Returned("true", DataType.BOOLEAN, false);
+                    generator.add_Goto(this.TrueLabel, cant_tabs+1);
+                    returned = new Returned("true", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel);
                 }
             }
             else if (this.type == 4)

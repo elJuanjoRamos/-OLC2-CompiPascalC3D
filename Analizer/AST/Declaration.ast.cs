@@ -95,7 +95,7 @@ namespace CompiPascalC3D.Analizer.AST
 
                 foreach (var item in elementos_her)
                 {
-                    lista_actual.AddLast(GetDeclarationValue(item.ToString(), datatype, false, row, col, false));
+                    lista_actual.AddLast(GetDeclarationValue(item.ToString(), datatype, false, row, col, false, 0));
                 }
                 elementos_her.Clear();
 
@@ -173,7 +173,7 @@ namespace CompiPascalC3D.Analizer.AST
             {
                 if (!esarray)
                 {
-                    lista_actual.AddLast(GetDeclarationValue(elementos_her[0].ToString(), elementos_her[1].ToString(), false, row, col, false));
+                    lista_actual.AddLast(GetDeclarationValue(elementos_her[0].ToString(), elementos_her[1].ToString(), false, row, col, false, 0));
                     elementos_her.Clear();
                 }
                 else
@@ -196,24 +196,24 @@ namespace CompiPascalC3D.Analizer.AST
             }
             return elementos_her;
         }
-        public Declaration GetDeclarationValue(string identifier, string datatype, bool perteneceFuncion, int row, int col, bool refe)
+        public Declaration GetDeclarationValue(string identifier, string datatype, bool perteneceFuncion, int row, int col, bool refe, int cant_tabs)
         {
 
             if (datatype.ToLower().Equals("integer"))
             {
-                return new Declaration(identifier.ToString(), datatype, new Literal(0, 1, row, col), row, col, false, refe);
+                return new Declaration(identifier.ToString(), datatype, new Literal(0, 1, row, col, cant_tabs), row, col, false, refe);
             }
             else if (datatype.ToLower().Equals("real"))
             {
-                return new Declaration(identifier.ToString(), datatype, new Literal(0, 4, row, col), row, col, false, refe);
+                return new Declaration(identifier.ToString(), datatype, new Literal(0, 4, row, col, cant_tabs), row, col, false, refe);
             }
             else if (datatype.ToLower().Equals("string"))
             {
-                return new Declaration(identifier.ToString(), datatype, new Literal("", 2, row, col), row, col, false, refe);
+                return new Declaration(identifier.ToString(), datatype, new Literal("", 2, row, col, cant_tabs), row, col, false, refe);
             }
             else if (datatype.ToLower().Equals("boolean"))
             {
-                return new Declaration(identifier.ToString(), datatype, new Literal(false, 3, row, col), row, col, false, refe);
+                return new Declaration(identifier.ToString(), datatype, new Literal(false, 3, row, col, cant_tabs), row, col, false, refe);
             }
             return null;
         }

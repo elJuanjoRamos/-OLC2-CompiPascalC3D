@@ -13,7 +13,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
     {
         private string id;
         private Expresion value;
-        private DataType type;
         private int row;
         private int column;
         private int tabs;
@@ -69,7 +68,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                                     var templabel = generator.newLabel();
                                     generator.addLabel(val.TrueLabel, tabs);
                                     generator.set_stack(variable.Position.ToString(), "1", tabs);
-                                    generator.add_Goto(templabel, tabs);
+                                    generator.add_Goto(templabel, tabs +1);
                                     generator.addLabel(val.FalseLabel, tabs);
                                     generator.set_stack(variable.Position.ToString(), "0", tabs);
                                     generator.addLabel(templabel, tabs);
@@ -78,10 +77,15 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                                 {
                                     generator.set_stack(variable.Position.ToString(), val.getValue(), tabs);
                                 }
+                            } else
+                            {
+                                var temp = generator.newTemporal();
+                                generator.addExpression(temp, "p", variable.Position.ToString(), "+", tabs);
+                                return temp;
                             }
 
 
-                            return "";
+                            return "executed";
 
                         }
                         else

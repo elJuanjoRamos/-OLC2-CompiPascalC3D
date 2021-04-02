@@ -37,30 +37,35 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             //INSTANCIA DEL GENERADOR C3D
             var generator = C3DController.Instance;
 
-            /*if (this.TrueLabel == "")
+            if (this.TrueLabel == "")
             {
                 this.TrueLabel = generator.newLabel();
             }
             if (this.FalseLabel == "")
             {
                 this.FalseLabel = generator.newLabel();
-            }*/
+            }
+
+            
 
             switch (operacion)
             {
                 case OpLogical.AND:
 
 
-                    /*this.left.TrueLabel = generator.newLabel();
-                    this.right.TrueLabel = this.TrueLabel;
-                    this.left.FalseLabel = this.right.FalseLabel = this.FalseLabel;*/
+                    this.left.TrueLabel = this.TrueLabel;
+                    this.left.FalseLabel = this.FalseLabel;
 
                     //EXPRESIONES
                     var varIz = this.left.Execute(ambit);
 
                     if (varIz.getDataType == DataType.BOOLEAN)
                     {
-                        generator.addLabel(varIz.TrueLabel, cant_tabs);
+                        generator.addLabel(this.left.TrueLabel, cant_tabs);
+
+                        this.right.TrueLabel = generator.newLabel();
+                        this.right.FalseLabel = varIz.FalseLabel;
+
                         var valDer = right.Execute(ambit);
                         if (valDer.getDataType != DataType.BOOLEAN)
                         {
@@ -68,7 +73,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             return result;
                         }
                         
-                        return new Returned("", DataType.BOOLEAN, false, valDer.TrueLabel, varIz.FalseLabel +":\n" +valDer.FalseLabel);
+                        return new Returned("", DataType.BOOLEAN, false, this.right.TrueLabel, this.right.FalseLabel);
 
                     }
                     set_error("Operador '" + this.type + "' NO puede ser aplicado al tipo " + varIz.getDataType, row, column);
@@ -76,13 +81,17 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
 
                 case OpLogical.OR:
-                    
-                   
+                    this.left.TrueLabel = this.TrueLabel;
+                    this.left.FalseLabel = this.FalseLabel;
+
                     //EXPRESIONES
                     var valIz = this.left.Execute(ambit);
                     if (valIz.getDataType == DataType.BOOLEAN)
                     {
-                        generator.addLabel(valIz.FalseLabel, cant_tabs);
+                        generator.addLabel(this.left.FalseLabel, cant_tabs);
+
+                        this.right.TrueLabel = this.TrueLabel;
+                        this.right.FalseLabel = generator.newLabel();
 
                         var valDer = right.Execute(ambit);
 
@@ -91,7 +100,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             set_error("Operador '" + this.type + "' NO puede ser aplicado alos tipos " + valIz.getDataType + " con " + valDer.getDataType, row, column);
                             return result;
                         }
-                        return new Returned("", DataType.BOOLEAN, false, valIz.TrueLabel + ":\n" + valDer.TrueLabel, valDer.FalseLabel);
+                        return new Returned("", DataType.BOOLEAN, false,this.TrueLabel, this.right.FalseLabel);
 
                     }
                     set_error("Operador '" + this.type + "' NO puede ser aplicado al tipo " + valIz.getDataType, row, column);
@@ -100,7 +109,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
                 case OpLogical.NOT:
 
-                  
+
+                    this.left.TrueLabel = this.FalseLabel;
+                    this.left.FalseLabel = this.TrueLabel;
 
                     //EXPRESIONES
                     var varrIz = this.left.Execute(ambit);

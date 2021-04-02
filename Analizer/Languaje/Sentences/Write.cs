@@ -14,14 +14,14 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         private int row;
         private int column;
         private int cant_tabs;
-        public Write(LinkedList<Expresion> v, bool s, int r, int c, int ct) :
+        public Write(LinkedList<Expresion> v, bool s, int r, int c, int canttabs) :
             base("Write")
         {
             this.value = v;
             this.isln = s;
             this.row = r;
             this.column = c;
-            this.cant_tabs = ct;
+            this.cant_tabs = canttabs;
         }
 
         public override string Execute(Ambit ambit)
@@ -47,6 +47,14 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
                         break;
                     case DataType.BOOLEAN:
+                        if (element.Value.ToString().Equals("false"))
+                        {
+                            generator.print_boolean(cant_tabs, false);
+                        } else
+                        {
+                            generator.print_boolean(cant_tabs, true);
+                        }
+                        
                         break;
                     case DataType.REAL:
                         generator.generate_print("d", element.getValue(), "(float)", cant_tabs);

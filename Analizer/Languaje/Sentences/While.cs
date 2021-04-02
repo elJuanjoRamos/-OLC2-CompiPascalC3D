@@ -41,32 +41,27 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 return null;
             }
 
-            var _break = cond.FalseLabel;
-            var _continue = label_recurrencia;
+            whileAmbit.Break = cond.FalseLabel;
+            whileAmbit.Continue = label_recurrencia;
 
             //TAG VERDADERA
-            generator.addLabel(condition.TrueLabel, cant_tabs);
+            generator.addLabel(cond.TrueLabel, cant_tabs);
             
+
             //EJECUTA SENTENCIAS
             var result = this.sentences.Execute(ambit);
 
-            generator.add_Goto(label_recurrencia, cant_tabs+1);
-            generator.addLabel(cond.FalseLabel, cant_tabs);
-            generator.save_comment("Finaliza while", cant_tabs);
             if (result == null)
             {
                 return null;
             }
+            
+            generator.add_Goto(label_recurrencia, cant_tabs + 1);
 
+            generator.addLabel(cond.FalseLabel, cant_tabs);
+            generator.save_comment("Fin while", cant_tabs);
+            
 
-            /*else if (result.ToLower().Equals("break"))
-            {
-
-            }
-            else if (result.ToLower().Equals("continue"))
-            {
-
-            }*/
 
             return "executed";
         }

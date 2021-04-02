@@ -32,27 +32,27 @@ namespace CompiPascalC3D.Analizer.AST
 
             if (node.Term.ToString().ToString().Equals("NUMERO"))
             {
-                return new Literal(node.Token.Value, 1, row, column);
+                return new Literal(node.Token.Value, 1, row, column, cant_Tabs);
             }
             else if (node.Term.ToString().Equals("CADENA"))
             {
-                return new Literal(node.Token.Value, 2, row, column);
+                return new Literal(node.Token.Value, 2, row, column, cant_Tabs);
             }
             else if (node.Term.ToString().Equals("RESERV_TRUE") || node.Term.ToString().Equals("RESERV_FALSE"))
             {
-                return new Literal(node.Token.Value, 3, row, column);
+                return new Literal(node.Token.Value, 3, row, column, cant_Tabs);
             }
             else if (node.Term.ToString().Equals("REAL"))
             {
-                return new Literal(node.Token.Value, 4, row, column);
+                return new Literal(node.Token.Value, 4, row, column, cant_Tabs);
             }
             else if (node.Term.ToString().Equals("TYPE"))
             {
-                return new Literal(node.Token.Value, 5, row, column);
+                return new Literal(node.Token.Value, 5, row, column, cant_Tabs);
             }
             else if (node.Term.ToString().Equals("ARRAY"))
             {
-                return new Literal(node.Token.Value, 6, row, column);
+                return new Literal(node.Token.Value, 6, row, column, cant_Tabs);
             }
             else if (node.Term.ToString().Equals("IDENTIFIER"))
             {
@@ -267,7 +267,7 @@ namespace CompiPascalC3D.Analizer.AST
                         var row = actual.ChildNodes[0].Token.Location.Line;
                         var col = actual.ChildNodes[0].Token.Location.Column;
 
-                        return new Arithmetic(new Literal("0", 1, row, col), iz, "-", row, col, cant_tabs);
+                        return new Arithmetic(new Literal("0", 1, row, col, cant_tabs), iz, "-", row, col, cant_tabs);
                     }
                 }
 

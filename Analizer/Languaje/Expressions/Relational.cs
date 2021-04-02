@@ -32,56 +32,246 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
         public override Returned Execute(Ambit ambit)
         {
             var valIz = this.left.Execute(ambit);
-            var valDer = this.right.Execute(ambit);
+
             var result = new Returned();
 
+            var generator = C3DController.Instance;
 
+            var op = GetType(this.type);
 
-
-            if (valIz.getDataType == DataType.REAL || valIz.getDataType == DataType.INTEGER)
+            switch (op)
             {
-                if (valDer.getDataType == DataType.REAL || valDer.getDataType == DataType.INTEGER)
-                {
-                    var generator = C3DController.Instance;
+                case OpRelational.EQUALS:
 
-                    if (this.TrueLabel == "")
+                    //VERIFICA SI EL IZQUIERDO ES REAL O INT
+                    if (valIz.getDataType == DataType.REAL || valIz.getDataType == DataType.INTEGER)
                     {
-                        this.TrueLabel = generator.newLabel();
+                        var valDer = this.right.Execute(ambit);
+                        if (valDer.getDataType == DataType.INTEGER || valDer.getDataType == DataType.REAL)
+                        {
+                            if (this.TrueLabel == "")
+                            {
+                                this.TrueLabel = generator.newLabel();
+                            }
+                            if (this.FalseLabel == "")
+                            {
+                                this.FalseLabel = generator.newLabel();
+                            }
+                            generator.add_If(valIz.getValue(), valDer.getValue(), "==", this.TrueLabel, cant_tabs);
+                            generator.add_Goto(this.FalseLabel, cant_tabs);
+
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel);
+
+                        }
+                        else
+                        {
+                            set_error("Operador '" + this.type + "' NO puede ser aplicado a los tipos " + valIz.getDataType + " con " + valDer.getDataType, row, column);
+                            return result;
+                        }
                     }
-                    if (this.FalseLabel == "")
+                    //VERIFICA SI EL IZQUIERDO ES BOOLEAN
+                    else if (valIz.getDataType == DataType.BOOLEAN)
                     {
-                        this.FalseLabel = generator.newLabel();
+                        var trueLabel = generator.newLabel();
+                        var falseLabel = generator.newLabel();
+                        generator.addLabel(valIz.TrueLabel, cant_tabs);
+                        this.right.TrueLabel = trueLabel;
+                        this.right.FalseLabel = falseLabel;
+                        var valDer = this.right.Execute(ambit);
+
+
+                        generator.addLabel(valIz.FalseLabel, cant_tabs);
+
+                        this.right.TrueLabel = falseLabel;
+                        this.right.FalseLabel = trueLabel;
+                        valDer = this.right.Execute(ambit);
+
+                        //VERIFICA QUE EL DERECHO SEA BOOLEAN
+                        if (valDer.getDataType == DataType.BOOLEAN)
+                        {
+                            result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel);
+
+                        } else
+                        {
+                            set_error("Operador '" + this.type + "' NO puede ser aplicado a los tipos " + valIz.getDataType + " con " + valDer.getDataType, row, column);
+                            return result;
+                        }
+                    }
+                    ////VERIFICA QUE EL IZQUIERDO SEA STRING
+                    else if (valIz.getDataType == DataType.STRING)
+                    {
+                        var valDer = this.right.Execute(ambit);
+                        if (valDer.getDataType == DataType.STRING)
+                        {
+                            /*var temp = generator.newTemporal();
+                            var tempAux = generator.newTemporal(); 
+                            generator.freeTemp(tempAux);
+
+                            generator.addExpression(tempAux, "p", (ambit.Size + 1).ToString(), "+", cant_tabs);
+                            generator.set_stack(tempAux, valIz.getValue(), cant_tabs);
+
+                            generator.addExpression(tempAux, tempAux, "1", "+", cant_tabs);
+                            generator.set_stack(tempAux, valDer.getValue(), cant_tabs);
+                            generator.add_next_ambit(enviorement.size);
+                            generator.addCall('native_compare_str_str');
+                            generator.addGetStack(temp, 'p');
+                            generator.addAntEnv(enviorement.size);*/
+
+
+
+                        } else
+                        {
+                            set_error("Operador '" + this.type + "' NO puede ser aplicado a los tipos " + valIz.getDataType + " con " + valDer.getDataType, row, column);
+                            return result;
+                        }
                     }
 
-                    generator.add_If(valIz.getValue(), valDer.getValue(), GetType(this.type), this.TrueLabel, cant_tabs);
-                    generator.add_Goto(this.FalseLabel, cant_tabs);
+                    else
+                    {
+                        set_error("Operador '" + this.type + "' NO puede ser aplicado al tipo " + valIz.getDataType, row, column);
+                        return result;
+                    }
 
-                    result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel);
 
-                } else
-                {
-                    set_error("Operador '" + this.type + "' NO puede ser aplicado a los tipos " + valIz.getDataType + " con " + valDer.getDataType, row, column);
-                }
+                    break;
+                case OpRelational.DISCTINCT:
+                    //VERIFICA QUE EL IZQUIERDO ESA REAL O INTEGER
+                    if (valIz.getDataType == DataType.REAL || valIz.getDataType == DataType.INTEGER)
+                    {
+                        var valDer = this.right.Execute(ambit);
+                        if (valDer.getDataType == DataType.INTEGER || valDer.getDataType == DataType.REAL)
+                        {
+                            if (this.TrueLabel == "")
+                            {
+                                this.TrueLabel = generator.newLabel();
+                            }
+                            if (this.FalseLabel == "")
+                            {
+                                this.FalseLabel = generator.newLabel();
+                            }
+                            generator.add_If(valIz.getValue(), valDer.getValue(), "!=", this.TrueLabel, cant_tabs);
+                            generator.add_Goto(this.FalseLabel, cant_tabs);
 
-            } else
-            {
-                set_error("Operador '" + this.type + "' NO puede ser aplicado a los tipos " + valIz.getDataType + " con " + valDer.getDataType, row, column);
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel);
+
+                        }
+                        else
+                        {
+                            set_error("Operador '" + this.type + "' NO puede ser aplicado a los tipos " + valIz.getDataType + " con " + valDer.getDataType, row, column);
+                            return result;
+                        }
+
+                    }
+                    else if (valIz.getDataType == DataType.STRING)
+                    {
+
+                    }
+                    else if (valIz.getDataType == DataType.BOOLEAN)
+                    {
+                        var trueLabel = generator.newLabel();
+                        var falseLabel = generator.newLabel();
+                        generator.addLabel(valIz.TrueLabel, cant_tabs);
+                        this.right.TrueLabel = falseLabel;
+                        this.right.FalseLabel = trueLabel;
+                        var valDer = this.right.Execute(ambit);
+
+
+                        generator.addLabel(valIz.FalseLabel, cant_tabs);
+
+                        this.right.TrueLabel = trueLabel;
+                        this.right.FalseLabel = falseLabel;
+                        valDer = this.right.Execute(ambit);
+
+                        //VERIFICA QUE EL DERECHO SEA BOOLEAN
+                        if (valDer.getDataType == DataType.BOOLEAN)
+                        {
+                            result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel);
+
+                        }
+                        else
+                        {
+                            set_error("Operador '" + this.type + "' NO puede ser aplicado a los tipos " + valIz.getDataType + " con " + valDer.getDataType, row, column);
+                            return result;
+                        }
+                    }
+                    else
+                    {
+                        set_error("Operador '" + this.type + "' NO puede ser aplicado al tipo " + valIz.getDataType, row, column);
+                        return result;
+                    }
+
+                    break;
+                case OpRelational.LESS:
+                case OpRelational.LESS_EQUALS:
+                case OpRelational.HIGHER:
+                case OpRelational.HIGHER_EQUALS:
+                    if (valIz.getDataType == DataType.REAL || valIz.getDataType == DataType.INTEGER)
+                    {
+                        var valDer = this.right.Execute(ambit);
+
+                        if (valDer.getDataType == DataType.REAL || valDer.getDataType == DataType.INTEGER)
+                        {
+                            if (this.TrueLabel == "")
+                            {
+                                this.TrueLabel = generator.newLabel();
+                            }
+                            if (this.FalseLabel == "")
+                            {
+                                this.FalseLabel = generator.newLabel();
+                            }
+                            generator.add_If(valIz.getValue(), valDer.getValue(), this.type, this.TrueLabel, cant_tabs);
+                            generator.add_Goto(this.FalseLabel, cant_tabs);
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel);
+
+                        } else
+                        {
+                            set_error("Operador '" + this.type + "' NO puede ser aplicado a los tipos " + valIz.getDataType + " con " + valDer.getDataType, row, column);
+                            return result;
+                        }   
+
+                    }
+                    else
+                    {
+                        set_error("Operador '" + this.type + "' NO puede ser aplicado al tipo " + valIz.getDataType, row, column);
+                        return result;
+                    }
+
+                    break;
+                default:
+                    return result;
             }
+
             return result;
+
         }
 
-        public string GetType(string simb)
+
+        public OpRelational GetType(string simb)
         {
-            if (simb.Equals("<>"))
+            if (simb.Equals("<"))
             {
-                return "!=";
+                return OpRelational.LESS;
             }
-            else if (simb.Equals("="))
+            else if (simb.Equals(">="))
             {
-                return "==";
-            } 
-            return simb;
+                return OpRelational.HIGHER_EQUALS;
+            }
+            else if (simb.Equals(">"))
+            {
+                return OpRelational.HIGHER;
+            }
+            else if (simb.Equals("<="))
+            {
+                return OpRelational.LESS_EQUALS;
+            }
+            else if (simb.Equals("<>"))
+            {
+                return OpRelational.DISCTINCT;
+            }
+
+            return OpRelational.EQUALS;
         }
+
         public void set_error(string texto, int row, int column)
         {
             ErrorController.Instance.SemantycErrors(texto, row, column);

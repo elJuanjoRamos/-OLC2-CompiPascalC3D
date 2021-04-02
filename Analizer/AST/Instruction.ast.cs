@@ -49,19 +49,21 @@ namespace CompiPascalC3D.Analizer.AST
         {
             if (actual.Term.ToString().Equals("WRITE"))
             {
+                var row = actual.ChildNodes[0].Token.Location.Line;
+                var col = actual.ChildNodes[0].Token.Location.Column;
                 var WRHITE_PARAMETER = actual.ChildNodes[2];
 
                 var isln = false;
-                //LinkedList<Expression> list = new LinkedList<Expression>();
-                //WriteAST writeAST = new WriteAST();
+                LinkedList<Expresion> list = new LinkedList<Expresion>();
+                WriteAST writeAST = new WriteAST();
 
-                //list = writeAST.WRITES(WRHITE_PARAMETER);
+                list = writeAST.WRITES(WRHITE_PARAMETER, cant_tabs);
 
-                //if (actual.ChildNodes[0].Term.ToString().Equals("RESERV_WRITEN"))
-                //{
-                //    isln = true;
-                //}
-                //return new Write(list, isln);
+                if (actual.ChildNodes[0].Term.ToString().Equals("RESERV_WRITEN"))
+                {
+                    isln = true;
+                }
+                return new Write(list, isln, row, col, cant_tabs);
 
             }
             else if (actual.Term.ToString().Equals("IF-THEN"))
@@ -95,8 +97,8 @@ namespace CompiPascalC3D.Analizer.AST
             }
             else if (actual.Term.ToString().Equals("REPEAT_UNTIL"))
             {
-                //Repeat _repeat = (new RepeatAST()).REPEAT_UNTIL(actual);
-                //return _repeat;
+                Repeat _repeat = (new RepeatAst()).REPEAT_UNTIL(actual, cant_tabs);
+                return _repeat;
             }
             else if (actual.Term.ToString().Equals("FOR"))
             {

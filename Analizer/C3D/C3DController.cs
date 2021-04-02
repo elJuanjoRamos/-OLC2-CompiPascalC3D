@@ -40,7 +40,7 @@ namespace CompiPascalC3D.Analizer.C3D
 
         public void clearCode()
         {
-            this.temporal_number = this.temporal_number = 1;
+            this.temporal_number = this.label_number = 0;
             this.code.Clear();
             this.tempStorage.Clear();
         }
@@ -53,9 +53,8 @@ namespace CompiPascalC3D.Analizer.C3D
         //TEMPORALES
 
         public string newTemporal() {
-            var temp = "T" + this.temporal_number;
+            var temp = "T" + this.temporal_number++;
             this.tempStorage.Add(temp);
-            this.temporal_number++;
             return temp;
         }
 
@@ -116,7 +115,8 @@ namespace CompiPascalC3D.Analizer.C3D
 
         //LABELS
         public string newLabel(){
-            return "L" + this.label_number++;
+            this.label_number++;
+            return "L" + this.label_number;
         }
 
 
@@ -130,40 +130,62 @@ namespace CompiPascalC3D.Analizer.C3D
         ///STACK
         public void set_stack(string index, string value, int cant_tabs)
         {
-            var texto = getTabs(cant_tabs, false) + "Stack[" + index + "] = " + value;
+            var texto = getTabs(cant_tabs, false) + "Stack[" + index + "] = " + value + ";";
 
             this.code.Add(texto);
         }
         public void get_stack(string target, string index,  int cant_tabs)
         {
-            var texto = getTabs(cant_tabs, false) + target + " = Stack[" + index + "]"; 
+            var texto = getTabs(cant_tabs, false) + target + " = Stack[" + index + "];"; 
+            this.code.Add(texto);
+        }
+
+        //AMBITOS
+        public void add_next_ambit(int size, int cant_tabs)
+        {
+            var texto = getTabs(cant_tabs, false) + "p = p + " + size + ";";
             this.code.Add(texto);
         }
 
         //IF
         public void add_If(string left, string right, string operatorr, string label, int cant_tabs)
         {
-            this.code.Add(getTabs(cant_tabs, false) + "if (" + left + " " + operatorr  + " "  + right + ") goto " + label);
+            this.code.Add(getTabs(cant_tabs, false) + "if (" + left + " " + operatorr  + " "  + right + ") goto " + label + ";");
         }
         //GOTO
         public void add_Goto(string label, int cant_tabs)
         {
-            this.code.Add(getTabs(cant_tabs, false) + "goto " + label);
+            this.code.Add(getTabs(cant_tabs, false) + "goto " + label + ";");
         }
 
 
         //EXPRESION
         public void addExpression(string target, string left, string right, string symbol_operator, int cant_tabs)
         {
-            var text = getTabs(cant_tabs, false) + target + " = " + left + " " + symbol_operator + " " + right ;
+            var text = getTabs(cant_tabs, false) + target + " = " + left + " " + symbol_operator + " " + right + ";";
             this.code.Add(text);
         }
 
         //PRINT
         public void generate_print(string format, string value, string type, int cant_tabs)
         {
-            var texto = getTabs(cant_tabs, false) + "printf(%" + format + "," + type +  value + ");";  
+            var texto = getTabs(cant_tabs, false) + "printf(\"%" + format + "\"," + type +  value + ");";  
             this.code.Add(texto);
+        }
+        public void print_boolean(int cant_tabs, bool istrue)
+        {
+            var str = "false";
+            var tab_S = getTabs(cant_tabs, false);
+
+            if (istrue)
+            {
+                str = "true";
+            }
+
+            foreach (char cha in str)
+            {
+                this.code.Add(tab_S + "printf(\"%" + "c" + "\"," + (int)cha + ");");
+            }
         }
 
         // OBTIENE LOS TEMPORALES
@@ -171,6 +193,11 @@ namespace CompiPascalC3D.Analizer.C3D
         {
             var text = "";
             var cont = 0;
+
+            if (tempStorage.Count == 0)
+            {
+                return "";
+            }
 
             foreach (var item in tempStorage)
             {
@@ -184,7 +211,8 @@ namespace CompiPascalC3D.Analizer.C3D
                     text += ";";
                 }
             }
-            return "Int " +  text + "\n\n";
+
+            return "float " +  text + "\n\n";
         }
 
         /// OBTIENE TODO EL CODIGO
