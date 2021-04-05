@@ -10,14 +10,17 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
     {
         private LinkedList<Instruction> list;
         private bool isNull;
+        private string exitLabel;
 
         public bool IsNull { get => isNull; set => isNull = value; }
+        public string ExitLabel { get => exitLabel; set => exitLabel = value; }
 
         public Sentence(LinkedList<Instruction> list)
            : base("Sentence")
         {
             this.list = list;
             this.isNull = false;
+            this.exitLabel = "";
         }
         public Sentence()
             : base("Sentence")
@@ -63,6 +66,10 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             foreach (var inst in list)
             {
+                if (inst is If)
+                {
+                    ((If)inst).LabelExit = this.ExitLabel;
+                }
                 var res = inst.Execute(ambit);
                 if (res == null)
                 {

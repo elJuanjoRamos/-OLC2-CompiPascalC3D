@@ -37,7 +37,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             repeatAmbit.Break = condition.FalseLabel = generator.newLabel();
 
             //IMPRIMIR ETIQUETA RECURRENCIA
-            generator.addLabel(condition.FalseLabel, cant_tabs);
+            generator.addLabel("LTEMP", 0);
 
 
             //INSTRUCCIONES
@@ -49,15 +49,14 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             //CONDICION
             var condicion = condition.Execute(repeatAmbit);
+            repeatAmbit.Break = condicion.FalseLabel;
+            generator.replace_temp(condicion.FalseLabel);
             //VERIFICA QUE SEA BOOL
             if (condicion.getDataType != DataType.BOOLEAN)
             {
                 set_error("La condicion del repeat no es booleana", row, column);
                 return null;
             }
-            //GENERAR EL goto
-            generator.addLabel(condicion.FalseLabel, cant_tabs);
-            generator.add_Goto(repeatAmbit.Break, cant_tabs + 1);
 
             //IMPRIMIR ETIQUETA VERDADERA
             generator.addLabel(condicion.TrueLabel, cant_tabs);

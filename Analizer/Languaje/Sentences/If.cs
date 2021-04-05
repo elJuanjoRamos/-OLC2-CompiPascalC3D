@@ -13,12 +13,14 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         private Expresion condition;
         private Sentence sentences;
         private Sentence elif;
+        private string labelExit;
         private bool isNull;
         public int row;
         public int column;
         public int tabs;
 
         public bool IsNull { get => isNull; set => isNull = value; }
+        public string LabelExit { get => labelExit; set => labelExit = value; }
 
         public If(Expresion condition, Sentence sentences, Sentence elif, int ro, int co, int ct)
            : base("If")
@@ -30,6 +32,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             this.row = ro;
             this.column = co;
             this.tabs = ct;
+            this.labelExit = "";
         }
 
         public If()
@@ -71,10 +74,19 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             if (!this.elif.IsNull)
             {
-                var tempLbl = generator.newLabel();
+                var tempLbl = "";
+                /*if (this.labelExit == "")
+                {
+                    tempLbl = generator.newLabel();
+                } else
+                {
+                    tempLbl = this.labelExit;
+                }*/
+                tempLbl = generator.newLabel();
                 generator.add_Goto(tempLbl, tabs);
                 generator.addLabel(condicion.FalseLabel, tabs);
 
+                this.elif.ExitLabel = tempLbl;
                 var else_sentence = this.elif.Execute(ifAmbit);
                 generator.addLabel(tempLbl,tabs);
                 if (else_sentence == null)

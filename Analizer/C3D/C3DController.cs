@@ -126,6 +126,18 @@ namespace CompiPascalC3D.Analizer.C3D
             this.code.Add(text);
         }
 
+        public void replace_temp(string label)
+        {
+            for (int i = 0; i < this.code.Count; i++)
+            {
+                string element = this.code[i].ToString();
+                if (element.Contains("LTEMP"))
+                {
+                    var temp = element.Replace("LTEMP", label);
+                    this.code[i] = temp;
+                }
+            }
+        }
 
         ///STACK
         public void set_stack(string index, string value, int cant_tabs)

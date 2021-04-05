@@ -45,14 +45,19 @@ namespace CompiPascal
         {
             Syntactic s = new Syntactic();
             C3DController.Instance.clearCode();
-            
+            ErrorController.Instance.Clean();
             s.analizer(areaanalizar.Text, "");
             
             if (ErrorController.Instance.containSemantycError())
             {
                 consola.Text = ErrorController.Instance.getSemantycError(""); 
 
-            } else
+            }
+            else if (ErrorController.Instance.containSyntacticError())
+            {
+                consola.Text = ErrorController.Instance.getSintactycError("");
+            }
+            else
             {
                 consola.Text = "";
                 consola.Text = "#include <stdio.h>\nfloat Heap[100000]; //estructura heap\nfloat Stack[100000]; //estructura stack\n\n";

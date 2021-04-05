@@ -90,7 +90,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     {
                         generator.addLabel(this.left.FalseLabel, cant_tabs);
 
-                        this.right.TrueLabel = this.TrueLabel;
+                        this.right.TrueLabel = valIz.TrueLabel;
                         this.right.FalseLabel = generator.newLabel();
 
                         var valDer = right.Execute(ambit);
@@ -100,7 +100,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             set_error("Operador '" + this.type + "' NO puede ser aplicado alos tipos " + valIz.getDataType + " con " + valDer.getDataType, row, column);
                             return result;
                         }
-                        return new Returned("", DataType.BOOLEAN, false,this.TrueLabel, this.right.FalseLabel);
+                        return new Returned("", DataType.BOOLEAN, false,this.right.TrueLabel, this.right.FalseLabel);
 
                     }
                     set_error("Operador '" + this.type + "' NO puede ser aplicado al tipo " + valIz.getDataType, row, column);

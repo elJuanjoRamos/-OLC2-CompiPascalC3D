@@ -107,8 +107,8 @@ namespace CompiPascalC3D.Analizer.AST
             }
             else if (actual.Term.ToString().Equals("SENTENCE_CASE"))
             {
-                //Switch _SW = (new CaseAST()).SENTENCE_CASE(actual);
-                //return _SW;
+                Switch _SW = (new CaseAST()).SENTENCE_CASE(actual, cant_tabs);
+                return _SW;
             }
             else if (actual.Term.ToString().Equals("CONTINUE"))
             {
