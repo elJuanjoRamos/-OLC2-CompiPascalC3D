@@ -77,6 +77,7 @@ namespace CompiPascalC3D.Analizer.Syntactic
 
         public void execute(LinkedList<Instruction> variables, LinkedList<Instruction> instrucciones)
         {
+            C3D.C3DController.Instance.save_comment("Inicia declaracion variables", 1);
             foreach (var item in variables)
             {
                 try
@@ -93,6 +94,7 @@ namespace CompiPascalC3D.Analizer.Syntactic
                     throw;
                 }
             }
+            C3D.C3DController.Instance.save_comment("Fin declaracion variables", 1);
 
             foreach (var item in instrucciones)
             {

@@ -38,7 +38,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             
 
-            var switchAmbit = new Ambit(ambit, ambit.Ambit_name, "Case", false);
+            var switchAmbit = new Ambit(ambit, ambit.Ambit_name+"_Case", "Case", false);
 
             switchAmbit.Break = generator.newLabel();
 
@@ -78,7 +78,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 }
             }
             generator.addLabel(switchAmbit.Break, cant_tabs);
-            generator.replace_temp(switchAmbit.Break);
+            generator.replace_temp(switchAmbit.Break, "LTEMP");
 
 
 

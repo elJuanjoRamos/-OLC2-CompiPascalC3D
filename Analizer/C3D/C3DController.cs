@@ -47,7 +47,12 @@ namespace CompiPascalC3D.Analizer.C3D
 
         public void save_comment(string comment, int cant_tabs)
         {
-            this.code.Add(getTabs(cant_tabs, false) + "/***** "+ comment +" *****/");
+            this.code.Add(getTabs(cant_tabs, false) + "/***** "+ comment +" *****/\n");
+        }
+
+        public void save_error(string comment, int row, int col)
+        {
+            this.code.Add("*Esto es un error: " + comment + " en Fila: " + row + ", Columna: " + col);
         }
 
         //TEMPORALES
@@ -126,14 +131,14 @@ namespace CompiPascalC3D.Analizer.C3D
             this.code.Add(text);
         }
 
-        public void replace_temp(string label)
+        public void replace_temp(string label, string replace)
         {
             for (int i = 0; i < this.code.Count; i++)
             {
                 string element = this.code[i].ToString();
-                if (element.Contains("LTEMP"))
+                if (element.Contains(replace))
                 {
-                    var temp = element.Replace("LTEMP", label);
+                    var temp = element.Replace(replace, label);
                     this.code[i] = temp;
                 }
             }

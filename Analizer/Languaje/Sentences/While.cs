@@ -26,7 +26,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         public override string Execute(Ambit ambit)
         {
             var generator = C3D.C3DController.Instance;
-            var whileAmbit = new Ambit(ambit, ambit.Ambit_name, "While", false);
+            var whileAmbit = new Ambit(ambit, ambit.Ambit_name+"_While", "While", false);
             var label_recurrencia = generator.newLabel();
     
             generator.save_comment("Inicia While", cant_tabs);

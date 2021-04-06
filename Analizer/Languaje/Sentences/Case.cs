@@ -59,8 +59,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             //VERIFICA QUE LAS SENTNECIAS NO VENGAN VACIAS
             if (!sentence.IsNull)
             {
-
-
                 var element = sentence.Execute(ambit);
 
                 if (element != null)

@@ -115,14 +115,14 @@ namespace CompiPascalC3D.Analizer.AST
                 var row = actual.ChildNodes[0].Token.Location.Line;
                 var col = actual.ChildNodes[0].Token.Location.Column;
 
-                //return new Continue(row, col);
+                return new Continue(row, col, cant_tabs);
             }
             else if (actual.Term.ToString().Equals("BREAK"))
             {
                 var row = actual.ChildNodes[0].Token.Location.Line;
                 var col = actual.ChildNodes[0].Token.Location.Column;
 
-                //return new Break(row, col);
+                return new Break(row, col, cant_tabs);
             }
             else if (actual.Term.ToString().Equals("CALL"))
             {

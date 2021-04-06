@@ -29,15 +29,16 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             var generator = C3D.C3DController.Instance;
 
             //AMBITO DEL REPEAT
-            var repeatAmbit = new Ambit(ambit, ambit.Ambit_name, "Repeat", false);
+            var repeatAmbit = new Ambit(ambit, ambit.Ambit_name+"_Repeat", "Repeat", false);
             generator.save_comment("Inicia Repeat", cant_tabs);
 
             //SETEO Continue y break por defecto
-            repeatAmbit.Continue = condition.TrueLabel = generator.newLabel();
-            repeatAmbit.Break = condition.FalseLabel = generator.newLabel();
+            condition.TrueLabel = generator.newLabel();
+            repeatAmbit.Break = "LBREAK";
+            repeatAmbit.Continue = condition.FalseLabel = generator.newLabel();
 
             //IMPRIMIR ETIQUETA RECURRENCIA
-            generator.addLabel("LTEMP", 0);
+            generator.addLabel("LTEMP", cant_tabs);
 
 
             //INSTRUCCIONES
@@ -47,10 +48,18 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 return null;
             }
 
+            if (repeatAmbit.Change_continue)
+            {
+                generator.addLabel(repeatAmbit.Continue, cant_tabs);
+            }
+
             //CONDICION
             var condicion = condition.Execute(repeatAmbit);
-            repeatAmbit.Break = condicion.FalseLabel;
-            generator.replace_temp(condicion.FalseLabel);
+            repeatAmbit.Break = condicion.TrueLabel;
+            repeatAmbit.Continue = condicion.FalseLabel;
+
+            generator.replace_temp(condicion.TrueLabel, "LBREAK");
+            generator.replace_temp(repeatAmbit.Continue, "LTEMP");
             //VERIFICA QUE SEA BOOL
             if (condicion.getDataType != DataType.BOOLEAN)
             {

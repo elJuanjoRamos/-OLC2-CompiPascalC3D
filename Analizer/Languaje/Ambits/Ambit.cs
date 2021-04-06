@@ -18,7 +18,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         private string idParent = "";
         private string _break = "";
         private string _continue = "";
-
+        private bool change_continue = false;
         private string ambit_name_inmediato = "";
         private Ambit anterior;
         private int size;
@@ -35,6 +35,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             this.anterior = a;
             this.ambit_null = isnull;
             this.size = a.Size;
+            this._break = a.Break;
+            this._continue = a.Continue;
         }
 
         public Ambit()
@@ -116,5 +118,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         public string Ambit_name { get => ambit_name; set => ambit_name = value; }
         public string Break { get => _break; set => _break = value; }
         public string Continue { get => _continue; set => _continue = value; }
+        public bool Change_continue { get => change_continue; set => change_continue = value; }
     }
 }

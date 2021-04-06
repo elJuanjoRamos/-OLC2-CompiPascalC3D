@@ -49,7 +49,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             
             //AMBITO IF
-            var ifAmbit = new Ambit(ambit, ambit.Ambit_name, "If", false);
+            var ifAmbit = new Ambit(ambit, ambit.Ambit_name+ "_If", "If", false);
             //CONDICION
             var condicion = condition.Execute(ambit);
             //VERIFICA QUE LLA CONDICION SEA BOOLEANA
