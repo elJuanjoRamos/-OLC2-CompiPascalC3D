@@ -26,7 +26,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         public override string Execute(Ambit ambit)
         {
             var generator = C3D.C3DController.Instance;
-            if (ambit.Continue == "")
+            if (getValidAmbit(ambit.Ambit_name_inmediato, ambit.Ambit_name))
             {
                 Controller.ErrorController.Instance.SyntacticError("La sentencia Continue solo puede aparece en ciclos", row, column);
                 return null;
@@ -36,6 +36,33 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             ambit.Change_continue = true;
             generator.add_Goto(ambit.Continue, cant_tabs);
             return "executed";
+        }
+
+        public bool getValidAmbit(string ambit_name, string ambit_padre)
+        {
+            switch (ambit_name)
+            {
+                case "for":
+                    return true;
+                case "while":
+                    return true;
+                case "repeat":
+                    return true;
+            }
+
+            if (ambit_padre.Contains("for"))
+            {
+                return true;
+            }
+            if (ambit_padre.Contains("while"))
+            {
+                return true;
+            }
+            if (ambit_padre.Contains("repeat"))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

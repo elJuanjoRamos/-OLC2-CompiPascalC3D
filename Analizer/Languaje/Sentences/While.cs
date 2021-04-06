@@ -49,13 +49,17 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             
 
             //EJECUTA SENTENCIAS
-            var result = this.sentences.Execute(ambit);
+            var result = this.sentences.Execute(whileAmbit);
 
             if (result == null)
             {
                 return null;
             }
-            
+            if (whileAmbit.Change_continue)
+            {
+                generator.addLabel(whileAmbit.Continue, cant_tabs);
+
+            }
             generator.add_Goto(label_recurrencia, cant_tabs + 1);
 
             generator.addLabel(cond.FalseLabel, cant_tabs);
