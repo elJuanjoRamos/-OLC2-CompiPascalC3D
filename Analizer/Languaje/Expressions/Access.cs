@@ -66,9 +66,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             else
             {
                 var tempAux = generator.newTemporal(); 
-                generator.freeTemp(tempAux);
+                //generator.freeTemp(tempAux);
                 
-                generator.addExpression(tempAux, "p", variable.Position.ToString(), "+", cant_Tabs);
+                generator.addExpression(tempAux, "SP", variable.Position.ToString(), "+", cant_Tabs);
 
                 generator.get_stack(temp, tempAux, cant_Tabs);
 

@@ -40,6 +40,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
         public override Returned Execute(Ambit ambit)
         {
+            var generator = C3D.C3DController.Instance;
             var returned = new Returned();
             if (this.type == 1)
             {
@@ -47,13 +48,23 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             }
             else if (this.type == 2)
             {
-                returned = new Returned(this.value.ToString(), DataType.STRING, false);
+                var temp = generator.newTemporal();
+                generator.addExpression(temp, "HP", "", "", cant_tabs);
+                foreach (char cha in this.value.ToString())
+                {
+                    generator.set_Heap("HP", ((int)cha).ToString(), cant_tabs);
+                    generator.next_Heap(cant_tabs);
+                }
+                generator.set_Heap("HP", "-1", cant_tabs);
+                generator.next_Heap(cant_tabs);
+
+                returned = new Returned(temp, DataType.STRING, true);
             }
 
             else if (this.type == 3)
             {
 
-                var generator = C3D.C3DController.Instance;
+                
 
                 if (this.TrueLabel == "")
                 {

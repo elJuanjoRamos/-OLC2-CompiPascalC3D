@@ -1,4 +1,5 @@
 ﻿using CompiPascalC3D.Analizer.Languaje.Abstracts;
+using CompiPascalC3D.Analizer.Languaje.Sentences;
 using CompiPascalC3D.Analizer.Languaje.Symbols;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
     public class Ambit
     {
         Dictionary<string, Identifier> variables;
-       // Dictionary<string, Function> functions;
+        Dictionary<string, Function> functions;
        // Dictionary<string, Arrays> arrays;
         //Dictionary<string, string> procedures;
         private string ambit_name = "";
@@ -21,14 +22,14 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         private bool change_continue = false;
         private string ambit_name_inmediato = "";
         private Ambit anterior;
-        private int size;
+        private int size = 0;
         public Boolean ambit_null;
 
 
         public Ambit(Ambit a, string n, string ni, bool isnull)
         {
             this.variables = new Dictionary<string, Identifier>();
-            //this.functions = new Dictionary<string, Function_Trad>();
+            this.functions = new Dictionary<string, Function>();
             //this.procedures = new Dictionary<string, string>();
             this.ambit_name = n;
             this.ambit_name_inmediato = ni;
@@ -43,7 +44,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         {
 
             this.variables = new Dictionary<string, Identifier>();
-            //this.functions = new Dictionary<string, Function_Trad>();
+            this.functions = new Dictionary<string, Function>();
             //this.procedures = new Dictionary<string, string>();
             this.ambit_null = true;
             this.ambit_name = "General";
@@ -63,7 +64,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             {
                 ant = true;
             }
-            Identifier ident = new Identifier(valor.ToString(), id, type, esconstante, isAssigned, false, tipo_dato, size++, ant);
+            this.size = this.size + 1;
+            Identifier ident = new Identifier(valor.ToString(), id, type, esconstante, 
+                isAssigned, false, tipo_dato, this.size, ant);
             
             
             if (!amb.Ambit_name_inmediato.Equals("Function"))
@@ -75,12 +78,50 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             }
             else
             {
-                //saveVarFunction(id, valor, type, esconstante, isAssigned);
+                saveVarFunction(ident);
             }
 
             return ident;
 
         }
+
+        #region FUNCIONES
+        public void saveVarFunction(Identifier ident)
+        {
+            Ambit amb = this;
+
+            if (!amb.variables.ContainsKey(ident.Id.ToLower()))
+            {
+                amb.variables[ident.Id.ToLower()] = (ident);
+            }
+
+        }
+
+        public void saveFuncion(string id, Function function)
+        {
+            Ambit amb = this;
+
+            if (!amb.functions.ContainsKey(id.ToLower()))
+            {
+                amb.functions[id.ToLower()] = function;
+            }
+        }
+        public void setFunction(string id, Function function)
+        {
+            Ambit env = this;
+
+            while (env != null)
+            {
+                if (env.Functions.ContainsKey(id.ToLower()))
+                {
+                    env.Functions[id.ToLower()] = function;
+                    return;
+                }
+                env = env.anterior;
+            }
+        }
+        #endregion
+
         public Identifier getVariable(string id)
         {
             Identifier identifier = new Identifier();
@@ -119,5 +160,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         public string Break { get => _break; set => _break = value; }
         public string Continue { get => _continue; set => _continue = value; }
         public bool Change_continue { get => change_continue; set => change_continue = value; }
+        public Dictionary<string, Function> Functions { get => functions; set => functions = value; }
+        public Ambit Anterior { get => anterior; set => anterior = value; }
     }
 }

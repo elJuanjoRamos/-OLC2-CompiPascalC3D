@@ -111,9 +111,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                             } else
                             {
                                 var temp = generator.newTemporal(); 
-                                generator.freeTemp(temp);
-                                
-                                generator.addExpression(temp, "p", variable.Position.ToString(), "+",1);
+                                //generator.freeTemp(temp);
+                                generator.addExpression(temp, "SP", variable.Position.ToString(), "+",1);
 
                                 if (variable.DataType == DataType.BOOLEAN)
                                 {
@@ -134,7 +133,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                         else
                         {
                             set_error("El tipo " + val.getDataType + " no es asignable con " + this.type.ToString(), row, column);
-                            return "null";
+                            return null;
                         }
                     }
 
@@ -148,7 +147,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             else
             {
                 set_error("La variable '" + id + "' ya fue declarada", row, column);
-                return "null";;
+                return null;
             }
             return "";
         }

@@ -62,21 +62,39 @@ namespace CompiPascalC3D.Analizer.Syntactic
 
 
             //LISTADO DE DECLARACIONES
-            //LISTA DE DECLARCION DE VARIABLES
             LinkedList<Instruction> lista_declaraciones = new LinkedList<Instruction>();
             ArrayList elemetos_heredados = new ArrayList();
+            lista_declaraciones = (new DeclarationAST()).LIST_DECLARATIONS(program_body.ChildNodes[1], lista_declaraciones, elemetos_heredados, 1);
 
-            lista_declaraciones = (new DeclarationAST()).LIST_DECLARATIONS(program_body.ChildNodes[1], lista_declaraciones, elemetos_heredados);
+            //LISTA DE FUNCIONES
+            LinkedList<Instruction> lista_funciones = new LinkedList<Instruction>();
+            elemetos_heredados.Clear();
+            lista_funciones = (new FunctionAST()).FUNCTION_LIST(program_body.ChildNodes[2], lista_funciones, elemetos_heredados, 0);
 
             //LISTADO DE SENTENCIAS SENTENCIAS
             LinkedList<Instruction> listaInstrucciones = (new InstructionAST()).INSTRUCTIONS_BODY(program_body.ChildNodes[3], 1);
 
 
-            execute(lista_declaraciones, listaInstrucciones);
+            execute(lista_declaraciones, lista_funciones, listaInstrucciones);
         }
 
-        public void execute(LinkedList<Instruction> variables, LinkedList<Instruction> instrucciones)
+        public void execute(LinkedList<Instruction> variables,
+            LinkedList<Instruction> funciones,
+            LinkedList<Instruction> instrucciones)
         {
+            foreach (var funcion in funciones)
+            {
+                var result = funcion.Execute(general);
+                if (result == null)
+                {
+                    continue;
+                }
+            }
+
+
+
+            C3D.C3DController.Instance.save_code("int main()\n{\n");
+
             C3D.C3DController.Instance.save_comment("Inicia declaracion variables", 1);
             foreach (var item in variables)
             {
@@ -112,6 +130,8 @@ namespace CompiPascalC3D.Analizer.Syntactic
                     throw;
                 }
             }
+            C3D.C3DController.Instance.save_code("\nreturn 0;\n}");
+
         }
     }
 }

@@ -50,9 +50,9 @@ namespace CompiPascalC3D.Analizer.C3D
             this.code.Add(getTabs(cant_tabs, false) + "/***** "+ comment +" *****/\n");
         }
 
-        public void save_error(string comment, int row, int col)
+        public void save_code(string comment)
         {
-            this.code.Add("*Esto es un error: " + comment + " en Fila: " + row + ", Columna: " + col);
+            this.code.Add(comment);
         }
 
         //TEMPORALES
@@ -157,6 +157,36 @@ namespace CompiPascalC3D.Analizer.C3D
             this.code.Add(texto);
         }
 
+        public void next_Env(int size, int cant_tabs)
+        {
+            var texto = getTabs(cant_tabs, false) + "SP = SP + " + size + ";";
+            this.code.Add(texto);
+        }
+
+        public void add_AntEnv(int size, int cant_tabs)
+        {
+            var texto = getTabs(cant_tabs, false) + "SP = SP - " + size + ";";
+            this.code.Add(texto);
+        }
+
+
+        //HEAP
+        public void next_Heap(int cant_tabs)
+        {
+            this.code.Add(getTabs(cant_tabs, false) + "HP = HP + 1;");
+        }
+
+        public void get_Heap(string target, string index, int cant_tabs)
+        {
+            this.code.Add(getTabs(cant_tabs, false) + target +"= Heap[" + index + "];");
+        }
+
+        public void set_Heap(string index, string value, int cant_tabs)
+        {
+            this.code.Add(getTabs(cant_tabs, false) + "Heap[" + index +"] = " + value + ";");
+        }
+
+
         //AMBITOS
         public void add_next_ambit(int size, int cant_tabs)
         {
@@ -179,7 +209,7 @@ namespace CompiPascalC3D.Analizer.C3D
         //EXPRESION
         public void addExpression(string target, string left, string right, string symbol_operator, int cant_tabs)
         {
-            var text = getTabs(cant_tabs, false) + target + " = " + left + " " + symbol_operator + " " + right + ";";
+            var text = getTabs(cant_tabs, false) + target + " = " + left + symbol_operator + right + ";";
             this.code.Add(text);
         }
 
@@ -229,7 +259,7 @@ namespace CompiPascalC3D.Analizer.C3D
                 }
             }
 
-            return "float " +  text + "\n\n";
+            return "int " +  text + "\n\n";
         }
 
         /// OBTIENE TODO EL CODIGO

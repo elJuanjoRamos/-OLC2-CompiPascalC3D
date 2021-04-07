@@ -21,7 +21,7 @@ namespace CompiPascalC3D.Analizer.AST
         #region DECLARACION
 
 
-        public LinkedList<Instruction> LIST_DECLARATIONS(ParseTreeNode actual, LinkedList<Instruction> lista_actual, ArrayList elementos_her)
+        public LinkedList<Instruction> LIST_DECLARATIONS(ParseTreeNode actual, LinkedList<Instruction> lista_actual, ArrayList elementos_her, int cant_tabs)
         {
 
             /*
@@ -44,9 +44,9 @@ namespace CompiPascalC3D.Analizer.AST
                 {
 
                     var identifier = actual.ChildNodes[1].Token.Text;
-                    lista_actual.AddLast(new Declaration(identifier, expressionAST.getExpresion(actual.ChildNodes[3], 0), row, col, true));
-                    lista_actual = CONST_DECLARATION(actual.ChildNodes[5], lista_actual, elementos_her);
-                    lista_actual = LIST_DECLARATIONS(actual.ChildNodes[6], lista_actual, elementos_her);
+                    lista_actual.AddLast(new Declaration(identifier, expressionAST.getExpresion(actual.ChildNodes[3], cant_tabs), row, col, true));
+                    lista_actual = CONST_DECLARATION(actual.ChildNodes[5], lista_actual, elementos_her, cant_tabs);
+                    lista_actual = LIST_DECLARATIONS(actual.ChildNodes[6], lista_actual, elementos_her, cant_tabs);
                 }
                 //ES VAR
                 else
@@ -54,9 +54,9 @@ namespace CompiPascalC3D.Analizer.AST
                     var identifier = actual.ChildNodes[1].Token.Text;
                     elementos_her.Add(identifier);
 
-                    lista_actual = DECLARATION_BODY(actual.ChildNodes[2], lista_actual, elementos_her);
-                    lista_actual = VAR_DECLARATION(actual.ChildNodes[3], lista_actual, elementos_her);
-                    lista_actual = LIST_DECLARATIONS(actual.ChildNodes[4], lista_actual, elementos_her);
+                    lista_actual = DECLARATION_BODY(actual.ChildNodes[2], lista_actual, elementos_her, cant_tabs);
+                    lista_actual = VAR_DECLARATION(actual.ChildNodes[3], lista_actual, elementos_her, cant_tabs);
+                    lista_actual = LIST_DECLARATIONS(actual.ChildNodes[4], lista_actual, elementos_her, cant_tabs);
 
                 }
 
@@ -69,7 +69,8 @@ namespace CompiPascalC3D.Analizer.AST
             return lista_actual;
         }
 
-        public LinkedList<Instruction> DECLARATION_BODY(ParseTreeNode actual, LinkedList<Instruction> lista_actual, ArrayList elementos_her)
+        public LinkedList<Instruction> DECLARATION_BODY(ParseTreeNode actual, 
+            LinkedList<Instruction> lista_actual, ArrayList elementos_her, int cant_tabs)
         {
             /*
              
@@ -95,7 +96,7 @@ namespace CompiPascalC3D.Analizer.AST
 
                 foreach (var item in elementos_her)
                 {
-                    lista_actual.AddLast(GetDeclarationValue(item.ToString(), datatype, false, row, col, false, 0));
+                    lista_actual.AddLast(GetDeclarationValue(item.ToString(), datatype, false, row, col, false, cant_tabs));
                 }
                 elementos_her.Clear();
 
@@ -113,11 +114,12 @@ namespace CompiPascalC3D.Analizer.AST
                 var datatype = actual.ChildNodes[1].ChildNodes[0].Token.Text;
 
                 elementos_her.Add(datatype);
-                lista_actual = ASSIGNATION_VARIABLE(actual.ChildNodes[2], lista_actual, elementos_her, esArray);
+                lista_actual = ASSIGNATION_VARIABLE(actual.ChildNodes[2], lista_actual, elementos_her, esArray, cant_tabs);
             }
             return lista_actual;
         }
-        public LinkedList<Instruction> VAR_DECLARATION(ParseTreeNode actual, LinkedList<Instruction> lista_actual, ArrayList elementos_her)
+        public LinkedList<Instruction> VAR_DECLARATION(ParseTreeNode actual, 
+            LinkedList<Instruction> lista_actual, ArrayList elementos_her, int cant_tabs)
         {
             /*
                = RESERV_VAR + IDENTIFIER + DECLARATION_BODY + VAR_DECLARATION + DECLARATION_LIST
@@ -128,14 +130,14 @@ namespace CompiPascalC3D.Analizer.AST
             {
                 var identifier = actual.ChildNodes[0].Token.Text;
                 elementos_her.Add(identifier);
-                lista_actual = DECLARATION_BODY(actual.ChildNodes[1], lista_actual, elementos_her);
-                lista_actual = VAR_DECLARATION(actual.ChildNodes[2], lista_actual, elementos_her);
+                lista_actual = DECLARATION_BODY(actual.ChildNodes[1], lista_actual, elementos_her, cant_tabs);
+                lista_actual = VAR_DECLARATION(actual.ChildNodes[2], lista_actual, elementos_her, cant_tabs);
 
             }
 
             return lista_actual;
         }
-        public LinkedList<Instruction> CONST_DECLARATION(ParseTreeNode actual, LinkedList<Instruction> lista_actual, ArrayList elementos_her)
+        public LinkedList<Instruction> CONST_DECLARATION(ParseTreeNode actual, LinkedList<Instruction> lista_actual, ArrayList elementos_her, int cant_tabs)
         {
             /*
              *  CONST_DECLARATION.Rule = IDENTIFIER + EQUALS + LOGIC_EXPRESION + PUNTO_COMA + CONST_DECLARATION
@@ -147,13 +149,14 @@ namespace CompiPascalC3D.Analizer.AST
                 int row = actual.ChildNodes[0].Token.Location.Line;
                 int col = actual.ChildNodes[0].Token.Location.Column;
                 var identifier = actual.ChildNodes[0].Token.Text;
-                lista_actual.AddLast(new Declaration(identifier, expressionAST.getExpresion(actual.ChildNodes[2], 0), row, col, true));
-                lista_actual = CONST_DECLARATION(actual.ChildNodes[4], lista_actual, elementos_her);
+                lista_actual.AddLast(new Declaration(identifier, expressionAST.getExpresion(actual.ChildNodes[2], cant_tabs), row, col, true));
+                lista_actual = CONST_DECLARATION(actual.ChildNodes[4], lista_actual, elementos_her, cant_tabs);
             }
             return lista_actual;
         }
 
-        public LinkedList<Instruction> ASSIGNATION_VARIABLE(ParseTreeNode actual, LinkedList<Instruction> lista_actual, ArrayList elementos_her, bool esarray)
+        public LinkedList<Instruction> ASSIGNATION_VARIABLE(ParseTreeNode actual, 
+            LinkedList<Instruction> lista_actual, ArrayList elementos_her, bool esarray, int cant_tabs)
         {
 
             var row = 0;
@@ -164,7 +167,7 @@ namespace CompiPascalC3D.Analizer.AST
             {
                 row = actual.ChildNodes[0].Token.Location.Line;
                 col = actual.ChildNodes[0].Token.Location.Column;
-                var exp = expressionAST.getExpresion(actual.ChildNodes[1], 0);
+                var exp = expressionAST.getExpresion(actual.ChildNodes[1], cant_tabs);
                 lista_actual.AddLast(new Declaration(elementos_her[0].ToString(), elementos_her[1].ToString(), exp, row, col, true, false));
                 elementos_her.Clear();
             }
@@ -173,7 +176,7 @@ namespace CompiPascalC3D.Analizer.AST
             {
                 if (!esarray)
                 {
-                    lista_actual.AddLast(GetDeclarationValue(elementos_her[0].ToString(), elementos_her[1].ToString(), false, row, col, false, 0));
+                    lista_actual.AddLast(GetDeclarationValue(elementos_her[0].ToString(), elementos_her[1].ToString(), false, row, col, false, cant_tabs));
                     elementos_her.Clear();
                 }
                 else

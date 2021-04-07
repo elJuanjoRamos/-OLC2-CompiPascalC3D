@@ -61,14 +61,12 @@ namespace CompiPascal
             {
                 consola.Text = "";
                 consola.Text = "#include <stdio.h>\nfloat Heap[100000]; //estructura heap\nfloat Stack[100000]; //estructura stack\n\n";
-                consola.Text += "float SP; //puntero Stack pointer\nfloat HP; //puntero Heap pointer\n\n";
+                consola.Text += "int SP = 0; //puntero Stack pointer\nint HP = 0; //puntero Heap pointer\n\n";
                 consola.Text += C3DController.Instance.getTemps();
 
-                consola.Text += "int main()\n{\n";
-
+                
                 consola.Text += C3DController.Instance.getCode();
 
-                consola.Text += "\nreturn 0;\n}";
             }
 
         }

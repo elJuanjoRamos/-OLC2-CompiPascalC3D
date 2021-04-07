@@ -80,8 +80,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                             } else
                             {
                                 var temp = generator.newTemporal();
-                                generator.addExpression(temp, "p", variable.Position.ToString(), "+", tabs);
-                                return temp;
+                                generator.addExpression(temp, "SP", variable.Position.ToString(), "+", tabs);
+                                generator.set_stack(temp, val.getValue(), tabs);
                             }
 
 
