@@ -103,23 +103,56 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                         var valDer = this.right.Execute(ambit);
                         if (valDer.getDataType == DataType.STRING)
                         {
-                            /*var temp = generator.newTemporal();
-                            var tempAux = generator.newTemporal(); 
-                            generator.freeTemp(tempAux);
+                            var tempo_izq = valIz.Value.ToString();
+                            var tempo_der = valDer.Value.ToString();
 
-                            generator.addExpression(tempAux, "p", (ambit.Size + 1).ToString(), "+", cant_tabs);
-                            generator.set_stack(tempAux, valIz.getValue(), cant_tabs);
+                            //GENERAR ETIQUETA RECURRENCIA
+                            var label_recurrecia = generator.newLabel();
+                            //PRINT TAG RECURRENCIA
+                            generator.addLabel(label_recurrecia, cant_tabs);
 
-                            generator.addExpression(tempAux, tempAux, "1", "+", cant_tabs);
-                            generator.set_stack(tempAux, valDer.getValue(), cant_tabs);
-                            generator.add_next_ambit(enviorement.size);
-                            generator.addCall('native_compare_str_str');
-                            generator.addGetStack(temp, 'p');
-                            generator.addAntEnv(enviorement.size);*/
+                            var tempo_evaluar_iz = generator.newTemporal();
+                            var tempo_evaluar_de = generator.newTemporal();
 
+                            //SETEA A LOS TEMPORALES EL VALOR EN EL HEAP DE LA CADENA
+                            generator.get_Heap(tempo_evaluar_iz, tempo_izq, cant_tabs);
+                            generator.get_Heap(tempo_evaluar_de, tempo_der, cant_tabs);
 
+                            //SE AGREGA LA CONDICION DE IGUALDAD 
+                            var label_igualdad = generator.newLabel();
+                            this.FalseLabel = generator.newLabel();
 
-                        } else
+                            generator.add_If(tempo_evaluar_iz, tempo_evaluar_de, "==",label_igualdad, cant_tabs);
+                            generator.add_Goto(this.FalseLabel, cant_tabs);
+
+                            //IMPRIME TAG VERDADERA
+                            generator.addLabel(label_igualdad, cant_tabs);
+
+                            //TEMPORAL -1 para evaluar fin de candena
+                            var tempo_menos = generator.newTemporal();
+                            generator.addExpression(tempo_menos, "0", "1", "-", cant_tabs);
+
+                            var label_true_menos1_izq = generator.newLabel();
+                            var label_false_menos1_izq = generator.newLabel();
+
+                            generator.add_If(tempo_evaluar_iz, tempo_menos, "==", label_true_menos1_izq, cant_tabs);
+                            generator.add_Goto(label_false_menos1_izq, cant_tabs);
+                            generator.addLabel(label_true_menos1_izq, cant_tabs);
+
+                            this.TrueLabel = generator.newLabel();
+                            generator.add_If(tempo_evaluar_de, tempo_menos, "==", this.TrueLabel, cant_tabs);
+                            generator.add_Goto(label_false_menos1_izq, cant_tabs);
+
+                            generator.addLabel(label_false_menos1_izq, cant_tabs);
+                            generator.addExpression(tempo_izq, tempo_izq, "1", "+", cant_tabs);
+                            generator.addExpression(tempo_der, tempo_der, "1", "+", cant_tabs);
+
+                            generator.add_Goto(label_recurrecia, cant_tabs);
+
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel);
+
+                        }
+                        else
                         {
                             set_error("Operador '" + this.type + "' NO puede ser aplicado a los tipos " + valIz.getDataType + " con " + valDer.getDataType, row, column);
                             return result;

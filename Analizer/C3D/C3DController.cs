@@ -147,13 +147,13 @@ namespace CompiPascalC3D.Analizer.C3D
         ///STACK
         public void set_stack(string index, string value, int cant_tabs)
         {
-            var texto = getTabs(cant_tabs, false) + "Stack[" + index + "] = " + value + ";";
+            var texto = getTabs(cant_tabs, false) + "Stack[" + IsNumeric(index) + "] = " + value + ";";
 
             this.code.Add(texto);
         }
         public void get_stack(string target, string index,  int cant_tabs)
         {
-            var texto = getTabs(cant_tabs, false) + target + " = Stack[" + index + "];"; 
+            var texto = getTabs(cant_tabs, false) + target + " = Stack[" + IsNumeric(index) + "];"; 
             this.code.Add(texto);
         }
 
@@ -178,12 +178,12 @@ namespace CompiPascalC3D.Analizer.C3D
 
         public void get_Heap(string target, string index, int cant_tabs)
         {
-            this.code.Add(getTabs(cant_tabs, false) + target +"= Heap[" + index + "];");
+            this.code.Add(getTabs(cant_tabs, false) + target +"= Heap[" + IsNumeric(index) + "];");
         }
 
         public void set_Heap(string index, string value, int cant_tabs)
         {
-            this.code.Add(getTabs(cant_tabs, false) + "Heap[" + index +"] = " + value + ";");
+            this.code.Add(getTabs(cant_tabs, false) + "Heap[" + IsNumeric(index) + "] = " + value + ";");
         }
 
 
@@ -219,15 +219,10 @@ namespace CompiPascalC3D.Analizer.C3D
             var texto = getTabs(cant_tabs, false) + "printf(\"%" + format + "\"," + type +  value + ");";  
             this.code.Add(texto);
         }
-        public void print_boolean(int cant_tabs, bool istrue)
+        public void print_boolean(int cant_tabs, string istrue)
         {
-            var str = "false";
+            var str = istrue;
             var tab_S = getTabs(cant_tabs, false);
-
-            if (istrue)
-            {
-                str = "true";
-            }
 
             foreach (char cha in str)
             {
@@ -259,7 +254,7 @@ namespace CompiPascalC3D.Analizer.C3D
                 }
             }
 
-            return "int " +  text + "\n\n";
+            return "float " +  text + "\n\n";
         }
 
         /// OBTIENE TODO EL CODIGO
@@ -289,5 +284,28 @@ namespace CompiPascalC3D.Analizer.C3D
             return this.isFunc;
         }
 
+        public string IsNumeric(string s)
+        {
+            if (s.Equals("HP") || s.Equals("SP"))
+            {
+                return s;
+            }
+
+            var _soyNumero = true;
+            foreach (char c in s)
+            {
+                if (!char.IsDigit(c) && c != '.')
+                {
+                    _soyNumero = false;
+                }
+            }
+
+            if (!_soyNumero)
+            {
+                return "(int)" + s;
+            }
+            return s;
+
+        }
     }
 }

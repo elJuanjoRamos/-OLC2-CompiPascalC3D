@@ -35,6 +35,27 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             {
 
 
+                if (el is Literal)
+                {
+                    if (((Literal)el).Type == 3)
+                    {
+                        var res = ((Literal)el).Value.ToString();
+                        generator.print_boolean(cant_tabs, res);
+                        continue;
+                    }
+                    if (((Literal)el).Type == 2)
+                    {
+                        var res = ((Literal)el).Value.ToString();
+                        if (res.ToLower().Equals("true") || res.ToLower().Equals("false"))
+                        {
+                            generator.print_boolean(cant_tabs, res);
+                            continue;
+                        }
+                    }
+
+                }
+
+
                 var element = el.Execute(ambit);
 
                 if (element.getDataType == DataType.ERROR)
@@ -52,9 +73,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                         {
                             id = ((Access)el).Id;
                         }
-
                         generator.save_comment("Inicia Print: " + id, cant_tabs);
-
 
                         var temp_stack = element.Value.ToString();
 
@@ -79,17 +98,22 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
                         break;
                     case DataType.BOOLEAN:
+
+                        
+                        generator.addLabel(element.TrueLabel, cant_tabs);
+                        generator.addLabel(element.FalseLabel, cant_tabs);
                         if (element.Value.ToString().Equals("false"))
                         {
-                            generator.print_boolean(cant_tabs, false);
-                        } else
+                            generator.print_boolean(cant_tabs, "false");
+                        }
+                        else
                         {
-                            generator.print_boolean(cant_tabs, true);
+                            generator.print_boolean(cant_tabs, "true");
                         }
                         
                         break;
                     case DataType.REAL:
-                        generator.generate_print("d", element.getValue(), "(float)", cant_tabs);
+                        generator.generate_print("f", element.getValue(), "(float)", cant_tabs);
                         break;
                     case DataType.IDENTIFIER:
                         break;

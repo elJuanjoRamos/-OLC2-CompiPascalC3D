@@ -37,6 +37,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
         public bool IsNull { get => isNull; set => isNull = value; }
         public int Row { get => row; set => row = value; }
         public int Column { get => column; set => column = value; }
+        public object Value { get => value; set => this.value = value; }
+        public int Type { get => type; set => type = value; }
 
         public override Returned Execute(Ambit ambit)
         {
@@ -64,8 +66,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             else if (this.type == 3)
             {
 
-                
-
                 if (this.TrueLabel == "")
                 {
                     this.TrueLabel = generator.newLabel();
@@ -77,12 +77,12 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
                 if (this.value.ToString() == "false")
                 {
-                    generator.add_Goto(this.FalseLabel, cant_tabs+1);
+                    generator.add_Goto(this.FalseLabel, cant_tabs);
                     returned = new Returned("false", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel);
                 }
                 else
                 {
-                    generator.add_Goto(this.TrueLabel, cant_tabs+1);
+                    generator.add_Goto(this.TrueLabel, cant_tabs);
                     returned = new Returned("true", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel);
                 }
             }

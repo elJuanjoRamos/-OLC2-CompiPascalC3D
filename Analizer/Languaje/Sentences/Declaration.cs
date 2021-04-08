@@ -79,64 +79,63 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                         return null;
                     }
 
+                    Identifier variable;
 
                     if (this.type == DataType.CONST)
                     {
-                        var variable = ambit.save(this.id, val.Value, val.getDataType, true, true, "Constante");
+                        variable = ambit.save(this.id, val.Value, val.getDataType, true, true, "Constante");
                         
-
                     }
                     else
                     {
                         if (val.getDataType == this.type)
                         {
-                            var variable = ambit.save(this.id, val.Value, val.getDataType, false, isAssigned, "Variable");
-                            var generator = C3DController.Instance;
-                            if (variable.IsGlobal)
-                            {
-                                if (this.type == DataType.BOOLEAN)
-                                {
-                                    var templabel = generator.newLabel();
-                                    generator.addLabel(val.TrueLabel, 1);
-                                    generator.set_stack(variable.Position.ToString(), "1",1);
-                                    generator.add_Goto(templabel,1);
-                                    generator.addLabel(val.FalseLabel,1);
-                                    generator.set_stack(variable.Position.ToString(), "0",1);
-                                    generator.addLabel(templabel,1);
-                                }
-                                else
-                                {
-                                    generator.set_stack(variable.Position.ToString(), val.getValue(),1);
-                                }
-                            } else
-                            {
-                                var temp = generator.newTemporal(); 
-                                //generator.freeTemp(temp);
-                                generator.addExpression(temp, "SP", variable.Position.ToString(), "+",1);
-
-                                if (variable.DataType == DataType.BOOLEAN)
-                                {
-                                    var templabel = generator.newLabel();
-                                    generator.addLabel(val.TrueLabel,1);
-                                    generator.set_stack(temp, "1",1);
-                                    generator.add_Goto(templabel,1);
-                                    generator.addLabel(val.FalseLabel,1);
-                                    generator.set_stack(temp, "0",1);
-                                    generator.addLabel(templabel,1);
-                                }
-                                else
-                                {
-                                    generator.set_stack(temp, val.getValue(),1);
-                                }
-                            }
-                        }
-                        else
+                            variable = ambit.save(this.id, val.Value, val.getDataType, false, isAssigned, "Variable");
+                        } else
                         {
                             set_error("El tipo " + val.getDataType + " no es asignable con " + this.type.ToString(), row, column);
                             return null;
                         }
                     }
+                    var generator = C3DController.Instance;
+                    if (variable.IsGlobal)
+                    {
+                        if (this.type == DataType.BOOLEAN)
+                        {
+                            var templabel = generator.newLabel();
+                            generator.addLabel(val.TrueLabel, 1);
+                            generator.set_stack(variable.Position.ToString(), "1", 1);
+                            generator.add_Goto(templabel, 1);
+                            generator.addLabel(val.FalseLabel, 1);
+                            generator.set_stack(variable.Position.ToString(), "0", 1);
+                            generator.addLabel(templabel, 1);
+                        }
+                        else
+                        {
+                            generator.set_stack(variable.Position.ToString(), val.getValue(), 1);
+                        }
+                    }
+                    else
+                    {
+                        var temp = generator.newTemporal();
+                        //generator.freeTemp(temp);
+                        generator.addExpression(temp, "SP", variable.Position.ToString(), "+", 1);
 
+                        if (variable.DataType == DataType.BOOLEAN)
+                        {
+                            var templabel = generator.newLabel();
+                            generator.addLabel(val.TrueLabel, 1);
+                            generator.set_stack(temp, "1", 1);
+                            generator.add_Goto(templabel, 1);
+                            generator.addLabel(val.FalseLabel, 1);
+                            generator.set_stack(temp, "0", 1);
+                            generator.addLabel(templabel, 1);
+                        }
+                        else
+                        {
+                            generator.set_stack(temp, val.getValue(), 1);
+                        }
+                    }
                 }
                 catch (Exception)
                 {
@@ -149,7 +148,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 set_error("La variable '" + id + "' ya fue declarada", row, column);
                 return null;
             }
-            return "";
+            return "executed";
         }
 
         public DataType GetDataType(string d)
