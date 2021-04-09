@@ -20,39 +20,50 @@ namespace CompiPascalC3D.Analizer.C3D
             }
         }
 
+        public bool Native_str { get => native_str; set => native_str = value; }
+        public bool Native_compare { get => native_compare; set => native_compare = value; }
+
 
         //VARIABLES
         private int temporal_number;
         private int label_number;
         private ArrayList code;
         private ArrayList tempStorage;
-        private string isFunc;
+        private bool native_str;
+        private bool native_compare;
 
+        
         private C3DController()
         {
-            this.temporal_number = 1;
-            this.label_number = 1;
+            this.temporal_number = 15;
             this.code = new ArrayList();
             this.tempStorage = new ArrayList();
-            this.isFunc = "";
+            this.native_compare = this.native_str = false;
         }
 
 
         public void clearCode()
         {
-            this.temporal_number = this.label_number = 0;
+            this.temporal_number = this.label_number = 15;
             this.code.Clear();
             this.tempStorage.Clear();
+            this.native_compare = this.native_str = false;
         }
 
-        public void save_comment(string comment, int cant_tabs)
+        public void save_comment(string comment, int cant_tabs, bool isclose)
         {
-            this.code.Add(getTabs(cant_tabs, false) + "/***** "+ comment +" *****/\n");
+            var texto = getTabs(cant_tabs, false) + "/***** " + comment + " *****/";
+            if (isclose)
+            {
+                texto += "\n";
+            }
+            this.code.Add(texto);
         }
+        
 
-        public void save_code(string comment)
+        public void save_code(string comment, int cant_tabs)
         {
-            this.code.Add(comment);
+            this.code.Add(getTabs(cant_tabs, false)  +comment);
         }
 
         //TEMPORALES
@@ -89,7 +100,7 @@ namespace CompiPascalC3D.Analizer.C3D
             
                 var size = 0;
 
-                this.save_comment("Inicia guardado de temporales", cant_tabs);
+                this.save_comment("Inicia guardado de temporales", cant_tabs, false);
 
                 
                 this.addExpression(temp, "p", ambit.Size.ToString(), "+", cant_tabs);
@@ -104,7 +115,7 @@ namespace CompiPascalC3D.Analizer.C3D
                     }
                         
                 }
-                this.save_comment("Fin guardado de temporales", cant_tabs);
+                this.save_comment("Fin guardado de temporales", cant_tabs, true);
             }
             var ptr = ambit.Size;
             ambit.Size = ptr + this.tempStorage.Count;
@@ -233,28 +244,25 @@ namespace CompiPascalC3D.Analizer.C3D
         // OBTIENE LOS TEMPORALES
         public string getTemps()
         {
-            var text = "";
+            var text = "float T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12";
             var cont = 0;
 
             if (tempStorage.Count == 0)
             {
-                return "";
+                return text + ";";
             }
 
             foreach (var item in tempStorage)
             {
-                text += item.ToString();
+                text += "," +item.ToString();
                 cont++;
-                if (cont != tempStorage.Count)
-                {
-                    text += ",";
-                } else
+                if (cont == tempStorage.Count)
                 {
                     text += ";";
                 }
             }
 
-            return "float " +  text + "\n\n";
+            return text + "\n\n";
         }
 
         /// OBTIENE TODO EL CODIGO
@@ -272,16 +280,16 @@ namespace CompiPascalC3D.Analizer.C3D
 
         private string getTabs(int cant_tabs, bool islabel)
         {
-            this.isFunc = "";
+            var texto = "";
             if (cant_tabs > 0)
             {
                 for (int i = 0; i < cant_tabs; i++)
                 {
-                    this.isFunc += " ";
+                    texto += " ";
                 }
             }
 
-            return this.isFunc;
+            return texto;
         }
 
         public string IsNumeric(string s)
@@ -307,5 +315,76 @@ namespace CompiPascalC3D.Analizer.C3D
             return s;
 
         }
+
+
+        public void print_natives()
+        {
+            
+            //NATIVA PARA IMRIMIR STRINGS
+            save_code("void native_print_str(){", 0);
+            addLabel("L1", 1);
+            get_Heap("T2", "T1", 1);
+            add_If("T2", "-1", "==", "L2", 1);
+            generate_print("c", "T2", "(int)", 1);
+            addExpression("T1", "T1", "1", "+", 1);
+            add_Goto("L1", 1);
+            addLabel("L2", 1);
+            generate_print("c", "", "' " + "'", 1);
+            save_code("}\n", 0);
+
+
+           
+            //NATIVA PARA COMPARAR STRING
+            save_code("int native_cmp_str(){", 0);
+            addLabel("L3", 1);
+            get_Heap("T5", "T3", 2);
+            get_Heap("T6", "T4", 2);
+            add_If("T5", "T6", "==", "L4", 2);
+            add_Goto("L5", 2);
+            addLabel("L4", 1);
+
+            addExpression("T7", "0", "1", "-", 2);
+            add_If("T5", "T7", "==", "L6", 2);
+            add_Goto("L7", 2);
+            addLabel("L6", 1);
+            add_If("T6", "T7", "==", "L8", 2);
+            add_Goto("L7", 2);
+            addLabel("L7", 1);
+            addExpression("T3", "T3", "1", "+", 2);
+            addExpression("T4", "T4", "1", "+", 2);
+            add_Goto("L3", 2);
+            addLabel("L8", 1);
+            save_code("return 1;", 2);
+            addLabel("L5", 1);
+            save_code("return 0;", 2);
+
+
+            save_code("}\n", 0);
+
+            save_code("void native_concat_str(){", 0);
+            save_code("T12 = HP; //valor de retorno", 1);
+            addLabel("L9", 1);
+            get_Heap("T11", "T9", 2);
+            add_If("T11", "-1", "==", "L10", 2);
+            set_Heap("HP", "T11", 2);
+            addExpression("T9", "T9", "1", "+", 2);
+            addExpression("HP", "HP", "1", "+", 2);
+            add_Goto("L9", 2);
+            addLabel("L10", 1);
+            get_Heap("T11", "T10", 2);
+            add_If("T11", "-1", "==", "L11", 2);
+            set_Heap("HP", "T11", 2);
+            addExpression("T10", "T10", "1", "+", 2);
+            addExpression("HP", "HP", "1", "+", 2);
+            add_Goto("L10", 2);
+            addLabel("L11", 1);
+            set_Heap("HP", "-1", 2);
+            addExpression("HP", "HP", "1", "+", 2);
+
+            save_code("}\n", 0);
+
+        }
+
+
     }
 }

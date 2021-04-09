@@ -23,10 +23,11 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         private string ambit_name_inmediato = "";
         private Ambit anterior;
         private int size = 0;
+        private int size_relativ = 0;
         public Boolean ambit_null;
 
 
-        public Ambit(Ambit a, string n, string ni, bool isnull)
+        public Ambit(Ambit a, string n, string ni, bool isnull, int sizes)
         {
             this.variables = new Dictionary<string, Identifier>();
             this.functions = new Dictionary<string, Function>();
@@ -35,7 +36,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             this.ambit_name_inmediato = ni;
             this.anterior = a;
             this.ambit_null = isnull;
-            this.size = a.Size;
+            this.size = sizes;
             this._break = a.Break;
             this._continue = a.Continue;
         }
@@ -55,18 +56,12 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
 
         #region VARIABLES
 
-        public Identifier save(string id, object valor, DataType type, bool esconstante, bool isAssigned, string tipo_dato)
+        public Identifier save(string id, object valor, DataType type, bool esconstante, bool isAssigned, bool isheap)
         {
             Ambit amb = this;
 
-            bool ant = false;
-            if (anterior == null)
-            {
-                ant = true;
-            }
-            this.size = this.size + 1;
             Identifier ident = new Identifier(valor.ToString(), id, type, esconstante, 
-                isAssigned, false, tipo_dato, this.size, ant);
+                isAssigned, this.size++, (anterior == null), isheap);
             
             
             if (!amb.Ambit_name_inmediato.Equals("Function"))
@@ -162,5 +157,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         public bool Change_continue { get => change_continue; set => change_continue = value; }
         public Dictionary<string, Function> Functions { get => functions; set => functions = value; }
         public Ambit Anterior { get => anterior; set => anterior = value; }
+        public int Size_relativ { get => size_relativ; set => size_relativ = value; }
     }
 }

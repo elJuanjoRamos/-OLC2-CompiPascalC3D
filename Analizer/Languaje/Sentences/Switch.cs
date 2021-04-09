@@ -38,7 +38,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             
 
-            var switchAmbit = new Ambit(ambit, ambit.Ambit_name+"_Case", "Case", false);
+            var switchAmbit = new Ambit(ambit, ambit.Ambit_name+"_Case", "Case", false, ambit.Size);
 
             switchAmbit.Break = generator.newLabel();
 

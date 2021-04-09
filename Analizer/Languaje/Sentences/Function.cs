@@ -44,17 +44,24 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         }
         public override string Execute(Ambit ambit)
         {
-            ambit.saveFuncion(this.id, this);
-
-            var generator = C3D.C3DController.Instance;
 
             if (ambit.Anterior != null)
             {
                 this.UniqId = ambit.Ambit_name + "_" + id;
-                ambit.setFunction(Id, this);
             }
 
-            Ambit ambit_func = new Ambit(ambit, this.uniqId, ambit.Ambit_name + "_" + this.uniqId, false);
+            ambit.saveFuncion(this.id, this);
+
+            var generator = C3D.C3DController.Instance;
+
+            
+            var texto = "Function";
+            if (IsProcedure)
+            {
+                texto = "Procedure";
+            }
+
+            Ambit ambit_func = new Ambit(ambit, this.uniqId, texto, false, 1);
 
             //FUNCIONES HIJAS
             foreach (var fun_hija in funciones_hijas)
@@ -68,7 +75,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             }
 
 
-            generator.save_code("void " + uniqId + "(" + ") { \n");
+            generator.save_code("void " + uniqId + "(" + ") { \n", 0);
 
             //DECLARACIONES 
             foreach (var declas in declaraciones)
@@ -89,7 +96,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 return null;
             }
 
-            generator.save_code("return;\n}");
+            generator.save_code("return;\n}", 0);
 
             return "executed";
 

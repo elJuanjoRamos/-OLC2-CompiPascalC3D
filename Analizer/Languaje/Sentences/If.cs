@@ -45,11 +45,11 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         public override string Execute(Ambit ambit)
         {
             var generator = C3DController.Instance;
-            generator.save_comment("Inicia If", tabs);
+            generator.save_comment("Inicia If", tabs, false);
 
             
             //AMBITO IF
-            var ifAmbit = new Ambit(ambit, ambit.Ambit_name+ "_If", "If", false);
+            var ifAmbit = new Ambit(ambit, ambit.Ambit_name+ "_If", "If", false, ambit.Size);
             //CONDICION
             var condicion = condition.Execute(ambit);
             //VERIFICA QUE LLA CONDICION SEA BOOLEANA

@@ -82,6 +82,10 @@ namespace CompiPascalC3D.Analizer.Syntactic
             LinkedList<Instruction> funciones,
             LinkedList<Instruction> instrucciones)
         {
+            //SETEA EL SIZE DEL GENERAL
+            general.Size = variables.Count+1;
+
+
             foreach (var funcion in funciones)
             {
                 var result = funcion.Execute(general);
@@ -93,9 +97,19 @@ namespace CompiPascalC3D.Analizer.Syntactic
 
 
 
-            C3D.C3DController.Instance.save_code("int main()\n{\n");
 
-            C3D.C3DController.Instance.save_comment("Inicia declaracion variables", 1);
+
+            #region IMPRIMIR NATIVAS
+
+            //C3D.C3DController.Instance.print_natives();
+
+            #endregion
+
+
+
+            C3D.C3DController.Instance.save_code("int main()\n{\n", 0);
+
+            C3D.C3DController.Instance.save_comment("Inicia declaracion variables", 1, false);
             foreach (var item in variables)
             {
                 try
@@ -112,7 +126,7 @@ namespace CompiPascalC3D.Analizer.Syntactic
                     throw;
                 }
             }
-            C3D.C3DController.Instance.save_comment("Fin declaracion variables", 1);
+            C3D.C3DController.Instance.save_comment("Fin declaracion variables", 1, true);
 
             foreach (var item in instrucciones)
             {
@@ -130,7 +144,7 @@ namespace CompiPascalC3D.Analizer.Syntactic
                     throw;
                 }
             }
-            C3D.C3DController.Instance.save_code("\nreturn 0;\n}");
+            C3D.C3DController.Instance.save_code("\nreturn 0;\n}", 0);
 
         }
     }

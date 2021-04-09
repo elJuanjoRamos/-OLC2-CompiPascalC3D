@@ -29,8 +29,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             var generator = C3D.C3DController.Instance;
 
             //AMBITO DEL REPEAT
-            var repeatAmbit = new Ambit(ambit, ambit.Ambit_name+"_Repeat", "Repeat", false);
-            generator.save_comment("Inicia Repeat", cant_tabs);
+            var repeatAmbit = new Ambit(ambit, ambit.Ambit_name+"_Repeat", "Repeat", false, ambit.Size);
+            generator.save_comment("Inicia Repeat", cant_tabs, false);
 
             //SETEO Continue y break por defecto
             condition.TrueLabel = generator.newLabel();
@@ -69,7 +69,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             //IMPRIMIR ETIQUETA VERDADERA
             generator.addLabel(condicion.TrueLabel, cant_tabs);
-            generator.save_comment("Fin Repeat", cant_tabs);
+            generator.save_comment("Fin Repeat", cant_tabs, true);
 
 
 

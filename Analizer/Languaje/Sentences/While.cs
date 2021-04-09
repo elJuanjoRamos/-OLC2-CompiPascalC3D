@@ -26,10 +26,10 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         public override string Execute(Ambit ambit)
         {
             var generator = C3D.C3DController.Instance;
-            var whileAmbit = new Ambit(ambit, ambit.Ambit_name+"_While", "While", false);
+            var whileAmbit = new Ambit(ambit, ambit.Ambit_name+"_While", "While", false, ambit.Size);
             var label_recurrencia = generator.newLabel();
     
-            generator.save_comment("Inicia While", cant_tabs);
+            generator.save_comment("Inicia While", cant_tabs, false);
             generator.addLabel(label_recurrencia, cant_tabs);
 
             //CONDICION
@@ -63,7 +63,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             generator.add_Goto(label_recurrencia, cant_tabs + 1);
 
             generator.addLabel(cond.FalseLabel, cant_tabs);
-            generator.save_comment("Fin while", cant_tabs);
+            generator.save_comment("Fin while", cant_tabs, true);
             
 
 

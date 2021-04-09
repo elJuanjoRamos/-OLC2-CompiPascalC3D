@@ -103,11 +103,30 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                         var valDer = this.right.Execute(ambit);
                         if (valDer.getDataType == DataType.STRING)
                         {
+                            if (this.TrueLabel == "")
+                            {
+                                this.TrueLabel = generator.newLabel();
+                            }
+                            if (this.FalseLabel == "")
+                            {
+                                this.FalseLabel = generator.newLabel();
+                            }
+
+
+
                             var tempo_izq = valIz.Value.ToString();
                             var tempo_der = valDer.Value.ToString();
 
+                            generator.addExpression("T3", tempo_izq, "", "", cant_tabs);
+                            generator.addExpression("T4", tempo_der, "", "", cant_tabs);
+                            generator.addExpression("T8", "native_cmp_str()","","",cant_tabs);
+                            generator.add_If("T8", "1", "==", this.TrueLabel, cant_tabs);
+                            generator.add_Goto(this.FalseLabel, cant_tabs);
+
+
+
                             //GENERAR ETIQUETA RECURRENCIA
-                            var label_recurrecia = generator.newLabel();
+                            /*var label_recurrecia = generator.newLabel();
                             //PRINT TAG RECURRENCIA
                             generator.addLabel(label_recurrecia, cant_tabs);
 
@@ -147,7 +166,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             generator.addExpression(tempo_izq, tempo_izq, "1", "+", cant_tabs);
                             generator.addExpression(tempo_der, tempo_der, "1", "+", cant_tabs);
 
-                            generator.add_Goto(label_recurrecia, cant_tabs);
+                            generator.add_Goto(label_recurrecia, cant_tabs);*/
 
                             result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel);
 

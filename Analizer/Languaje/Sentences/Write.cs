@@ -29,6 +29,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         {
             //INSTANCIA GENERADOR C3D
             var generator = C3DController.Instance;
+            var label_print = "";
+            generator.save_comment("Inicia Print PRINTTEMP", cant_tabs, false);
 
             //FOREACH DE LAS EXPRESIONES A HACER PRINT
             foreach (Expresion el in value)
@@ -54,7 +56,10 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                     }
 
                 }
-
+                if (el is Access)
+                {
+                    label_print = ":" + ((Access)el).Id;
+                }
 
                 var element = el.Execute(ambit);
 
@@ -68,16 +73,17 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                         generator.generate_print("i", element.getValue(), "(int)", cant_tabs);
                         break;
                     case DataType.STRING:
-                        var id = "";
-                        if (el is Access)
-                        {
-                            id = ((Access)el).Id;
-                        }
-                        generator.save_comment("Inicia Print: " + id, cant_tabs);
+                        
+                        
+
+                        generator.Native_str = true;
 
                         var temp_stack = element.Value.ToString();
+                        generator.addExpression("T1", temp_stack, "", "", cant_tabs);
 
-                        var label_temp = generator.newLabel();
+                        generator.save_code("native_print_str();", cant_tabs);
+
+                        /*var label_temp = generator.newLabel();
                         generator.addLabel(label_temp, cant_tabs);
                         var temp_heap = generator.newTemporal();
 
@@ -92,14 +98,11 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                         generator.addExpression(temp_stack, temp_stack, "1", "+", cant_tabs);
 
                         generator.add_Goto(label_temp, cant_tabs);
-                        generator.addLabel(true_label, cant_tabs);
-
-                        generator.save_comment("Fin Print: " + id, cant_tabs);
+                        generator.addLabel(true_label, cant_tabs);*/
 
                         break;
                     case DataType.BOOLEAN:
 
-                        
                         generator.addLabel(element.TrueLabel, cant_tabs);
                         generator.addLabel(element.FalseLabel, cant_tabs);
                         if (element.Value.ToString().Equals("false"))
@@ -120,14 +123,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                     default:
                         break;
                 }
-
-
-
             }
             if (this.isln)
             {
                 generator.generate_print("c", "10", "(int)", cant_tabs);
             }
+            generator.save_comment("Fin Print PRINTTEMP", cant_tabs, true);
+            generator.replace_temp(label_print, "PRINTTEMP");
             return "executed";
         }
     }

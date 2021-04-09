@@ -11,26 +11,24 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
         private string id;
         private DataType type;
         private bool esconsante;
-        private string tipo_dato;
         private bool isNull;
         private bool isAssiged;
-        private bool perteneceFucion;
-
+        
         private int position;
         private bool isGlobal;
+        private bool isHeap;
 
-        public Identifier(string v, string i, DataType t, bool ec, bool isa, bool perteneceFuc, string ti, int pos, bool isg)
+        public Identifier(string value, string ids, DataType tipo, bool es_const, bool isassigned, int posi, bool isglobal, bool is_Heap)
         {
-            this._value = v;
-            this.id = i;
-            this.type = t;
-            this.esconsante = ec;
+            this._value = value;
+            this.id = ids;
+            this.type = tipo;
+            this.esconsante = es_const;
             this.isNull = false;
-            this.isAssiged = isa;
-            this.perteneceFucion = perteneceFuc;
-            this.tipo_dato = ti;
-            this.position = pos;
-            this.isGlobal = isg;
+            this.isAssiged = isassigned;
+            this.position = posi;
+            this.isGlobal = isglobal;
+            this.isHeap = is_Heap;
         }
         public Identifier()
         {
@@ -66,9 +64,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
         }
 
         public bool IsAssiged { get => isAssiged; set => isAssiged = value; }
-        public bool PerteneceFucion { get => perteneceFucion; set => perteneceFucion = value; }
-        public string Tipo_dato { get => tipo_dato; set => tipo_dato = value; }
         public int Position { get => position; set => position = value; }
         public bool IsGlobal { get => isGlobal; set => isGlobal = value; }
+        public bool IsHeap { get => isHeap; set => isHeap = value; }
     }
 }

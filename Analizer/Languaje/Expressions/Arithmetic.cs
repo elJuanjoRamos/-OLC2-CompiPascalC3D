@@ -35,12 +35,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
             var generator = C3DController.Instance;
 
-            var temp = generator.newTemporal();
 
             if (varIz.getDataType == DataType.INTEGER || varIz.getDataType == DataType.REAL)
             {
+
                 if (valDer.getDataType == DataType.INTEGER || valDer.getDataType == DataType.REAL)
                 {
+                    var temp = generator.newTemporal();
                     generator.addExpression(temp, varIz.Value, valDer.Value, type, cant_tabs);
 
                     if (valDer.getDataType == DataType.REAL || varIz.getDataType == DataType.REAL)
@@ -53,6 +54,17 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 set_error("Operador '" + this.type + "' NO puede ser aplicado a los tipos " + varIz.getDataType + " con " + valDer.getDataType, row, column);
                 return new Returned();
             }
+            else if (varIz.getDataType == DataType.STRING && valDer.getDataType == DataType.STRING)
+            {
+
+                generator.addExpression("T9", varIz.Value.ToString(), "", "", cant_tabs);
+                generator.addExpression("T10", valDer.Value.ToString(), "", "", cant_tabs);
+                generator.save_code("native_concat_str();", cant_tabs);
+                return new Returned("T12", DataType.STRING, true);
+
+            }
+
+
             set_error("Operador '" + this.type + "' NO puede ser aplicado a los tipos " + varIz.getDataType + " con " + valDer.getDataType, row, column);
             return new Returned();
 

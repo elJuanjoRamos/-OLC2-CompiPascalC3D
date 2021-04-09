@@ -83,14 +83,14 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
                     if (this.type == DataType.CONST)
                     {
-                        variable = ambit.save(this.id, val.Value, val.getDataType, true, true, "Constante");
+                        variable = ambit.save(this.id, val.Value, val.getDataType, true, true, false);
                         
                     }
                     else
                     {
                         if (val.getDataType == this.type)
                         {
-                            variable = ambit.save(this.id, val.Value, val.getDataType, false, isAssigned, "Variable");
+                            variable = ambit.save(this.id, val.Value, val.getDataType, false, isAssigned, false);
                         } else
                         {
                             set_error("El tipo " + val.getDataType + " no es asignable con " + this.type.ToString(), row, column);
