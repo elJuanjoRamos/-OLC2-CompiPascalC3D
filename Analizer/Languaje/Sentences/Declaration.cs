@@ -18,11 +18,12 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         public int column;
         public bool isConst;
         public bool isAssigned;
-        public bool perteneceFuncion;
-        private bool referencia;
-        
 
-        
+        public DataType Type { get => type; set => type = value; }
+        public string Id { get => id; set => id = value; }
+
+
+
 
         //CONSTRUCTOR PARA VARIABLES
         public Declaration(string id, String dataType, Expresion ex, int r, int c, bool isAs, bool refe)
@@ -35,7 +36,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             this.column = c;
             this.isConst = false;
             this.isAssigned = isAs;
-            this.referencia = refe;
             
         }
         //CONSTRUCTOR PARA CONSTANTES

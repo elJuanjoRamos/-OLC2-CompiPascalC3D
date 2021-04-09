@@ -123,7 +123,31 @@ namespace CompiPascalC3D.Analizer.C3D
         }
 
 
+        public void recoverTemps(Ambit ambit, int pos, int cant_tabs)
+        {
+            if (this.tempStorage.Count > 0)
+            {
+                var temp = this.newTemporal(); 
+                this.freeTemp(temp);
+                var size = 0;
 
+                this.save_comment("Inicia recuperado de temporales", cant_tabs, false);
+                this.addExpression(temp, "p", pos.ToString(), "+", cant_tabs);
+
+                foreach (string item in tempStorage)
+                {
+                    size++;
+                    this.get_stack(item, temp, cant_tabs);
+                    if (size != this.tempStorage.Count)
+                    {
+                        this.addExpression(temp, temp, "1", "+", cant_tabs);
+                    }
+                }
+                
+                this.save_comment("Finaliza recuperado de temporales", cant_tabs, true);
+                ambit.Size = pos;
+            }
+        }
 
 
 
@@ -174,7 +198,7 @@ namespace CompiPascalC3D.Analizer.C3D
             this.code.Add(texto);
         }
 
-        public void add_AntEnv(int size, int cant_tabs)
+        public void ant_Env(int size, int cant_tabs)
         {
             var texto = getTabs(cant_tabs, false) + "SP = SP - " + size + ";";
             this.code.Add(texto);

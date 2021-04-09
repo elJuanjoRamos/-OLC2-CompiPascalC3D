@@ -80,6 +80,29 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
 
         }
 
+        public void setVariableInAmbit(string id, string valor, DataType type, int pos)
+        {
+            Ambit env = this;
+
+            while (env != null)
+            {
+                if (env.Variables.ContainsKey(id.ToLower()))
+                {
+                    env.Variables[id.ToLower()] = new Identifier(valor, id, type, false, false,  pos, false, false);
+                }
+                env = env.anterior;
+            }
+        }
+        public void setVariableFuncion(string id, string valor, DataType type, int posi)
+        {
+            Ambit env = this;
+
+            if (env.Variables.ContainsKey(id.ToLower()))
+            {
+                env.Variables[id.ToLower()] = new Identifier(valor, id, type, false, false, posi, false, false);
+            }
+        }
+
         #region FUNCIONES
         public void saveVarFunction(Identifier ident)
         {
@@ -114,6 +137,19 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
                 }
                 env = env.anterior;
             }
+        }
+        public Function getFuncion(string id)
+        {
+            Ambit amb = this;
+            while (amb != null)
+            {
+                if (amb.Functions.ContainsKey(id.ToLower()))
+                {
+                    return amb.Functions[id.ToLower()];
+                }
+                amb = amb.anterior;
+            }
+            return null;
         }
         #endregion
 

@@ -126,7 +126,7 @@ namespace CompiPascalC3D.Analizer.AST
             }
             else if (actual.Term.ToString().Equals("CALL"))
             {
-                //return (new Call_Instruction()).CALL(actual);
+                return (new CallInstruction()).CALL(actual, cant_tabs);
             }
             else if (actual.Term.ToString().Equals("EXIT"))
             {
