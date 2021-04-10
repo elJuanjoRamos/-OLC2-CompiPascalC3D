@@ -14,15 +14,17 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
         bool isTemporal;
         private string trueLabel;
         private string falseLabel;
-        public Returned(string v, DataType d, bool istemp)
+        private string texto_anterior;
+        public Returned(string v, DataType d, bool istemp, string texto_ant)
         {
             this._value = v;
             this.type = d;
             this.isTemporal = istemp;
             this.isNull = false;
-            this.trueLabel = this.falseLabel = "";
+            this.trueLabel = this.falseLabel =  "";
+            this.texto_anterior = texto_ant;
         }
-        public Returned(string v, DataType d, bool ist, string truel, string falsel)
+        public Returned(string v, DataType d, bool ist, string truel, string falsel, string texto_ant)
         {
             this._value = v;
             this.type = d;
@@ -30,6 +32,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
             this.isNull = false;
             this.trueLabel = truel;
             this.falseLabel = falsel;
+            this.texto_anterior = texto_ant;
         }
         public Returned()
         {
@@ -68,6 +71,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
         public bool IsTemporal { get => isTemporal; set => isTemporal = value; }
         public string TrueLabel { get => trueLabel; set => trueLabel = value; }
         public string FalseLabel { get => falseLabel; set => falseLabel = value; }
+        public string Texto_anterior { get => texto_anterior; set => texto_anterior = value; }
+
         public string getValue()
         {
             //C3DController.Instance.freeTemp(this._value);

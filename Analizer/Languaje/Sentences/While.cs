@@ -25,15 +25,17 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         }
         public override string Execute(Ambit ambit)
         {
+            var while_string = "";
             var generator = C3D.C3DController.Instance;
             var whileAmbit = new Ambit(ambit, ambit.Ambit_name+"_While", "While", false);
             var label_recurrencia = generator.newLabel();
-    
-            generator.save_comment("Inicia While", cant_tabs, false);
-            generator.addLabel(label_recurrencia, cant_tabs);
+
+            while_string += generator.save_comment("Inicia While", cant_tabs, false);
+            while_string += generator.addLabel(label_recurrencia, cant_tabs);
 
             //CONDICION
             var cond = condition.Execute(whileAmbit);
+            while_string += cond.Texto_anterior;
 
             if (cond.getDataType != DataType.BOOLEAN)
             {
@@ -45,7 +47,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             whileAmbit.Continue = label_recurrencia;
 
             //TAG VERDADERA
-            generator.addLabel(cond.TrueLabel, cant_tabs);
+            while_string += generator.addLabel(cond.TrueLabel, cant_tabs);
             
 
             //EJECUTA SENTENCIAS
@@ -55,19 +57,20 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             {
                 return null;
             }
+            while_string += result;
             if (whileAmbit.Change_continue)
             {
-                generator.addLabel(whileAmbit.Continue, cant_tabs);
+                while_string += generator.addLabel(whileAmbit.Continue, cant_tabs);
 
             }
-            generator.add_Goto(label_recurrencia, cant_tabs + 1);
+            while_string += generator.add_Goto(label_recurrencia, cant_tabs + 1);
 
-            generator.addLabel(cond.FalseLabel, cant_tabs);
-            generator.save_comment("Fin while", cant_tabs, true);
+            while_string += generator.addLabel(cond.FalseLabel, cant_tabs);
+            while_string += generator.save_comment("Fin while", cant_tabs, true);
             
 
 
-            return "executed";
+            return while_string;
         }
 
         public void set_error(string texto, int row, int column)

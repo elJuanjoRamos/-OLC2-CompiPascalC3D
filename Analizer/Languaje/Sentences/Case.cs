@@ -53,32 +53,32 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         }
         public override string Execute(Ambit ambit)
         {
-
+            var case_string = "";
             var generator = C3D.C3DController.Instance;
 
             //VERIFICA QUE LAS SENTNECIAS NO VENGAN VACIAS
             if (!sentence.IsNull)
             {
                 var element = sentence.Execute(ambit);
-
                 if (element != null)
                 {
-                    if (element.Equals("Break"))
+                    /*if (element.Equals("Break"))
                     {
 
                     } else if (element.Equals("Exit"))
                     {
                         return element;
-                    }
-                    
+                    }*/
+                    case_string += element;
+
                 }
                 else
                 {
                     return null;
                 }
             }
-            generator.add_Goto("LTEMP", cant_tabs);
-            return "executed";
+            case_string += generator.add_Goto("LTEMP", cant_tabs);
+            return case_string;
         }
 
         public Returned getCaseCondition(Ambit ambit)

@@ -33,6 +33,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
         public override string Execute(Ambit ambit)
         {
+            var call_String = "";
             var funcion_llamada = ambit.getFuncion(this.id);
             
             //VALIDACION DE EXISTENCIA
@@ -77,7 +78,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
                 
                 var result = ((Expresion)parametros[i]).Execute(ambit);
-
+                call_String += result.Texto_anterior;
 
                 if (variable.Type == result.getDataType)
                 {
@@ -97,29 +98,29 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             if (paramsValues.Count > 0)
             {
                 var temp = generator.newTemporal();
-                generator.addExpression(temp, "SP", (ambit.Size+1).ToString(), "+", cant_tabs );
+                call_String += generator.addExpression(temp, "SP", (ambit.Size+1).ToString(), "+", cant_tabs );
                 int i = 0;
                 foreach (Returned item in paramsValues)
                 {
                     i++;
-                    generator.set_stack(temp, item.Value, cant_tabs);
+                    call_String += generator.set_stack(temp, item.Value, cant_tabs);
                     if (i != paramsValues.Count -1)
                     {
-                        generator.addExpression(temp, temp, "1", "+", cant_tabs);
+                        call_String += generator.addExpression(temp, temp, "1", "+", cant_tabs);
                     }
                 }
             }
-            generator.next_Env(ambit.Size, cant_tabs);
-            generator.save_code(funcion_llamada.UniqId+"();", cant_tabs);
+            call_String += generator.next_Env(ambit.Size, cant_tabs);
+            call_String += generator.save_code(funcion_llamada.UniqId+"();", cant_tabs);
             //generator.get_stack(temp, "SP", cant_tabs);
-            generator.ant_Env(ambit.Size, cant_tabs);
+            call_String += generator.ant_Env(ambit.Size, cant_tabs);
             //generator.freeTemp(temp);
             //generator.recoverTemps(ambit, size, cant_tabs);
 
 
 
 
-            return "executed";
+            return call_String;
         }
 
         public void set_error(string texto, int row, int column)

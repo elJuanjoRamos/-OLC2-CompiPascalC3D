@@ -11,7 +11,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
     {
         Dictionary<string, Identifier> variables;
         Dictionary<string, Function> functions;
-       // Dictionary<string, Arrays> arrays;
+        // Dictionary<string, Arrays> arrays;
         //Dictionary<string, string> procedures;
         private string ambit_name = "";
         private string actualfunc = "";
@@ -31,7 +31,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         {
             this.variables = new Dictionary<string, Identifier>();
             this.functions = new Dictionary<string, Function>();
-            //this.procedures = new Dictionary<string, string>();
             this.ambit_name = n;
             this.ambit_name_inmediato = ni;
             this.anterior = a;
@@ -39,6 +38,10 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             this.size = a.Size;
             this._break = a.Break;
             this._continue = a.Continue;
+            if (ni.Equals("Procedure") || ni.Equals("Function"))
+            {
+                this.size = 1;
+            }
         }
 
         public Ambit()

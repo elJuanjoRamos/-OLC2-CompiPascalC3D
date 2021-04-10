@@ -42,25 +42,26 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
         public override Returned Execute(Ambit ambit)
         {
+            var literal_string = "";
             var generator = C3D.C3DController.Instance;
             var returned = new Returned();
             if (this.type == 1)
             {
-                returned = new Returned(this.value.ToString(), DataType.INTEGER, false);
+                returned = new Returned(this.value.ToString(), DataType.INTEGER, false, literal_string);
             }
             else if (this.type == 2)
             {
                 var temp = generator.newTemporal();
-                generator.addExpression(temp, "HP", "", "", cant_tabs);
+                literal_string += generator.addExpression(temp, "HP", "", "", cant_tabs);
                 foreach (char cha in this.value.ToString())
                 {
-                    generator.set_Heap("HP", ((int)cha).ToString(), cant_tabs);
-                    generator.next_Heap(cant_tabs);
+                    literal_string += generator.set_Heap("HP", ((int)cha).ToString(), cant_tabs);
+                    literal_string += generator.next_Heap(cant_tabs);
                 }
-                generator.set_Heap("HP", "-1", cant_tabs);
-                generator.next_Heap(cant_tabs);
+                literal_string += generator.set_Heap("HP", "-1", cant_tabs);
+                literal_string += generator.next_Heap(cant_tabs);
 
-                returned = new Returned(temp, DataType.STRING, true);
+                returned = new Returned(temp, DataType.STRING, true, literal_string);
             }
 
             else if (this.type == 3)
@@ -77,23 +78,23 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
                 if (this.value.ToString() == "false")
                 {
-                    generator.add_Goto(this.FalseLabel, cant_tabs);
-                    returned = new Returned("false", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel);
+                    literal_string += generator.add_Goto(this.FalseLabel, cant_tabs);
+                    returned = new Returned("false", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, literal_string);
                 }
                 else
                 {
-                    generator.add_Goto(this.TrueLabel, cant_tabs);
-                    returned = new Returned("true", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel);
+                    literal_string += generator.add_Goto(this.TrueLabel, cant_tabs);
+                    returned = new Returned("true", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, literal_string);
                 }
             }
             else if (this.type == 4)
             {
-                returned = new Returned(this.value.ToString(), DataType.REAL, false);
+                returned = new Returned(this.value.ToString(), DataType.REAL, false, literal_string);
             }
 
             else if (this.type == 7)
             {
-                returned = new Returned(this.value.ToString(), DataType.IDENTIFIER, false);
+                returned = new Returned(this.value.ToString(), DataType.IDENTIFIER, false, literal_string);
             }
             return returned;
 

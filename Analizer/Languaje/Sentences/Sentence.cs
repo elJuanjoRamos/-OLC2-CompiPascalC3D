@@ -79,7 +79,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             }
 
             return response;
-
         }
     }
 }

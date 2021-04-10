@@ -25,12 +25,14 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         }
         public override string Execute(Ambit ambit)
         {
+            var repeat_String = "";
+
             //INSTANCIA DEL GENERADOR C3D
             var generator = C3D.C3DController.Instance;
 
             //AMBITO DEL REPEAT
             var repeatAmbit = new Ambit(ambit, ambit.Ambit_name+"_Repeat", "Repeat", false);
-            generator.save_comment("Inicia Repeat", cant_tabs, false);
+            repeat_String += generator.save_comment("Inicia Repeat", cant_tabs, false);
 
             //SETEO Continue y break por defecto
             condition.TrueLabel = generator.newLabel();
@@ -38,7 +40,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             repeatAmbit.Continue = condition.FalseLabel = generator.newLabel();
 
             //IMPRIMIR ETIQUETA RECURRENCIA
-            generator.addLabel("LTEMP", cant_tabs);
+            repeat_String += generator.addLabel("LTEMP", cant_tabs);
 
 
             //INSTRUCCIONES
@@ -47,19 +49,21 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             {
                 return null;
             }
-
+            repeat_String += result;
             if (repeatAmbit.Change_continue)
             {
-                generator.addLabel(repeatAmbit.Continue, cant_tabs);
+                repeat_String += generator.addLabel(repeatAmbit.Continue, cant_tabs);
             }
 
             //CONDICION
             var condicion = condition.Execute(repeatAmbit);
+            repeat_String += condicion.Texto_anterior;
+
             repeatAmbit.Break = condicion.TrueLabel;
             repeatAmbit.Continue = condicion.FalseLabel;
 
-            generator.replace_temp(condicion.TrueLabel, "LBREAK");
-            generator.replace_temp(repeatAmbit.Continue, "LTEMP");
+            repeat_String = generator.replace_temp(condicion.TrueLabel, "LBREAK", repeat_String);
+            repeat_String = generator.replace_temp(repeatAmbit.Continue, "LTEMP", repeat_String);
             //VERIFICA QUE SEA BOOL
             if (condicion.getDataType != DataType.BOOLEAN)
             {
@@ -68,12 +72,12 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             }
 
             //IMPRIMIR ETIQUETA VERDADERA
-            generator.addLabel(condicion.TrueLabel, cant_tabs);
-            generator.save_comment("Fin Repeat", cant_tabs, true);
+            repeat_String += generator.addLabel(condicion.TrueLabel, cant_tabs);
+            repeat_String += generator.save_comment("Fin Repeat", cant_tabs, true);
 
 
 
-            return "executed";
+            return repeat_String;
         }
 
         public void set_error(string texto, int row, int column)

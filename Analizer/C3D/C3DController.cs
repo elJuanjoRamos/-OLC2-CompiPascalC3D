@@ -22,6 +22,7 @@ namespace CompiPascalC3D.Analizer.C3D
 
         public bool Native_str { get => native_str; set => native_str = value; }
         public bool Native_compare { get => native_compare; set => native_compare = value; }
+        public bool Native_equals { get => native_equals; set => native_equals = value; }
 
 
         //VARIABLES
@@ -32,7 +33,8 @@ namespace CompiPascalC3D.Analizer.C3D
         private ArrayList tempStorage;
         private bool native_str;
         private bool native_compare;
-
+        private bool native_equals;
+        private string texto_general;
         
         private C3DController()
         {
@@ -52,23 +54,24 @@ namespace CompiPascalC3D.Analizer.C3D
             this.native_compare = this.native_str = false;
         }
 
-        public void save_comment(string comment, int cant_tabs, bool isclose)
+        public string save_comment(string comment, int cant_tabs, bool isclose)
         {
             var texto = getTabs(cant_tabs, false) + "/***** " + comment + " *****/";
             if (isclose)
             {
                 texto += "\n";
             }
-
-
-
-            this.code.Add(texto);
+            //this.code.Add(texto);
+            return texto + "\n";
         }
         
 
-        public void save_code(string comment, int cant_tabs)
+        public string save_code(string comment, int cant_tabs)
         {
-            this.code.Add(getTabs(cant_tabs, false)  +comment);
+            var texto = getTabs(cant_tabs, false) + comment;
+            //this.code.Add(texto);
+            this.texto_general += "\n" + texto;
+            return texto + "\n";
         }
 
         //TEMPORALES
@@ -165,15 +168,24 @@ namespace CompiPascalC3D.Analizer.C3D
         }
 
 
-        public void addLabel(string label, int cant_tabs)
+        public string addLabel(string label, int cant_tabs)
         {
-            var text = getTabs(cant_tabs, true) + label + ":";
-            this.code.Add(text);
+            var texto = getTabs(cant_tabs, true) + label + ":";
+            //this.code.Add(texto);
+            this.texto_general += "\n" + texto;
+            return texto + "\n";
         }
 
-        public void replace_temp(string label, string replace)
+        public string replace_temp(string label, string replace, string texto)
         {
-            for (int i = 0; i < this.code.Count; i++)
+
+            if (texto.Contains(replace))
+            {
+                texto = texto.Replace(replace, label);
+            }
+
+            return texto;
+            /*for (int i = 0; i < this.code.Count; i++)
             {
                 string element = this.code[i].ToString();
                 if (element.Contains(replace))
@@ -181,93 +193,114 @@ namespace CompiPascalC3D.Analizer.C3D
                     var temp = element.Replace(replace, label);
                     this.code[i] = temp;
                 }
-            }
+            }*/
         }
 
         ///STACK
-        public void set_stack(string index, string value, int cant_tabs)
+        public string set_stack(string index, string value, int cant_tabs)
         {
             var texto = getTabs(cant_tabs, false) + "Stack[" + IsNumeric(index) + "] = " + value + ";";
-
-            this.code.Add(texto);
+            //this.code.Add(texto);
+            return texto + "\n";
         }
-        public void get_stack(string target, string index,  int cant_tabs)
+        public string get_stack(string target, string index,  int cant_tabs)
         {
-            var texto = getTabs(cant_tabs, false) + target + " = Stack[" + IsNumeric(index) + "];"; 
-            this.code.Add(texto);
+            var texto = getTabs(cant_tabs, false) + target + " = Stack[" + IsNumeric(index) + "];";
+            //this.code.Add(texto);
+            return texto + "\n";
         }
 
-        public void next_Env(int size, int cant_tabs)
+        public string next_Env(int size, int cant_tabs)
         {
             var texto = getTabs(cant_tabs, false) + "SP = SP + " + size + ";";
-            this.code.Add(texto);
+            //this.code.Add(texto);
+            return texto + "\n";
         }
 
-        public void ant_Env(int size, int cant_tabs)
+        public string ant_Env(int size, int cant_tabs)
         {
             var texto = getTabs(cant_tabs, false) + "SP = SP - " + size + ";";
-            this.code.Add(texto);
+            //this.code.Add(texto);
+            return texto + "\n";
         }
 
 
         //HEAP
-        public void next_Heap(int cant_tabs)
+        public string next_Heap(int cant_tabs)
         {
-            this.code.Add(getTabs(cant_tabs, false) + "HP = HP + 1;");
+            var texto = getTabs(cant_tabs, false) + "HP = HP + 1;";
+            //this.code.Add(texto);
+            return texto + "\n";
         }
 
-        public void get_Heap(string target, string index, int cant_tabs)
+        public string get_Heap(string target, string index, int cant_tabs)
         {
-            this.code.Add(getTabs(cant_tabs, false) + target +"= Heap[" + IsNumeric(index) + "];");
+            var texto = getTabs(cant_tabs, false) + target + "= Heap[" + IsNumeric(index) + "];";
+            this.code.Add(texto);
+            return texto + "\n";
         }
 
-        public void set_Heap(string index, string value, int cant_tabs)
+        public string set_Heap(string index, string value, int cant_tabs)
         {
-            this.code.Add(getTabs(cant_tabs, false) + "Heap[" + IsNumeric(index) + "] = " + value + ";");
+            var texto = getTabs(cant_tabs, false) + "Heap[" + IsNumeric(index) + "] = " + value + ";";
+            //this.code.Add(texto);
+            return texto + "\n"; 
         }
 
 
         //AMBITOS
-        public void add_next_ambit(int size, int cant_tabs)
+        public string add_next_ambit(int size, int cant_tabs)
         {
-            var texto = getTabs(cant_tabs, false) + "p = p + " + size + ";";
-            this.code.Add(texto);
+            var texto = getTabs(cant_tabs, false) + "SP = SP + " + size + ";";
+            //this.code.Add(texto);
+            return texto + "\n";
         }
 
         //IF
-        public void add_If(string left, string right, string operatorr, string label, int cant_tabs)
+        public string add_If(string left, string right, string operatorr, string label, int cant_tabs)
         {
-            this.code.Add(getTabs(cant_tabs, false) + "if (" + left + " " + operatorr  + " "  + right + ") goto " + label + ";");
+            var texto = getTabs(cant_tabs, false) + "if (" + left + " " + operatorr + " " + right + ") goto " + label + ";";
+            //this.code.Add(texto);
+            return texto + "\n";
         }
         //GOTO
-        public void add_Goto(string label, int cant_tabs)
+        public string add_Goto(string label, int cant_tabs)
         {
-            this.code.Add(getTabs(cant_tabs, false) + "goto " + label + ";");
+            var texto = getTabs(cant_tabs, false) + "goto " + label + ";";
+            //this.code.Add(texto);
+            return texto + "\n";
         }
 
 
         //EXPRESION
-        public void addExpression(string target, string left, string right, string symbol_operator, int cant_tabs)
+        public string addExpression(string target, string left, string right, string symbol_operator, int cant_tabs)
         {
             var text = getTabs(cant_tabs, false) + target + " = " + left + symbol_operator + right + ";";
-            this.code.Add(text);
+            //this.code.Add(text);
+            return text + "\n";
         }
 
+
         //PRINT
-        public void generate_print(string format, string value, string type, int cant_tabs)
+        public string generate_print(string format, string value, string type, int cant_tabs)
         {
-            var texto = getTabs(cant_tabs, false) + "printf(\"%" + format + "\"," + type +  value + ");";  
-            this.code.Add(texto);
+            var texto = getTabs(cant_tabs, false) + "printf(\"%" + format + "\"," + type +  value + ");";
+            //this.code.Add(texto);
+            return texto + "\n";
         }
-        public void print_boolean(int cant_tabs, string istrue)
+        public string print_boolean(int cant_tabs, string istrue)
         {
             var str = istrue;
             var tab_S = getTabs(cant_tabs, false);
 
+            var texto = "";
             foreach (char cha in str)
             {
-                this.code.Add(tab_S + "printf(\"%" + "c" + "\"," + (int)cha + ");");
+                //this.code.Add();
+                texto += tab_S + "printf(\"%" + "c" + "\"," + (int)cha + ");\n";
             }
+
+            return texto + "\n";
         }
 
         // OBTIENE LOS TEMPORALES
@@ -346,74 +379,93 @@ namespace CompiPascalC3D.Analizer.C3D
         }
 
 
-        public void print_natives()
+        public string print_natives()
         {
-            
-            //NATIVA PARA IMRIMIR STRINGS
-            save_code("void native_print_str(){", 0);
-            addLabel("L1", 1);
-            get_Heap("T2", "T1", 1);
-            add_If("T2", "-1", "==", "L2", 1);
-            generate_print("c", "T2", "(int)", 1);
-            addExpression("T1", "T1", "1", "+", 1);
-            add_Goto("L1", 1);
-            addLabel("L2", 1);
-            generate_print("c", "", "' " + "'", 1);
-            save_code("}\n", 0);
 
 
-           
-            //NATIVA PARA COMPARAR STRING
-            save_code("int native_cmp_str(){", 0);
-            addLabel("L3", 1);
-            get_Heap("T5", "T3", 2);
-            get_Heap("T6", "T4", 2);
-            add_If("T5", "T6", "==", "L4", 2);
-            add_Goto("L5", 2);
-            addLabel("L4", 1);
+            var nativa_print = "";
+            if (this.Native_str)
+            {
+                //NATIVA PARA IMRIMIR STRINGS
+                nativa_print += save_code("void native_print_str(){", 0);
+                nativa_print += addLabel("L1", 1);
+                nativa_print += get_Heap("T2", "T1", 1);
+                nativa_print += add_If("T2", "-1", "==", "L2", 1);
+                nativa_print += generate_print("c", "T2", "(int)", 1);
+                nativa_print += addExpression("T1", "T1", "1", "+", 1);
+                nativa_print += add_Goto("L1", 1);
+                nativa_print += addLabel("L2", 1);
+                nativa_print += generate_print("c", "", "' " + "'", 1);
+                nativa_print += save_code("}\n\n", 0);
+            }
 
-            addExpression("T7", "0", "1", "-", 2);
-            add_If("T5", "T7", "==", "L6", 2);
-            add_Goto("L7", 2);
-            addLabel("L6", 1);
-            add_If("T6", "T7", "==", "L8", 2);
-            add_Goto("L7", 2);
-            addLabel("L7", 1);
-            addExpression("T3", "T3", "1", "+", 2);
-            addExpression("T4", "T4", "1", "+", 2);
-            add_Goto("L3", 2);
-            addLabel("L8", 1);
-            save_code("return 1;", 2);
-            addLabel("L5", 1);
-            save_code("return 0;", 2);
+            var nativa_compare = "";
+            if (this.native_compare)
+            {
+                //NATIVA PARA COMPARAR STRING
+                nativa_compare += save_code("int native_cmp_str(){", 0)
+                +addLabel("L3", 1)
+                +get_Heap("T5", "T3", 2)
+                +get_Heap("T6", "T4", 2)
+                +add_If("T5", "T6", "==", "L4", 2)
+                +add_Goto("L5", 2)
+                +addLabel("L4", 1)
 
+                +addExpression("T7", "0", "1", "-", 2)
+                +add_If("T5", "T7", "==", "L6", 2)
+                +add_Goto("L7", 2)
+                +addLabel("L6", 1)
+                +add_If("T6", "T7", "==", "L8", 2)
+                +add_Goto("L7", 2)
+                +addLabel("L7", 1)
+                +addExpression("T3", "T3", "1", "+", 2)
+                +addExpression("T4", "T4", "1", "+", 2)
+                +add_Goto("L3", 2)
+                +addLabel("L8", 1)
+                +save_code("return 1;", 2)
+                +addLabel("L5", 1)
+                +save_code("return 0;", 2)
+                +save_code("}\n\n", 0);
+            }
 
-            save_code("}\n", 0);
+            var nativa_igual = "";
+            if (this.native_equals)
+            {
+                nativa_igual += save_code("void native_concat_str(){", 0)
+                +save_code("T12 = HP; //valor de retorno", 1)
+                +addLabel("L9", 1)
+                +get_Heap("T11", "T9", 2)
+                +add_If("T11", "-1", "==", "L10", 2)
+                +set_Heap("HP", "T11", 2)
+                +addExpression("T9", "T9", "1", "+", 2)
+                +addExpression("HP", "HP", "1", "+", 2)
+                +add_Goto("L9", 2)
+                +addLabel("L10", 1)
+                +get_Heap("T11", "T10", 2)
+                +add_If("T11", "-1", "==", "L11", 2)
+                +set_Heap("HP", "T11", 2)
+                +addExpression("T10", "T10", "1", "+", 2)
+                +addExpression("HP", "HP", "1", "+", 2)
+                +add_Goto("L10", 2)
+                +addLabel("L11", 1)
+                +set_Heap("HP", "-1", 2)
+                +addExpression("HP", "HP", "1", "+", 2)
 
-            save_code("void native_concat_str(){", 0);
-            save_code("T12 = HP; //valor de retorno", 1);
-            addLabel("L9", 1);
-            get_Heap("T11", "T9", 2);
-            add_If("T11", "-1", "==", "L10", 2);
-            set_Heap("HP", "T11", 2);
-            addExpression("T9", "T9", "1", "+", 2);
-            addExpression("HP", "HP", "1", "+", 2);
-            add_Goto("L9", 2);
-            addLabel("L10", 1);
-            get_Heap("T11", "T10", 2);
-            add_If("T11", "-1", "==", "L11", 2);
-            set_Heap("HP", "T11", 2);
-            addExpression("T10", "T10", "1", "+", 2);
-            addExpression("HP", "HP", "1", "+", 2);
-            add_Goto("L10", 2);
-            addLabel("L11", 1);
-            set_Heap("HP", "-1", 2);
-            addExpression("HP", "HP", "1", "+", 2);
+                +save_code("}\n\n", 0);
+            }
 
-            save_code("}\n", 0);
-
+            return nativa_print + nativa_compare + nativa_igual;
         }
 
 
+
+        public void save_Genenal(string nativas, string funciones, string general)
+        {
+            this.texto_general  = nativas + funciones + general;
+        }
+        public string get_Genenal()
+        {
+            return this.texto_general;
+        }
     }
 }

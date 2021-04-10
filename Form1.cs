@@ -63,9 +63,7 @@ namespace CompiPascal
                 consola.Text = "#include <stdio.h>\nfloat Heap[100000]; //estructura heap\nfloat Stack[100000]; //estructura stack\n\n";
                 consola.Text += "int SP = 0; //puntero Stack pointer\nint HP = 0; //puntero Heap pointer\n\n";
                 consola.Text += C3DController.Instance.getTemps();
-
-                
-                consola.Text += C3DController.Instance.getCode();
+                consola.Text += C3DController.Instance.get_Genenal();
 
             }
 

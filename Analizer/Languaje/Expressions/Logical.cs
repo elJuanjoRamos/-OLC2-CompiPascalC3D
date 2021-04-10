@@ -31,6 +31,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
         public override Returned Execute(Ambit ambit)
         {
+            var logical_str = "";
             var result = new Returned();
             var operacion = GetOpLogical(this.type);
 
@@ -59,21 +60,25 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     //EXPRESIONES
                     var varIz = this.left.Execute(ambit);
 
+                    logical_str += varIz.Texto_anterior;
+
                     if (varIz.getDataType == DataType.BOOLEAN)
                     {
-                        generator.addLabel(this.left.TrueLabel, cant_tabs);
+                        logical_str += generator.addLabel(this.left.TrueLabel, cant_tabs);
 
                         this.right.TrueLabel = generator.newLabel();
                         this.right.FalseLabel = varIz.FalseLabel;
 
                         var valDer = right.Execute(ambit);
+                        logical_str += valDer.Texto_anterior;
+
                         if (valDer.getDataType != DataType.BOOLEAN)
                         {
                             set_error("Operador '" + this.type + "' NO puede ser aplicado alos tipos " + varIz.getDataType + " con " + valDer.getDataType, row, column);
                             return result;
                         }
                         
-                        return new Returned("", DataType.BOOLEAN, false, this.right.TrueLabel, this.right.FalseLabel);
+                        return new Returned("", DataType.BOOLEAN, false, this.right.TrueLabel, this.right.FalseLabel, logical_str);
 
                     }
                     set_error("Operador '" + this.type + "' NO puede ser aplicado al tipo " + varIz.getDataType, row, column);
@@ -86,21 +91,23 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
                     //EXPRESIONES
                     var valIz = this.left.Execute(ambit);
+                    logical_str += valIz.Texto_anterior;
                     if (valIz.getDataType == DataType.BOOLEAN)
                     {
-                        generator.addLabel(this.left.FalseLabel, cant_tabs);
+                        logical_str += generator.addLabel(this.left.FalseLabel, cant_tabs);
 
                         this.right.TrueLabel = valIz.TrueLabel;
                         this.right.FalseLabel = generator.newLabel();
 
                         var valDer = right.Execute(ambit);
+                        logical_str += valDer.Texto_anterior;
 
                         if (valDer.getDataType != DataType.BOOLEAN)
                         {
                             set_error("Operador '" + this.type + "' NO puede ser aplicado alos tipos " + valIz.getDataType + " con " + valDer.getDataType, row, column);
                             return result;
                         }
-                        return new Returned("", DataType.BOOLEAN, false,this.right.TrueLabel, this.right.FalseLabel);
+                        return new Returned("", DataType.BOOLEAN, false,this.right.TrueLabel, this.right.FalseLabel, logical_str);
 
                     }
                     set_error("Operador '" + this.type + "' NO puede ser aplicado al tipo " + valIz.getDataType, row, column);
@@ -115,12 +122,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
                     //EXPRESIONES
                     var varrIz = this.left.Execute(ambit);
+                    logical_str += varrIz.Texto_anterior;
                     if (varrIz.getDataType != DataType.BOOLEAN)
                     {
                         set_error("Operador '" + this.type + "' NO puede ser aplicado al tipo " + varrIz.getDataType , row, column);
                         return result;
                     }
-                    return new Returned("", DataType.BOOLEAN, false, varrIz.FalseLabel, varrIz.TrueLabel);
+                    return new Returned("", DataType.BOOLEAN, false, varrIz.FalseLabel, varrIz.TrueLabel, logical_str);
 
 
 

@@ -25,14 +25,15 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
         public override string Execute(Ambit ambit)
         {
+            var break_str = "";
             var generator = C3D.C3DController.Instance;
             if (getValidAmbit(ambit.Ambit_name_inmediato, ambit.Ambit_name))
             {
                 Controller.ErrorController.Instance.SyntacticError("La sentencia Break solo puede aparece en ciclos o en la sentencia CASE", row, column);
                 return null;
             }
-            generator.add_Goto(ambit.Break, cant_tabs);
-            return "Break";
+            break_str = generator.add_Goto(ambit.Break, cant_tabs);
+            return break_str;
         }
 
         public bool getValidAmbit(string ambit_name, string ambit_padre)

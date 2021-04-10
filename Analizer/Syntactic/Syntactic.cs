@@ -90,17 +90,17 @@ namespace CompiPascalC3D.Analizer.Syntactic
 
 
 
-            #region IMPRIMIR NATIVAS
-
-            //C3D.C3DController.Instance.print_natives();
-
-            #endregion
 
 
 
-            C3D.C3DController.Instance.save_code("int main()\n{\n", 0);
+            var main = C3D.C3DController.Instance.save_code("\n\nint main(){\n", 0);
 
-            C3D.C3DController.Instance.save_comment("Inicia declaracion variables", 1, false);
+
+
+
+            main += C3D.C3DController.Instance.save_comment("Inicia declaracion variables", 1, false);
+
+            
             foreach (var item in variables)
             {
                 try
@@ -110,6 +110,7 @@ namespace CompiPascalC3D.Analizer.Syntactic
                     {
                         continue;
                     }
+                    main += result; 
                 }
                 catch (Exception)
                 {
@@ -117,16 +118,18 @@ namespace CompiPascalC3D.Analizer.Syntactic
                     throw;
                 }
             }
-            C3D.C3DController.Instance.save_comment("Fin declaracion variables", 1, true);
+            main += C3D.C3DController.Instance.save_comment("Fin declaracion variables", 1, true);
 
-            /*foreach (var funcion in funciones)
+            var funcion_String = "";
+            foreach (var funcion in funciones)
             {
                 var result = funcion.Execute(general);
                 if (result == null)
                 {
                     continue;
                 }
-            }*/
+                funcion_String += result;
+            }
 
 
             foreach (var item in instrucciones)
@@ -138,6 +141,7 @@ namespace CompiPascalC3D.Analizer.Syntactic
                     {
                         continue;
                     }
+                    main += result;
                 }
                 catch (Exception)
                 {
@@ -145,7 +149,16 @@ namespace CompiPascalC3D.Analizer.Syntactic
                     throw;
                 }
             }
-            C3D.C3DController.Instance.save_code("\nreturn 0;\n}", 0);
+            main += C3D.C3DController.Instance.save_code("\n return 0;\n}", 0);
+
+
+            #region IMPRIMIR NATIVAS
+
+            var nativas = C3D.C3DController.Instance.print_natives();
+
+            #endregion
+
+            C3D.C3DController.Instance.save_Genenal(nativas, "", main);
 
         }
     }

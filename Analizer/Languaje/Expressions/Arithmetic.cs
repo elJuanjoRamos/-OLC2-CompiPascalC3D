@@ -33,6 +33,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             var varIz = this.left.Execute(ambit);
             var valDer = this.right.Execute(ambit);
 
+            var arithmetic_string = varIz.Texto_anterior + valDer.Texto_anterior;
+
             var generator = C3DController.Instance;
 
 
@@ -42,13 +44,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 if (valDer.getDataType == DataType.INTEGER || valDer.getDataType == DataType.REAL)
                 {
                     var temp = generator.newTemporal();
-                    generator.addExpression(temp, varIz.Value, valDer.Value, type, cant_tabs);
+                    arithmetic_string += generator.addExpression(temp, varIz.Value, valDer.Value, type, cant_tabs);
 
                     if (valDer.getDataType == DataType.REAL || varIz.getDataType == DataType.REAL)
                     {
-                        return new Returned(temp, DataType.REAL, true);
+                        return new Returned(temp, DataType.REAL, true, arithmetic_string);
                     }
-                    return new Returned(temp, DataType.INTEGER, true);
+                    return new Returned(temp, DataType.INTEGER, true, arithmetic_string);
 
                 }
                 set_error("Operador '" + this.type + "' NO puede ser aplicado a los tipos " + varIz.getDataType + " con " + valDer.getDataType, row, column);
@@ -57,10 +59,10 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             else if (varIz.getDataType == DataType.STRING && valDer.getDataType == DataType.STRING)
             {
 
-                generator.addExpression("T9", varIz.Value.ToString(), "", "", cant_tabs);
-                generator.addExpression("T10", valDer.Value.ToString(), "", "", cant_tabs);
-                generator.save_code("native_concat_str();", cant_tabs);
-                return new Returned("T12", DataType.STRING, true);
+                arithmetic_string += generator.addExpression("T9", varIz.Value.ToString(), "", "", cant_tabs);
+                arithmetic_string += generator.addExpression("T10", valDer.Value.ToString(), "", "", cant_tabs);
+                arithmetic_string += generator.save_code("native_concat_str();", cant_tabs);
+                return new Returned("T12", DataType.STRING, true, arithmetic_string);
 
             }
 

@@ -30,11 +30,15 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
         public override string Execute(Ambit ambit)
         {
+            var generator = C3D.C3DController.Instance;
 
+            var switch_string = generator.save_comment("Inicia CASE", cant_tabs, false);
 
             //Condicion de switch
             var conSwitch = condicion.Execute(ambit);
-            var generator = C3D.C3DController.Instance;
+            
+            switch_string += conSwitch.Texto_anterior;
+
 
             
 
@@ -54,19 +58,17 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
                 var cond = condicion.Execute(ambit);
 
-                generator.addLabel(condicion.TrueLabel, cant_tabs);
+                switch_string += cond.Texto_anterior;
+
+                switch_string += generator.addLabel(condicion.TrueLabel, cant_tabs);
                 var resultado = @case.Execute(switchAmbit);
 
                 if (resultado == null)
                 {
                     return null;
                 }
-
-                if (resultado.Equals("Break") || resultado.Equals("Exit"))
-                {
-                    return resultado;
-                }
-                generator.addLabel(condicion.FalseLabel, cant_tabs);
+                switch_string += resultado;
+                switch_string += generator.addLabel(condicion.FalseLabel, cant_tabs);
             }
 
             if (!else_case.IsNull)
@@ -76,13 +78,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 {
                     return null;
                 }
+                switch_string += element;
             }
-            generator.addLabel(switchAmbit.Break, cant_tabs);
-            generator.replace_temp(switchAmbit.Break, "LTEMP");
+            switch_string += generator.addLabel(switchAmbit.Break, cant_tabs);
+            switch_string = generator.replace_temp(switchAmbit.Break, "LTEMP", switch_string);
 
-
-
-            return "executed";
+            switch_string += generator.save_comment("Inicia CASE", cant_tabs, true);
+            return switch_string;
         }
 
 

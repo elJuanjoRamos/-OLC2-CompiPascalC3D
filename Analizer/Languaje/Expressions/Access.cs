@@ -28,6 +28,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
         public override Returned Execute(Ambit ambit)
         {
+
+            var access_string = "";
             var generator = C3DController.Instance;
 
             Identifier variable = ambit.getVariable(this.id);
@@ -39,12 +41,14 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
 
             var temp = generator.newTemporal();
+
+
             if (variable.IsGlobal)
             {
-                generator.get_stack(temp, variable.Position.ToString(), cant_Tabs);
+                access_string += generator.get_stack(temp, variable.Position.ToString(), cant_Tabs);
 
                 if (variable.DataType!= DataType.BOOLEAN) {
-                    return new Returned(temp, variable.DataType, true);
+                    return new Returned(temp, variable.DataType, true, access_string);
                 }
 
                 
@@ -56,26 +60,25 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 {
                     this.FalseLabel = generator.newLabel();
                 }
-                generator.add_If(temp, "1", "==", this.TrueLabel, cant_Tabs);
-                generator.add_Goto(this.FalseLabel, cant_Tabs);
+                access_string += generator.add_If(temp, "1", "==", this.TrueLabel, cant_Tabs);
+                access_string += generator.add_Goto(this.FalseLabel, cant_Tabs);
 
-                return new Returned("", variable.DataType, false, this.TrueLabel, this.FalseLabel);
+                return new Returned("", variable.DataType, false, this.TrueLabel, this.FalseLabel, access_string);
 
 
             }
             else
             {
-                var tempAux = generator.newTemporal(); 
+                var tempAux = generator.newTemporal();
                 //generator.freeTemp(tempAux);
-                
-                generator.addExpression(tempAux, "SP", variable.Position.ToString(), "+", cant_Tabs);
 
-                generator.get_stack(temp, tempAux, cant_Tabs);
+                access_string += generator.addExpression(tempAux, "SP", variable.Position.ToString(), "+", cant_Tabs);
+                access_string += generator.get_stack(temp, tempAux, cant_Tabs);
 
 
                 if (variable.DataType != DataType.BOOLEAN)
                 {
-                    return new Returned(temp, variable.DataType, true);
+                    return new Returned(temp, variable.DataType, true, access_string);
                 }
 
 
@@ -88,9 +91,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     this.FalseLabel = generator.newLabel();
                 }
 
-                generator.add_If(temp, "1", "==", this.TrueLabel, cant_Tabs);
-                generator.add_Goto(this.FalseLabel, cant_Tabs);
-                return new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel);
+                access_string += generator.add_If(temp, "1", "==", this.TrueLabel, cant_Tabs);
+                access_string += generator.add_Goto(this.FalseLabel, cant_Tabs);
+                return new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, access_string);
             }
         }
 

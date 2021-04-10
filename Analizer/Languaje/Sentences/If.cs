@@ -44,14 +44,16 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
         public override string Execute(Ambit ambit)
         {
+            var if_string = "";
             var generator = C3DController.Instance;
-            generator.save_comment("Inicia If", tabs, false);
+            if_string += generator.save_comment("Inicia If", tabs, false);
 
             
             //AMBITO IF
             var ifAmbit = new Ambit(ambit, ambit.Ambit_name+ "_If", "If", false);
             //CONDICION
             var condicion = condition.Execute(ambit);
+            if_string += condicion.Texto_anterior;
             //VERIFICA QUE LLA CONDICION SEA BOOLEANA
             if (condicion.getDataType != DataType.BOOLEAN)
             {
@@ -59,11 +61,11 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 return "null";
             }
 
-            generator.addLabel(condicion.TrueLabel, tabs);
+            if_string += generator.addLabel(condicion.TrueLabel, tabs);
 
             if (sentences.IsNull)
             {
-                return "executed";
+                return if_string;
             }
             //SENTENCIAS
             var if_sentencias = this.sentences.Execute(ifAmbit);
@@ -71,6 +73,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             {
                 return null;
             }
+            if_string += if_sentencias;
 
             if (!this.elif.IsNull)
             {
@@ -83,22 +86,24 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                     tempLbl = this.labelExit;
                 }*/
                 tempLbl = generator.newLabel();
-                generator.add_Goto(tempLbl, tabs);
-                generator.addLabel(condicion.FalseLabel, tabs);
+                if_string += generator.add_Goto(tempLbl, tabs);
+                if_string += generator.addLabel(condicion.FalseLabel, tabs);
 
                 this.elif.ExitLabel = tempLbl;
                 var else_sentence = this.elif.Execute(ifAmbit);
-                generator.addLabel(tempLbl,tabs);
+
                 if (else_sentence == null)
                 {
                     return null;
                 }
+                if_string += else_sentence;
+                if_string += generator.addLabel(tempLbl,tabs);
             } else
             {
-                generator.addLabel(condicion.FalseLabel, tabs);
+                if_string += generator.addLabel(condicion.FalseLabel, tabs);
             }
 
-            return "executed";
+            return if_string;
         }
         public void setError(string text, int row, int column)
         {

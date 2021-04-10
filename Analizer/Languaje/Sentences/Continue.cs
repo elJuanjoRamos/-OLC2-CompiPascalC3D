@@ -25,6 +25,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
         public override string Execute(Ambit ambit)
         {
+            var continue_String = "";
             var generator = C3D.C3DController.Instance;
             if (getValidAmbit(ambit.Ambit_name_inmediato, ambit.Ambit_name))
             {
@@ -34,8 +35,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             var cont = generator.newLabel();
             ambit.Continue = cont;
             ambit.Change_continue = true;
-            generator.add_Goto(ambit.Continue, cant_tabs);
-            return "executed";
+            continue_String = generator.add_Goto(ambit.Continue, cant_tabs);
+            return continue_String;
         }
 
         public bool getValidAmbit(string ambit_name, string ambit_padre)

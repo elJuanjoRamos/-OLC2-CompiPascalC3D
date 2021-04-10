@@ -31,7 +31,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
         public override Returned Execute(Ambit ambit)
         {
+            var relational_Str = "";
             var valIz = this.left.Execute(ambit);
+            relational_Str += valIz.Texto_anterior;
 
             var result = new Returned();
 
@@ -47,6 +49,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     if (valIz.getDataType == DataType.REAL || valIz.getDataType == DataType.INTEGER)
                     {
                         var valDer = this.right.Execute(ambit);
+                        relational_Str += valDer.Texto_anterior;
+
                         if (valDer.getDataType == DataType.INTEGER || valDer.getDataType == DataType.REAL)
                         {
                             if (this.TrueLabel == "")
@@ -57,10 +61,10 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             {
                                 this.FalseLabel = generator.newLabel();
                             }
-                            generator.add_If(valIz.getValue(), valDer.getValue(), "==", this.TrueLabel, cant_tabs);
-                            generator.add_Goto(this.FalseLabel, cant_tabs);
+                            relational_Str += generator.add_If(valIz.getValue(), valDer.getValue(), "==", this.TrueLabel, cant_tabs);
+                            relational_Str += generator.add_Goto(this.FalseLabel, cant_tabs);
 
-                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel);
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str);
 
                         }
                         else
@@ -74,22 +78,23 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     {
                         var trueLabel = generator.newLabel();
                         var falseLabel = generator.newLabel();
-                        generator.addLabel(valIz.TrueLabel, cant_tabs);
+                        relational_Str += generator.addLabel(valIz.TrueLabel, cant_tabs);
                         this.right.TrueLabel = trueLabel;
                         this.right.FalseLabel = falseLabel;
                         var valDer = this.right.Execute(ambit);
+                        relational_Str += valDer.Texto_anterior;
 
-
-                        generator.addLabel(valIz.FalseLabel, cant_tabs);
+                        relational_Str += generator.addLabel(valIz.FalseLabel, cant_tabs);
 
                         this.right.TrueLabel = falseLabel;
                         this.right.FalseLabel = trueLabel;
                         valDer = this.right.Execute(ambit);
+                        relational_Str += valDer.Texto_anterior;
 
                         //VERIFICA QUE EL DERECHO SEA BOOLEAN
                         if (valDer.getDataType == DataType.BOOLEAN)
                         {
-                            result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel);
+                            result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel, relational_Str);
 
                         } else
                         {
@@ -101,6 +106,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     else if (valIz.getDataType == DataType.STRING)
                     {
                         var valDer = this.right.Execute(ambit);
+                        relational_Str += valDer.Texto_anterior;
+
+
                         if (valDer.getDataType == DataType.STRING)
                         {
                             if (this.TrueLabel == "")
@@ -117,11 +125,11 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             var tempo_izq = valIz.Value.ToString();
                             var tempo_der = valDer.Value.ToString();
 
-                            generator.addExpression("T3", tempo_izq, "", "", cant_tabs);
-                            generator.addExpression("T4", tempo_der, "", "", cant_tabs);
-                            generator.addExpression("T8", "native_cmp_str()","","",cant_tabs);
-                            generator.add_If("T8", "1", "==", this.TrueLabel, cant_tabs);
-                            generator.add_Goto(this.FalseLabel, cant_tabs);
+                            relational_Str += generator.addExpression("T3", tempo_izq, "", "", cant_tabs);
+                            relational_Str += generator.addExpression("T4", tempo_der, "", "", cant_tabs);
+                            relational_Str += generator.addExpression("T8", "native_cmp_str()","","",cant_tabs);
+                            relational_Str += generator.add_If("T8", "1", "==", this.TrueLabel, cant_tabs);
+                            relational_Str += generator.add_Goto(this.FalseLabel, cant_tabs);
 
 
 
@@ -168,7 +176,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
                             generator.add_Goto(label_recurrecia, cant_tabs);*/
 
-                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel);
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str);
 
                         }
                         else
@@ -191,6 +199,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     if (valIz.getDataType == DataType.REAL || valIz.getDataType == DataType.INTEGER)
                     {
                         var valDer = this.right.Execute(ambit);
+                        relational_Str += valDer.Texto_anterior;
+
                         if (valDer.getDataType == DataType.INTEGER || valDer.getDataType == DataType.REAL)
                         {
                             if (this.TrueLabel == "")
@@ -201,10 +211,10 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             {
                                 this.FalseLabel = generator.newLabel();
                             }
-                            generator.add_If(valIz.getValue(), valDer.getValue(), "!=", this.TrueLabel, cant_tabs);
-                            generator.add_Goto(this.FalseLabel, cant_tabs);
+                            relational_Str += generator.add_If(valIz.getValue(), valDer.getValue(), "!=", this.TrueLabel, cant_tabs);
+                            relational_Str += generator.add_Goto(this.FalseLabel, cant_tabs);
 
-                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel);
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str);
 
                         }
                         else
@@ -222,22 +232,23 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     {
                         var trueLabel = generator.newLabel();
                         var falseLabel = generator.newLabel();
-                        generator.addLabel(valIz.TrueLabel, cant_tabs);
+                        relational_Str += generator.addLabel(valIz.TrueLabel, cant_tabs);
                         this.right.TrueLabel = falseLabel;
                         this.right.FalseLabel = trueLabel;
                         var valDer = this.right.Execute(ambit);
+                        relational_Str += valDer.Texto_anterior;
 
-
-                        generator.addLabel(valIz.FalseLabel, cant_tabs);
+                        relational_Str += generator.addLabel(valIz.FalseLabel, cant_tabs);
 
                         this.right.TrueLabel = trueLabel;
                         this.right.FalseLabel = falseLabel;
                         valDer = this.right.Execute(ambit);
+                        relational_Str += valDer.Texto_anterior;
 
                         //VERIFICA QUE EL DERECHO SEA BOOLEAN
                         if (valDer.getDataType == DataType.BOOLEAN)
                         {
-                            result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel);
+                            result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel, relational_Str);
 
                         }
                         else
@@ -260,6 +271,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     if (valIz.getDataType == DataType.REAL || valIz.getDataType == DataType.INTEGER)
                     {
                         var valDer = this.right.Execute(ambit);
+                        relational_Str += valDer.Texto_anterior;
 
                         if (valDer.getDataType == DataType.REAL || valDer.getDataType == DataType.INTEGER)
                         {
@@ -271,9 +283,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             {
                                 this.FalseLabel = generator.newLabel();
                             }
-                            generator.add_If(valIz.getValue(), valDer.getValue(), this.type, this.TrueLabel, cant_tabs);
-                            generator.add_Goto(this.FalseLabel, cant_tabs);
-                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel);
+                            relational_Str += generator.add_If(valIz.getValue(), valDer.getValue(), this.type, this.TrueLabel, cant_tabs);
+                            relational_Str += generator.add_Goto(this.FalseLabel, cant_tabs);
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str);
 
                         } else
                         {

@@ -55,6 +55,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
         public override string Execute(Ambit ambit)
         {
+            var string_declaracion = "";
+
             Identifier buscar = new Identifier();
             //BUSCA LA VARIABLE SI NO HA SIDO DECLARADA
             if (!ambit.Ambit_name_inmediato.Equals("Function") && !ambit.Ambit_name_inmediato.Equals("Procedure"))
@@ -103,37 +105,37 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                         if (this.type == DataType.BOOLEAN)
                         {
                             var templabel = generator.newLabel();
-                            generator.addLabel(val.TrueLabel, 1);
-                            generator.set_stack(variable.Position.ToString(), "1", 1);
-                            generator.add_Goto(templabel, 1);
-                            generator.addLabel(val.FalseLabel, 1);
-                            generator.set_stack(variable.Position.ToString(), "0", 1);
-                            generator.addLabel(templabel, 1);
+                            string_declaracion += generator.addLabel(val.TrueLabel, 1);
+                            string_declaracion += generator.set_stack(variable.Position.ToString(), "1", 1);
+                            string_declaracion += generator.add_Goto(templabel, 1);
+                            string_declaracion += generator.addLabel(val.FalseLabel, 1);
+                            string_declaracion += generator.set_stack(variable.Position.ToString(), "0", 1);
+                            string_declaracion += generator.addLabel(templabel, 1);
                         }
                         else
                         {
-                            generator.set_stack(variable.Position.ToString(), val.getValue(), 1);
+                            string_declaracion += generator.set_stack(variable.Position.ToString(), val.getValue(), 1);
                         }
                     }
                     else
                     {
                         var temp = generator.newTemporal();
                         //generator.freeTemp(temp);
-                        generator.addExpression(temp, "SP", variable.Position.ToString(), "+", 1);
+                        string_declaracion += generator.addExpression(temp, "SP", variable.Position.ToString(), "+", 1);
 
                         if (variable.DataType == DataType.BOOLEAN)
                         {
                             var templabel = generator.newLabel();
-                            generator.addLabel(val.TrueLabel, 1);
-                            generator.set_stack(temp, "1", 1);
-                            generator.add_Goto(templabel, 1);
-                            generator.addLabel(val.FalseLabel, 1);
-                            generator.set_stack(temp, "0", 1);
-                            generator.addLabel(templabel, 1);
+                            string_declaracion += generator.addLabel(val.TrueLabel, 1);
+                            string_declaracion += generator.set_stack(temp, "1", 1);
+                            string_declaracion += generator.add_Goto(templabel, 1);
+                            string_declaracion += generator.addLabel(val.FalseLabel, 1);
+                            string_declaracion += generator.set_stack(temp, "0", 1);
+                            string_declaracion += generator.addLabel(templabel, 1);
                         }
                         else
                         {
-                            generator.set_stack(temp, val.getValue(), 1);
+                            string_declaracion += generator.set_stack(temp, val.getValue(), 1);
                         }
                     }
                 }
@@ -148,7 +150,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 set_error("La variable '" + id + "' ya fue declarada", row, column);
                 return null;
             }
-            return "executed";
+            return string_declaracion;
         }
 
         public DataType GetDataType(string d)

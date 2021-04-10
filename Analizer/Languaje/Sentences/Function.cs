@@ -44,6 +44,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         }
         public override string Execute(Ambit ambit)
         {
+            var funcion_total = "";
+
 
             if (ambit.Anterior != null)
             {
@@ -71,11 +73,11 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 {
                     return null;
                 }
-
+                funcion_total += result;
             }
 
 
-            generator.save_code("void " + uniqId + "(" + ") { \n", 0);
+            funcion_total += generator.save_code("void " + uniqId + "(" + ") { \n", 0);
 
             //DECLARACIONES 
             foreach (var declas in declaraciones)
@@ -85,6 +87,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 {
                     return null;
                 }
+                funcion_total += result;
             }
 
             
@@ -95,10 +98,12 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             {
                 return null;
             }
+            funcion_total += instrucciones;
 
-            generator.save_code("return;\n}", 0);
 
-            return "executed";
+            funcion_total += generator.save_code("return;\n}", 0);
+
+            return funcion_total;
 
         }
 
