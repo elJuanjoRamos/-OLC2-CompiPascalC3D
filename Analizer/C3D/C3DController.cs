@@ -28,6 +28,7 @@ namespace CompiPascalC3D.Analizer.C3D
         private int temporal_number;
         private int label_number;
         private ArrayList code;
+        private ArrayList code_function;
         private ArrayList tempStorage;
         private bool native_str;
         private bool native_compare;
@@ -36,7 +37,7 @@ namespace CompiPascalC3D.Analizer.C3D
         private C3DController()
         {
             this.temporal_number = 15;
-            this.code = new ArrayList();
+            this.code = this.code_function = new ArrayList();
             this.tempStorage = new ArrayList();
             this.native_compare = this.native_str = false;
         }
@@ -46,6 +47,7 @@ namespace CompiPascalC3D.Analizer.C3D
         {
             this.temporal_number = this.label_number = 15;
             this.code.Clear();
+            this.code_function.Clear();
             this.tempStorage.Clear();
             this.native_compare = this.native_str = false;
         }
@@ -57,6 +59,9 @@ namespace CompiPascalC3D.Analizer.C3D
             {
                 texto += "\n";
             }
+
+
+
             this.code.Add(texto);
         }
         

@@ -54,14 +54,17 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             if (funcion_llamada.IsProcedure)
             {
-                function_ambit = new Ambit(ambit, "Procedure_" + funcion_llamada.Id, "Procedure", false, 1);
+                function_ambit = new Ambit(ambit, "Procedure_" + funcion_llamada.Id, "Procedure", false);
             }
             else
             {
-                function_ambit = new Ambit(ambit, "Function_" + funcion_llamada.Id, "Function", false, 1);
+                function_ambit = new Ambit(ambit, "Function_" + funcion_llamada.Id, "Function", false);
             }
             var generator = C3D.C3DController.Instance;
-            var size = generator.save_Temps(ambit, cant_tabs);
+
+
+            var size = ambit.Size;
+
 
             var paramsValues = new ArrayList();
 
@@ -89,10 +92,11 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
 
             }
-            var temp = generator.newTemporal();
+            
             //PASO DE PARAMETRO, CAMBIO SIMULADO
             if (paramsValues.Count > 0)
             {
+                var temp = generator.newTemporal();
                 generator.addExpression(temp, "SP", (ambit.Size+1).ToString(), "+", cant_tabs );
                 int i = 0;
                 foreach (Returned item in paramsValues)
@@ -106,12 +110,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 }
             }
             generator.next_Env(ambit.Size, cant_tabs);
-            generator.save_code(funcion_llamada.UniqId, cant_tabs);
-            generator.get_stack(temp, "SP", cant_tabs);
+            generator.save_code(funcion_llamada.UniqId+"();", cant_tabs);
+            //generator.get_stack(temp, "SP", cant_tabs);
             generator.ant_Env(ambit.Size, cant_tabs);
-            generator.recoverTemps(ambit, size, cant_tabs);
+            //generator.freeTemp(temp);
+            //generator.recoverTemps(ambit, size, cant_tabs);
 
-            
+
 
 
             return "executed";

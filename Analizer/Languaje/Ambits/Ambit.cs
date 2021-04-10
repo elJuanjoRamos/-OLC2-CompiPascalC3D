@@ -22,12 +22,12 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         private bool change_continue = false;
         private string ambit_name_inmediato = "";
         private Ambit anterior;
-        private int size = 0;
-        private int size_relativ = 0;
+        private int size = 1;
+        private int size_relativ = 1;
         public Boolean ambit_null;
 
 
-        public Ambit(Ambit a, string n, string ni, bool isnull, int sizes)
+        public Ambit(Ambit a, string n, string ni, bool isnull)
         {
             this.variables = new Dictionary<string, Identifier>();
             this.functions = new Dictionary<string, Function>();
@@ -36,7 +36,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             this.ambit_name_inmediato = ni;
             this.anterior = a;
             this.ambit_null = isnull;
-            this.size = sizes;
+            this.size = a.Size;
             this._break = a.Break;
             this._continue = a.Continue;
         }
@@ -50,7 +50,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             this.ambit_null = true;
             this.ambit_name = "General";
             this.ambit_name_inmediato = "General";
-            this.size = 0;
+            this.size = 1;
         }
 
 

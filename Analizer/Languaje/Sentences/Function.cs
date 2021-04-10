@@ -61,7 +61,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 texto = "Procedure";
             }
 
-            Ambit ambit_func = new Ambit(ambit, this.uniqId, texto, false, 1);
+            Ambit ambit_func = new Ambit(ambit, this.uniqId, texto, false);
 
             //FUNCIONES HIJAS
             foreach (var fun_hija in funciones_hijas)

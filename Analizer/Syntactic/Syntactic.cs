@@ -82,18 +82,9 @@ namespace CompiPascalC3D.Analizer.Syntactic
             LinkedList<Instruction> funciones,
             LinkedList<Instruction> instrucciones)
         {
-            //SETEA EL SIZE DEL GENERAL
-            general.Size = variables.Count+1;
+            
 
-
-            foreach (var funcion in funciones)
-            {
-                var result = funcion.Execute(general);
-                if (result == null)
-                {
-                    continue;
-                }
-            }
+            
 
 
 
@@ -127,6 +118,16 @@ namespace CompiPascalC3D.Analizer.Syntactic
                 }
             }
             C3D.C3DController.Instance.save_comment("Fin declaracion variables", 1, true);
+
+            /*foreach (var funcion in funciones)
+            {
+                var result = funcion.Execute(general);
+                if (result == null)
+                {
+                    continue;
+                }
+            }*/
+
 
             foreach (var item in instrucciones)
             {
