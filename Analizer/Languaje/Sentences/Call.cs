@@ -110,6 +110,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                         call_String += generator.addExpression(temp, temp, "1", "+", cant_tabs);
                     }
                 }
+                generator.free_temps(temp);
                 call_String += generator.save_comment("Fin:Parametros, Cambio de ambito", cant_tabs, false);
             }
             call_String += generator.next_Env(ambit.Size, cant_tabs);

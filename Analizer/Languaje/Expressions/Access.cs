@@ -41,8 +41,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
 
             var temp = generator.newTemporal();
-
-
+            
             if (variable.IsGlobal)
             {
                 access_string += generator.get_stack(temp, variable.Position.ToString(), cant_Tabs);

@@ -76,6 +76,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                     Returned val = this.value.Execute(ambit);
                     string_declaracion += val.Texto_anterior;
 
+
                     //VERIFICA QUE NO HAYA ERROR
                     if (val.getDataType == DataType.ERROR)
                     {
@@ -101,8 +102,15 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                         }
                     }
                     var generator = C3DController.Instance;
+                    if (val.IsTemporal)
+                    {
+                        generator.free_temps(val.Value);
+                    }
+
                     if (variable.IsGlobal)
                     {
+
+
                         if (this.type == DataType.BOOLEAN)
                         {
                             var templabel = generator.newLabel();
@@ -137,7 +145,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                         else
                         {
                             string_declaracion += generator.set_stack(temp, val.getValue(), 1);
+                            generator.free_temps(temp);
                         }
+
                     }
                 }
                 catch (Exception)
@@ -153,6 +163,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             }
             return string_declaracion;
         }
+
+
 
         public DataType GetDataType(string d)
         {

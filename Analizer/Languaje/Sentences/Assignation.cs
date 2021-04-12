@@ -16,6 +16,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         private int row;
         private int column;
         private int tabs;
+        private string assignation_string = "";
         public Assignation(string id, Expresion value, int row, int column, int cantTabs) :
             base("Assignation")
         {
@@ -24,10 +25,10 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             this.row = row;
             this.column = column;
             this.tabs = cantTabs;
+            this.assignation_string = "";
         }
         public override object Execute(Ambit ambit)
         {
-            var assignation_string = "";
             try
             {
 
@@ -64,6 +65,11 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                         {
                             var generator = C3DController.Instance;
 
+                            if (val.IsTemporal)
+                            {
+                                generator.free_temps(val.Value);
+                            }
+
                             if (variable.IsGlobal)
                             {
                                 if (variable.DataType == DataType.BOOLEAN)
@@ -71,7 +77,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                                     var templabel = generator.newLabel();
                                     assignation_string += generator.addLabel(val.TrueLabel, tabs);
                                     assignation_string += generator.set_stack(variable.Position.ToString(), "1", tabs);
-                                    assignation_string += generator.add_Goto(templabel, tabs +1);
+                                    assignation_string += generator.add_Goto(templabel, tabs + 1);
                                     assignation_string += generator.addLabel(val.FalseLabel, tabs);
                                     assignation_string += generator.set_stack(variable.Position.ToString(), "0", tabs);
                                     assignation_string += generator.addLabel(templabel, tabs);
@@ -80,11 +86,27 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                                 {
                                     assignation_string += generator.set_stack(variable.Position.ToString(), val.getValue(), tabs);
                                 }
-                            } else
+                            }
+                            else
                             {
-                                var temp = generator.newTemporal();
-                                assignation_string += generator.addExpression(temp, "SP", variable.Position.ToString(), "+", tabs);
-                                assignation_string += generator.set_stack(temp, val.getValue(), tabs);
+
+                                if (variable.DataType == DataType.BOOLEAN)
+                                {
+                                    var templabel = generator.newLabel();
+                                    assignation_string += generator.addLabel(val.TrueLabel, tabs);
+                                    assignation_string += generator.set_stack(variable.Position.ToString(), "1", tabs);
+                                    assignation_string += generator.add_Goto(templabel, tabs + 1);
+                                    assignation_string += generator.addLabel(val.FalseLabel, tabs);
+                                    assignation_string += generator.set_stack(variable.Position.ToString(), "0", tabs);
+                                    assignation_string += generator.addLabel(templabel, tabs);
+                                }
+                                else
+                                {
+                                    var temp = generator.newTemporal();
+                                    assignation_string += generator.addExpression(temp, "SP", variable.Position.ToString(), "+", tabs);
+                                    assignation_string += generator.set_stack(temp, val.getValue(), tabs);
+                                }
+
                             }
 
 
@@ -102,16 +124,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 else
                 {
                     /*Function function = ambit.getFuncion(id);
-
                     if (function != null)
                     {
-
                         if (function.IsProcedure)
                         {
                             setError("No puede asignarse ningun valor al procedimiento '" + id + "' ", row, column);
                             return null;
                         }
-
                         /**
                        * VALIDAR VALOR: VERIFICA SI EL TIPO DE LA VARIABLE ES IGUAL AL DEL VALOR A ASIGNAR
                        */
@@ -126,13 +145,11 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                          setError("El tipo " + val.getDataType + " no es asignable con " + variable.DataType, row, column);
                          return null;
                      }
-
                  }
                  else
                  {
                      setError("La variable '" + id + "' no esta declara", row, column);
                      return null;
-
                  }*/
                 }
 
@@ -147,6 +164,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             return assignation_string;
         }
 
+       
         public void setError(string texto, int row, int col)
         {
             ErrorController.Instance.SemantycErrors(texto, row, col);

@@ -36,13 +36,15 @@ namespace CompiPascalC3D.Analizer.C3D
         private bool native_compare;
         private bool native_equals;
         private string texto_general;
-        
+        private Stack micola;
+
         private C3DController()
         {
             this.temporal_number = 15;
             this.code = this.code_function = new ArrayList();
             this.tempStorage = this.tempNatives = new ArrayList();
             this.native_compare = this.native_str = false;
+            this.micola = new Stack();
         }
 
 
@@ -54,6 +56,7 @@ namespace CompiPascalC3D.Analizer.C3D
             this.tempStorage.Clear();
             this.tempNatives.Clear();
             this.native_compare = this.native_str = this.native_equals = false;
+            this.micola.Clear();
         }
 
         public string save_comment(string comment, int cant_tabs, bool isclose)
@@ -78,9 +81,21 @@ namespace CompiPascalC3D.Analizer.C3D
 
         //TEMPORALES
 
+
+
+
         public string newTemporal() {
-            var temp = "T" + this.temporal_number++;
-            this.tempStorage.Add(temp);
+            var temp = "";
+
+            if (micola.Count == 0)
+            {
+                temp = "T" + this.temporal_number++;
+                this.tempStorage.Add(temp);
+            } else
+            {
+                temp = micola.Pop().ToString();
+            }
+
             return temp;
         }
 
@@ -93,6 +108,9 @@ namespace CompiPascalC3D.Analizer.C3D
                 this.tempStorage.Add(temp);
             }
         }
+
+
+
         public void freeTemp(string temp)
         {
             if (this.tempStorage.Contains(temp))
@@ -100,6 +118,11 @@ namespace CompiPascalC3D.Analizer.C3D
                 this.tempStorage.Remove(temp);
             }
         }
+
+        public void free_temps(string temp)
+        {
+            this.micola.Push(temp);
+        }  
 
         public int save_Temps(Ambit ambit, int cant_tabs){
 
