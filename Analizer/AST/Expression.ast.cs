@@ -278,7 +278,7 @@ namespace CompiPascalC3D.Analizer.AST
                 var a = actual.ChildNodes[0].Term;
                 if (a.ToString().Equals("CALL_FUNCTION_PROCEDURE"))
                 {
-                    //return (new Call_Expresion()).CALLFUNCTION(actual.ChildNodes[0]);
+                    return (new CallExpresionAST()).CALL(actual.ChildNodes[0], cant_tabs);
                 }
                 else
                 {

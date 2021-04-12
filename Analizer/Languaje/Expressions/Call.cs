@@ -1,68 +1,65 @@
 ﻿using CompiPascalC3D.Analizer.Controller;
 using CompiPascalC3D.Analizer.Languaje.Abstracts;
 using CompiPascalC3D.Analizer.Languaje.Ambits;
+using CompiPascalC3D.Analizer.Languaje.Sentences;
 using CompiPascalC3D.Analizer.Languaje.Symbols;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CompiPascalC3D.Analizer.Languaje.Sentences
+namespace CompiPascalC3D.Analizer.Languaje.Expressions
 {
-    class Call : Instruction
+    class CallFunction : Expresion
     {
-
         private string id;
         private ArrayList parametros;
         private int row;
         private int column;
         private int cant_tabs;
-        public int Row { get => row; set => row = value; }
-        public int Column { get => column; set => column = value; }
-
-        public Call(string id, ArrayList expresion, int row, int col, int ct) :
+        public CallFunction(string id, ArrayList expresion, int r, int c, int cant_tabs) :
             base("Call")
         {
             this.id = id;
             this.parametros = expresion;
-            this.row = row;
-            this.column = col;
-            this.cant_tabs = ct;
+            this.row = r;
+            this.column = c;
+            this.cant_tabs = cant_tabs;
         }
 
-
-        public override object Execute(Ambit ambit)
+        public override Returned Execute(Ambit ambit)
         {
-            var call_String = "";
             var funcion_llamada = ambit.getFuncion(this.id);
-            
-            //VALIDACION DE EXISTENCIA
             if (funcion_llamada == null)
             {
-                set_error("La funcion o procediminento '" + this.id + "' no esta definido", Row, Column);
-                return null;
+                set_error("La funcion '" + this.id + "' no esta definido", row, column);
+                return new Returned();
             }
-            //VALIDACION DE MISMA CANTIDAD DE PARAMETROS
+
             if (funcion_llamada.Parametos.Count != parametros.Count)
             {
-                set_error("La funcion '" + this.id + "' no recibe la misma cantidad de parametros", Row, Column);
-                return null;
+                set_error("La funcion '" + this.id + "' no recibe la misma cantidad de parametros", row, column);
+                return new Returned();
 
             }
             //GUARDAR LOS PARAMETROS EN LA TABLA DE SIMBOLOS
 
             Ambit function_ambit = new Ambit();
 
+
             if (funcion_llamada.IsProcedure)
             {
-                function_ambit = new Ambit(ambit, funcion_llamada.Id, "Procedure", false, ambit.IsFunction);
+                set_error("El procedimiento'" + this.id + "' no puede asignarse como valor de retorno", row, column);
+                return new Returned();
+
             }
             else
             {
-                function_ambit = new Ambit(ambit, funcion_llamada.Id, "Function", false, ambit.IsFunction);
+                function_ambit = new Ambit(ambit, funcion_llamada.UniqId, "Function", ambit.Temp_return, ambit.Exit, ambit.IsFunction, ambit.Tipo_fun);
             }
-            var generator = C3D.C3DController.Instance;
 
+            var generator = C3D.C3DController.Instance;
+            var call_String = "";
 
             var size = ambit.Size;
 
@@ -73,7 +70,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             {
                 var variable = (Declaration)(funcion_llamada.getParameterAt(i));
 
-                
+
                 var result = ((Expresion)parametros[i]).Execute(ambit);
                 call_String += result.Texto_anterior;
 
@@ -84,7 +81,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 }
                 else
                 {
-                    set_error("El tipo " + result.getDataType + " no es asignable con " + variable.Type, Row, Column);
+                    set_error("El tipo " + result.getDataType + " no es asignable con " + variable.Type, row, column);
                     return null;
                 }
 
@@ -99,7 +96,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 call_String += generator.save_comment("Inicia:Parametros, Cambio de ambito", cant_tabs, false);
 
                 var temp = generator.newTemporal();
-                call_String += generator.addExpression(temp, "SP", (ambit.Size+1).ToString(), "+", cant_tabs );
+                call_String += generator.addExpression(temp, "SP", (ambit.Size + 1).ToString(), "+", cant_tabs);
                 int i = 0;
                 foreach (Returned item in paramsValues)
                 {
@@ -113,7 +110,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 call_String += generator.save_comment("Fin:Parametros, Cambio de ambito", cant_tabs, false);
             }
             call_String += generator.next_Env(ambit.Size, cant_tabs);
-            call_String += generator.save_code(funcion_llamada.UniqId+"();", cant_tabs);
+            call_String += generator.save_code(funcion_llamada.UniqId + "();", cant_tabs);
             //generator.get_stack(temp, "SP", cant_tabs);
             call_String += generator.ant_Env(ambit.Size, cant_tabs);
             //generator.freeTemp(temp);
@@ -121,11 +118,10 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             call_String += generator.save_comment("Fin Llamada: " + funcion_llamada.UniqId, cant_tabs, true);
 
+            
+            return new Returned("T13", funcion_llamada.Tipe, true, call_String);
 
-
-            return call_String;
         }
-
         public void set_error(string texto, int row, int column)
         {
             ErrorController.Instance.SemantycErrors(texto, row, column);
