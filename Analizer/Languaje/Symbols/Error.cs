@@ -10,8 +10,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
         private string message;
         private int row;
         private int column;
-        private DataType type;
-        private bool isNull;
+        
 
         public string Message { get => message; set => message = value; }
         public int Row { get => row; set => row = value; }
@@ -23,8 +22,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
             this.message = message;
             this.row = row;
             this.column = column;
-            this.type = DataType.ERROR;
-            this.isNull = false;
         }
         public string toString()
         {

@@ -51,7 +51,6 @@ namespace CompiPascal
             if (ErrorController.Instance.containSemantycError())
             {
                 consola.Text = ErrorController.Instance.getSemantycError(""); 
-
             }
             else if (ErrorController.Instance.containSyntacticError())
             {

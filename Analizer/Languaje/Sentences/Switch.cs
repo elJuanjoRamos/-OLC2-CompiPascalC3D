@@ -28,7 +28,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             this.cant_tabs = ct;
         }
 
-        public override string Execute(Ambit ambit)
+        public override object Execute(Ambit ambit)
         {
             var generator = C3D.C3DController.Instance;
 
@@ -42,7 +42,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             
 
-            var switchAmbit = new Ambit(ambit, ambit.Ambit_name+"_Case", "Case", false);
+            var switchAmbit = new Ambit(ambit, ambit.Ambit_name+"_Case", "Case", false, ambit.IsFunction);
 
             switchAmbit.Break = generator.newLabel();
 
@@ -67,6 +67,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 {
                     return null;
                 }
+                
+
                 switch_string += resultado;
                 switch_string += generator.addLabel(condicion.FalseLabel, cant_tabs);
             }
@@ -83,7 +85,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             switch_string += generator.addLabel(switchAmbit.Break, cant_tabs);
             switch_string = generator.replace_temp(switchAmbit.Break, "LTEMP", switch_string);
 
-            switch_string += generator.save_comment("Inicia CASE", cant_tabs, true);
+            switch_string += generator.save_comment("Fin CASE", cant_tabs, true);
             return switch_string;
         }
 

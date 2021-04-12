@@ -55,7 +55,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             return "array";
         }
 
-        public override string Execute(Ambit ambit)
+        public override object Execute(Ambit ambit)
         {
             if (IsNull)
             {
@@ -75,7 +75,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 {
                     return null;
                 }
-                response = response + res;
+                response = response + res.ToString();
             }
 
             return response;

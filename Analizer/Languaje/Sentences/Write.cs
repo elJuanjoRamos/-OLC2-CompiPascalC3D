@@ -25,7 +25,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             this.cant_tabs = canttabs;
         }
 
-        public override string Execute(Ambit ambit)
+        public override object Execute(Ambit ambit)
         {
             //INSTANCIA GENERADOR C3D
             var generator = C3DController.Instance;
@@ -77,8 +77,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                         break;
                     case DataType.STRING:
                         
-                        
-
                         generator.Native_str = true;
 
                         var temp_stack = element.Value.ToString();

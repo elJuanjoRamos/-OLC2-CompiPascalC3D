@@ -31,6 +31,7 @@ namespace CompiPascalC3D.Analizer.C3D
         private ArrayList code;
         private ArrayList code_function;
         private ArrayList tempStorage;
+        private ArrayList tempNatives;
         private bool native_str;
         private bool native_compare;
         private bool native_equals;
@@ -40,7 +41,7 @@ namespace CompiPascalC3D.Analizer.C3D
         {
             this.temporal_number = 15;
             this.code = this.code_function = new ArrayList();
-            this.tempStorage = new ArrayList();
+            this.tempStorage = this.tempNatives = new ArrayList();
             this.native_compare = this.native_str = false;
         }
 
@@ -51,7 +52,8 @@ namespace CompiPascalC3D.Analizer.C3D
             this.code.Clear();
             this.code_function.Clear();
             this.tempStorage.Clear();
-            this.native_compare = this.native_str = false;
+            this.tempNatives.Clear();
+            this.native_compare = this.native_str = this.native_equals = false;
         }
 
         public string save_comment(string comment, int cant_tabs, bool isclose)
@@ -306,7 +308,7 @@ namespace CompiPascalC3D.Analizer.C3D
         // OBTIENE LOS TEMPORALES
         public string getTemps()
         {
-            var text = "float T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12";
+            var text = "float T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13";
             var cont = 0;
 
             if (tempStorage.Count == 0)
@@ -386,6 +388,7 @@ namespace CompiPascalC3D.Analizer.C3D
             var nativa_print = "";
             if (this.Native_str)
             {
+                //this.tempNatives.Add("T1,T2");
                 //NATIVA PARA IMRIMIR STRINGS
                 nativa_print += save_code("void native_print_str(){", 0);
                 nativa_print += addLabel("L1", 1);
@@ -399,11 +402,14 @@ namespace CompiPascalC3D.Analizer.C3D
                 nativa_print += save_code("}\n\n", 0);
             }
 
-            var nativa_compare = "";
-            if (this.native_compare)
+            var nativa_igual = "";
+            if (this.native_equals)
             {
+                
+                
+                //this.tempNatives.Add("T3,T4,T5,T6,T7");
                 //NATIVA PARA COMPARAR STRING
-                nativa_compare += save_code("int native_cmp_str(){", 0)
+                nativa_igual += save_code("int native_cmp_str(){", 0)
                 +addLabel("L3", 1)
                 +get_Heap("T5", "T3", 2)
                 +get_Heap("T6", "T4", 2)
@@ -427,11 +433,11 @@ namespace CompiPascalC3D.Analizer.C3D
                 +save_code("return 0;", 2)
                 +save_code("}\n\n", 0);
             }
-
-            var nativa_igual = "";
-            if (this.native_equals)
+            var nativa_concat = "";
+            
+            if (this.Native_compare)
             {
-                nativa_igual += save_code("void native_concat_str(){", 0)
+                nativa_concat += save_code("void native_concat_str(){", 0)
                 +save_code("T12 = HP; //valor de retorno", 1)
                 +addLabel("L9", 1)
                 +get_Heap("T11", "T9", 2)
@@ -454,7 +460,7 @@ namespace CompiPascalC3D.Analizer.C3D
                 +save_code("}\n\n", 0);
             }
 
-            return nativa_print + nativa_compare + nativa_igual;
+            return nativa_print + nativa_concat + nativa_igual;
         }
 
 

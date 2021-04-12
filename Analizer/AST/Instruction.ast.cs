@@ -130,7 +130,7 @@ namespace CompiPascalC3D.Analizer.AST
             }
             else if (actual.Term.ToString().Equals("EXIT"))
             {
-                //return (new ExitAst()).getExit(actual.ChildNodes[2]);
+                return (new ExitAST()).getExit(actual, cant_tabs);
             }
 
             return null;

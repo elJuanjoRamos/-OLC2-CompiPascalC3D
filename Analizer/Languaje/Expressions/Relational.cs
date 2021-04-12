@@ -105,6 +105,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     ////VERIFICA QUE EL IZQUIERDO SEA STRING
                     else if (valIz.getDataType == DataType.STRING)
                     {
+                        generator.Native_equals = true;
+
                         var valDer = this.right.Execute(ambit);
                         relational_Str += valDer.Texto_anterior;
 

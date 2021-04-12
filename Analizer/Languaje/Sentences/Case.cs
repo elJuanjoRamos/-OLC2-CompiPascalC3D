@@ -51,7 +51,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             this.column = col;
             this.cant_tabs = cant_t;
         }
-        public override string Execute(Ambit ambit)
+        public override object Execute(Ambit ambit)
         {
             var case_string = "";
             var generator = C3D.C3DController.Instance;

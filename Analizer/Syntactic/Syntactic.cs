@@ -83,20 +83,7 @@ namespace CompiPascalC3D.Analizer.Syntactic
             LinkedList<Instruction> instrucciones)
         {
             
-
-            
-
-
-
-
-
-
-
-
             var main = C3D.C3DController.Instance.save_code("\n\nint main(){\n", 0);
-
-
-
 
             main += C3D.C3DController.Instance.save_comment("Inicia declaracion variables", 1, false);
 
@@ -158,7 +145,7 @@ namespace CompiPascalC3D.Analizer.Syntactic
 
             #endregion
 
-            C3D.C3DController.Instance.save_Genenal(nativas, "", main);
+            C3D.C3DController.Instance.save_Genenal(nativas, funcion_String, main);
 
         }
     }

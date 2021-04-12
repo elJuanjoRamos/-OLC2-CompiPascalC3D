@@ -94,8 +94,8 @@ namespace CompiPascalC3D.Analizer.AST
 
             var function_instructions = instructionAST.INSTRUCTIONS_BODY(actual.ChildNodes[10], cant_tabs + 1);
 
-            lista_funciones.AddLast(new Function(identifier, parametros, declaraciones, fuciones_hijas, function_type, 
-                new Sentence(function_instructions), false, false, "", identifier, row, col));
+            lista_funciones.AddLast(new Function(identifier, parametros, declaraciones, fuciones_hijas, function_type,
+                function_instructions, false, identifier, row, col));
 
 
             parametros_her.Clear();
@@ -143,7 +143,7 @@ namespace CompiPascalC3D.Analizer.AST
             parametros_her.Clear();
 
             lista_funciones.AddLast(new Function(identifier, parametros, declaraciones, fuciones_hijas, "void",
-                new Sentence(instructions), true, false, "", identifier,  row, col));
+                instructions, true, identifier,  row, col));
 
 
             lista_funciones = FUNCTION_LIST(actual.ChildNodes[10], lista_funciones, parametros_her, can_tabs);
@@ -290,8 +290,8 @@ namespace CompiPascalC3D.Analizer.AST
 
                     var instrucciones = instructionAST.INSTRUCTIONS_BODY(actual.ChildNodes[8], cant_tabs + 1);
 
-                    fuciones_hijas.AddLast(new Function(id, parametros, declaraciones, func_hijas, "void", 
-                        new Sentence(instrucciones), true, true, padre, id, row, col));
+                    fuciones_hijas.AddLast(new Function(id, parametros, declaraciones, func_hijas, "void",
+                        instrucciones, true, id, row, col));
 
                     fuciones_hijas = FUNCION_HIJA(actual.ChildNodes[10], fuciones_hijas, cant_tabs, padre);
 
@@ -324,7 +324,7 @@ namespace CompiPascalC3D.Analizer.AST
 
                     var instrucciones = instructionAST.INSTRUCTIONS_BODY(actual.ChildNodes[10], cant_tabs + 1);
 
-                    fuciones_hijas.AddLast(new Function(id, parametros, declaraciones, func_hijas, type, new Sentence(instrucciones), false, true, padre, id, row, col));
+                    fuciones_hijas.AddLast(new Function(id, parametros, declaraciones, func_hijas, type, instrucciones, false, id, row, col));
 
                     fuciones_hijas = FUNCION_HIJA(actual.ChildNodes[12], fuciones_hijas, cant_tabs, padre);
 

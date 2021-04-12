@@ -31,7 +31,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         }
 
 
-        public override string Execute(Ambit ambit)
+        public override object Execute(Ambit ambit)
         {
             var call_String = "";
             var funcion_llamada = ambit.getFuncion(this.id);
@@ -55,11 +55,11 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             if (funcion_llamada.IsProcedure)
             {
-                function_ambit = new Ambit(ambit, "Procedure_" + funcion_llamada.Id, "Procedure", false);
+                function_ambit = new Ambit(ambit, "Procedure_" + funcion_llamada.Id, "Procedure", false, ambit.IsFunction);
             }
             else
             {
-                function_ambit = new Ambit(ambit, "Function_" + funcion_llamada.Id, "Function", false);
+                function_ambit = new Ambit(ambit, "Function_" + funcion_llamada.Id, "Function", false, ambit.IsFunction);
             }
             var generator = C3D.C3DController.Instance;
 
@@ -68,9 +68,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
 
             var paramsValues = new ArrayList();
-
-
-
 
             for (int i = 0; i < parametros.Count; i++)
             {
@@ -93,10 +90,14 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
 
             }
-            
+
+            call_String += generator.save_comment("Inicia Llamada: " + funcion_llamada.UniqId, cant_tabs, false);
+
             //PASO DE PARAMETRO, CAMBIO SIMULADO
             if (paramsValues.Count > 0)
             {
+                call_String += generator.save_comment("Inicia:Parametros, Cambio de ambito", cant_tabs, false);
+
                 var temp = generator.newTemporal();
                 call_String += generator.addExpression(temp, "SP", (ambit.Size+1).ToString(), "+", cant_tabs );
                 int i = 0;
@@ -104,11 +105,12 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 {
                     i++;
                     call_String += generator.set_stack(temp, item.Value, cant_tabs);
-                    if (i != paramsValues.Count -1)
+                    if (i != paramsValues.Count)
                     {
                         call_String += generator.addExpression(temp, temp, "1", "+", cant_tabs);
                     }
                 }
+                call_String += generator.save_comment("Fin:Parametros, Cambio de ambito", cant_tabs, false);
             }
             call_String += generator.next_Env(ambit.Size, cant_tabs);
             call_String += generator.save_code(funcion_llamada.UniqId+"();", cant_tabs);
@@ -117,6 +119,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             //generator.freeTemp(temp);
             //generator.recoverTemps(ambit, size, cant_tabs);
 
+            call_String += generator.save_comment("Fin Llamada: " + funcion_llamada.UniqId, cant_tabs, true);
 
 
 

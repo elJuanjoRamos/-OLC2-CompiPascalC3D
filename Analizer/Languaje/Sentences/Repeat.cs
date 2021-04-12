@@ -23,7 +23,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             this.column = col;
             this.cant_tabs = cant_tabs;
         }
-        public override string Execute(Ambit ambit)
+        public override object Execute(Ambit ambit)
         {
             var repeat_String = "";
 
@@ -31,7 +31,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             var generator = C3D.C3DController.Instance;
 
             //AMBITO DEL REPEAT
-            var repeatAmbit = new Ambit(ambit, ambit.Ambit_name+"_Repeat", "Repeat", false);
+            var repeatAmbit = new Ambit(ambit, ambit.Ambit_name+"_Repeat", "Repeat", false, ambit.IsFunction);
             repeat_String += generator.save_comment("Inicia Repeat", cant_tabs, false);
 
             //SETEO Continue y break por defecto
@@ -45,11 +45,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             //INSTRUCCIONES
             var result = sentences.Execute(repeatAmbit);
+            
             if (result == null)
             {
                 return null;
             }
-            repeat_String += result;
+            
+            repeat_String += result.ToString();
             if (repeatAmbit.Change_continue)
             {
                 repeat_String += generator.addLabel(repeatAmbit.Continue, cant_tabs);

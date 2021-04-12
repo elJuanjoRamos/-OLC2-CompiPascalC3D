@@ -8,6 +8,7 @@ C:\Users\juan_\Documents\USAC\4.Cuarto Año\1. SEPTIMO SEMESTRE\COMPILADORES 2\L
 C:\Users\juan_\Documents\USAC\4.Cuarto Año\1. SEPTIMO SEMESTRE\COMPILADORES 2\Lab\-OLC2-CompiPascalC3D\bin\Debug\netcoreapp3.1\Irony.dll
 C:\Users\juan_\Documents\USAC\4.Cuarto Año\1. SEPTIMO SEMESTRE\COMPILADORES 2\Lab\-OLC2-CompiPascalC3D\obj\Debug\netcoreapp3.1\CompiPascalC3D.csprojAssemblyReference.cache
 C:\Users\juan_\Documents\USAC\4.Cuarto Año\1. SEPTIMO SEMESTRE\COMPILADORES 2\Lab\-OLC2-CompiPascalC3D\obj\Debug\netcoreapp3.1\CompiPascal.Form1.resources
+C:\Users\juan_\Documents\USAC\4.Cuarto Año\1. SEPTIMO SEMESTRE\COMPILADORES 2\Lab\-OLC2-CompiPascalC3D\obj\Debug\netcoreapp3.1\CompiPascalC3D.Properties.Resources.resources
 C:\Users\juan_\Documents\USAC\4.Cuarto Año\1. SEPTIMO SEMESTRE\COMPILADORES 2\Lab\-OLC2-CompiPascalC3D\obj\Debug\netcoreapp3.1\CompiPascalC3D.csproj.GenerateResource.cache
 C:\Users\juan_\Documents\USAC\4.Cuarto Año\1. SEPTIMO SEMESTRE\COMPILADORES 2\Lab\-OLC2-CompiPascalC3D\obj\Debug\netcoreapp3.1\CompiPascalC3D.AssemblyInfoInputs.cache
 C:\Users\juan_\Documents\USAC\4.Cuarto Año\1. SEPTIMO SEMESTRE\COMPILADORES 2\Lab\-OLC2-CompiPascalC3D\obj\Debug\netcoreapp3.1\CompiPascalC3D.AssemblyInfo.cs
@@ -16,4 +17,3 @@ C:\Users\juan_\Documents\USAC\4.Cuarto Año\1. SEPTIMO SEMESTRE\COMPILADORES 2\L
 C:\Users\juan_\Documents\USAC\4.Cuarto Año\1. SEPTIMO SEMESTRE\COMPILADORES 2\Lab\-OLC2-CompiPascalC3D\obj\Debug\netcoreapp3.1\CompiPascalC3D.dll
 C:\Users\juan_\Documents\USAC\4.Cuarto Año\1. SEPTIMO SEMESTRE\COMPILADORES 2\Lab\-OLC2-CompiPascalC3D\obj\Debug\netcoreapp3.1\CompiPascalC3D.pdb
 C:\Users\juan_\Documents\USAC\4.Cuarto Año\1. SEPTIMO SEMESTRE\COMPILADORES 2\Lab\-OLC2-CompiPascalC3D\obj\Debug\netcoreapp3.1\CompiPascalC3D.genruntimeconfig.cache
-C:\Users\juan_\Documents\USAC\4.Cuarto Año\1. SEPTIMO SEMESTRE\COMPILADORES 2\Lab\-OLC2-CompiPascalC3D\obj\Debug\netcoreapp3.1\CompiPascalC3D.Properties.Resources.resources

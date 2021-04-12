@@ -42,7 +42,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         }
 
 
-        public override string Execute(Ambit ambit)
+        public override object Execute(Ambit ambit)
         {
             var if_string = "";
             var generator = C3DController.Instance;
@@ -50,7 +50,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             
             //AMBITO IF
-            var ifAmbit = new Ambit(ambit, ambit.Ambit_name+ "_If", "If", false);
+            var ifAmbit = new Ambit(ambit, ambit.Ambit_name+ "_If", "If", false, ambit.IsFunction);
             //CONDICION
             var condicion = condition.Execute(ambit);
             if_string += condicion.Texto_anterior;
@@ -73,7 +73,11 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             {
                 return null;
             }
-            if_string += if_sentencias;
+            if (if_sentencias is Instruction)
+            {
+                return if_sentencias;
+            }
+            if_string += if_sentencias.ToString();
 
             if (!this.elif.IsNull)
             {

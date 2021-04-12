@@ -53,7 +53,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
 
 
-        public override string Execute(Ambit ambit)
+        public override object Execute(Ambit ambit)
         {
             var string_declaracion = "";
 
@@ -74,6 +74,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 try
                 {
                     Returned val = this.value.Execute(ambit);
+                    string_declaracion += val.Texto_anterior;
 
                     //VERIFICA QUE NO HAYA ERROR
                     if (val.getDataType == DataType.ERROR)

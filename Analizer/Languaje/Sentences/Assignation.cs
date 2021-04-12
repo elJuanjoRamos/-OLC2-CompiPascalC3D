@@ -25,7 +25,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             this.column = column;
             this.tabs = cantTabs;
         }
-        public override string Execute(Ambit ambit)
+        public override object Execute(Ambit ambit)
         {
             var assignation_string = "";
             try

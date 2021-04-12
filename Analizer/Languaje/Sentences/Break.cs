@@ -23,7 +23,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         }
         
 
-        public override string Execute(Ambit ambit)
+        public override object Execute(Ambit ambit)
         {
             var break_str = "";
             var generator = C3D.C3DController.Instance;

@@ -23,11 +23,11 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             this.column = col;
             this.cant_tabs = cant_tabs;
         }
-        public override string Execute(Ambit ambit)
+        public override object Execute(Ambit ambit)
         {
             var while_string = "";
             var generator = C3D.C3DController.Instance;
-            var whileAmbit = new Ambit(ambit, ambit.Ambit_name+"_While", "While", false);
+            var whileAmbit = new Ambit(ambit, ambit.Ambit_name+"_While", "While", false, ambit.IsFunction);
             var label_recurrencia = generator.newLabel();
 
             while_string += generator.save_comment("Inicia While", cant_tabs, false);

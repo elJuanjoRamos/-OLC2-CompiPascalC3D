@@ -12,20 +12,18 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         private string id;
         private LinkedList<Instruction> parametos;
         private LinkedList<Instruction> declaraciones;
-        private LinkedList<Instruction> funciones_hijas; 
+        private LinkedList<Instruction> funciones_hijas;
+        private LinkedList<Instruction> sentences;
         private DataType tipe;
-        private Instruction sentences;
         private int row;
         private int column;
-        private bool isProcedure;
         private string retorno;
-        private bool esHija;
-        private string padre_inmediato;
         private string uniqId;
-
+        private string tipo;
+        private bool isProcedure;
         public Function(string id, LinkedList<Instruction> parametos, LinkedList<Instruction> declas,
-            LinkedList<Instruction> functs, string tipe, Instruction sentences, bool isProcedure, 
-            bool eshija, string padre, string uniq_id, int row, int col)
+            LinkedList<Instruction> functs, string tipe, LinkedList<Instruction> sentences, bool isProcedure, 
+            string uniq_id, int row, int col)
         : base("Function")
         {
             this.retorno = "-";
@@ -38,32 +36,46 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             this.funciones_hijas= functs;
             this.row = row;
             this.column = col;
-            this.esHija = eshija;
-            this.padre_inmediato = padre;
             this.uniqId = uniq_id;
+            this.tipo = IsProcedure ? "Procedure" : "Function";
         }
-        public override string Execute(Ambit ambit)
+        public override object Execute(Ambit ambit)
         {
-            var funcion_total = "";
-
 
             if (ambit.Anterior != null)
             {
                 this.UniqId = ambit.Ambit_name + "_" + id;
             }
 
+            //this.UniqId = ambit.Anterior != null ? ambit.Ambit_name + "_" + id : "Function_" + id;
+
+
+
             ambit.saveFuncion(this.id, this);
 
             var generator = C3D.C3DController.Instance;
 
-            
-            var texto = "Function";
-            if (IsProcedure)
+            var funcion_total = generator.save_code("void " + uniqId + "(" + ") { \n", 0);
+
+
+
+            var tempo_return = "T13";
+            var exit_label = "";
+            if (!IsProcedure)
             {
-                texto = "Procedure";
+                exit_label = generator.newLabel();
+                funcion_total += generator.save_code("//Temporal de retorno", 1);
+                funcion_total += generator.addExpression(tempo_return, "SP", "0", "+", 1);
             }
 
-            Ambit ambit_func = new Ambit(ambit, this.uniqId, texto, false);
+            Ambit ambit_func = new Ambit(ambit, this.uniqId, tipo, tempo_return, exit_label, !isProcedure, this.tipe);
+
+
+            foreach (var param in parametos)
+            {
+                Declaration dec = (Declaration)param;
+                ambit_func.saveVarFunction(dec.Id, "0", dec.Type);
+            }
 
             //FUNCIONES HIJAS
             foreach (var fun_hija in funciones_hijas)
@@ -76,9 +88,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 funcion_total += result;
             }
 
-
-            funcion_total += generator.save_code("void " + uniqId + "(" + ") { \n", 0);
-
             //DECLARACIONES 
             foreach (var declas in declaraciones)
             {
@@ -90,18 +99,27 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 funcion_total += result;
             }
 
-            
+
 
             //INSTRUCCIONES
-            var instrucciones = sentences.Execute(ambit_func);
-            if (instrucciones == null)
-            {
-                return null;
+            foreach (Instruction instruction in sentences)
+            {               
+                var instruccion = instruction.Execute(ambit_func);
+                if (instruccion == null)
+                {
+                    return null;
+                }
+                funcion_total += instruccion;
             }
-            funcion_total += instrucciones;
 
 
-            funcion_total += generator.save_code("return;\n}", 0);
+            if (!isProcedure)
+            {
+                funcion_total += generator.addLabel(exit_label, 1);
+            }
+
+            funcion_total += generator.save_code(" return;\n", 2);
+            funcion_total += generator.save_code("}\n", 0);
 
             return funcion_total;
 
@@ -149,16 +167,17 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             return null;
         }
         public LinkedList<Instruction> Parametos { get => parametos; set => parametos = value; }
-        public Instruction Sentences { get => sentences; set => sentences = value; }
-        public bool IsProcedure { get => isProcedure; set => isProcedure = value; }
-        public DataType Tipe { get => tipe; set => tipe = value; }
+        public LinkedList<Instruction> Sentences { get => sentences; set => sentences = value; }
+        public LinkedList<Instruction> Declaraciones { get => declaraciones; set => declaraciones = value; }
         public string Retorno { get => retorno; set => retorno = value; }
         public string Id { get => id; set => id = value; }
-        public LinkedList<Instruction> Declaraciones { get => declaraciones; set => declaraciones = value; }
+        public string UniqId { get => uniqId; set => uniqId = value; }
+        public string Tipo { get => tipo; set => tipo = value; }
         public int Row { get => row; set => row = value; }
         public int Column { get => column; set => column = value; }
         public LinkedList<Instruction> Funciones_hijas { get => funciones_hijas; set => funciones_hijas = value; }
-        public string UniqId { get => uniqId; set => uniqId = value; }
-        public string Padre_inmediato { get => padre_inmediato; set => padre_inmediato = value; }
+        public bool IsProcedure { get => isProcedure; set => isProcedure = value; }
+        public DataType Tipe { get => tipe; set => tipe = value; }
+
     }
 }

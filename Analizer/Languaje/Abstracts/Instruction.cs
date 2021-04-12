@@ -16,6 +16,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Abstracts
         }
 
         public string Name { get => name; set => name = value; }
-        public abstract string Execute(Ambit ambit);
+        public abstract object Execute(Ambit ambit);
     }
 }
