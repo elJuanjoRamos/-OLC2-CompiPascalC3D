@@ -27,12 +27,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         {
             var while_string = "";
             var generator = C3D.C3DController.Instance;
-            var whileAmbit = new Ambit(ambit, ambit.Ambit_name+"_While", "While", false, ambit.IsFunction);
+            var whileAmbit = new Ambit(ambit, ambit.Ambit_name, "While", false, ambit.IsFunction);
             var label_recurrencia = generator.newLabel();
 
             while_string += generator.save_comment("Inicia While", cant_tabs, false);
             while_string += generator.addLabel(label_recurrencia, cant_tabs);
 
+            
             //CONDICION
             var cond = condition.Execute(whileAmbit);
             while_string += cond.Texto_anterior;
@@ -58,11 +59,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 return null;
             }
             while_string += result;
-            if (whileAmbit.Change_continue)
-            {
-                while_string += generator.addLabel(whileAmbit.Continue, cant_tabs);
 
-            }
             while_string += generator.add_Goto(label_recurrencia, cant_tabs + 1);
 
             while_string += generator.addLabel(cond.FalseLabel, cant_tabs);

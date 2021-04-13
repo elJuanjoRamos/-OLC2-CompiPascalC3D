@@ -124,6 +124,20 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
                 env.Variables[id.ToLower()] = new Identifier(valor, id, type, false, false, posi, false, false);
             }
         }
+        public void setVariable(string id, string valor, DataType type, bool isAssigned, int posi, bool isglobal)
+        {
+            Ambit env = this;
+
+            while (env != null)
+            {
+                if (env.Variables.ContainsKey(id.ToLower()))
+                {
+                    env.Variables[id.ToLower()] = new Identifier(valor, id, type, false, isAssigned, posi, isglobal, false);
+                    return;
+                }
+                env = env.anterior;
+            }
+        }
 
         #region FUNCIONES
         public void saveVarFunction(Identifier ident)
@@ -224,7 +238,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         public string Temp_return { get => temp_return; set => temp_return = value; }
         public string Exit { get => _exit; set => _exit = value; }
         public int Size { get => size; set => size = value; }
-        public bool Change_continue { get => change_continue; set => change_continue = value; }
         public bool IsFunction { get => isFunction; set => isFunction = value; }
         public Ambit Anterior { get => anterior; set => anterior = value; }
         public DataType Tipo_fun { get => tipo_fun; set => tipo_fun = value; }

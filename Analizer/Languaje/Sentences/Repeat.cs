@@ -35,12 +35,16 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             repeat_String += generator.save_comment("Inicia Repeat", cant_tabs, false);
 
             //SETEO Continue y break por defecto
-            condition.TrueLabel = generator.newLabel();
             repeatAmbit.Break = "LBREAK";
-            repeatAmbit.Continue = condition.FalseLabel = generator.newLabel();
+            repeatAmbit.Continue = "LCONTINUE";
+
+
+
+            condition.TrueLabel = generator.newLabel();
+            condition.FalseLabel = generator.newLabel();
 
             //IMPRIMIR ETIQUETA RECURRENCIA
-            repeat_String += generator.addLabel("LTEMP", cant_tabs);
+            repeat_String += generator.addLabel("LCONTINUE", cant_tabs);
 
 
             //INSTRUCCIONES
@@ -52,10 +56,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             }
             
             repeat_String += result.ToString();
-            if (repeatAmbit.Change_continue)
-            {
-                repeat_String += generator.addLabel(repeatAmbit.Continue, cant_tabs);
-            }
+           
 
             //CONDICION
             var condicion = condition.Execute(repeatAmbit);
@@ -65,7 +66,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             repeatAmbit.Continue = condicion.FalseLabel;
 
             repeat_String = generator.replace_temp(condicion.TrueLabel, "LBREAK", repeat_String);
-            repeat_String = generator.replace_temp(repeatAmbit.Continue, "LTEMP", repeat_String);
+            repeat_String = generator.replace_temp(repeatAmbit.Continue, "LCONTINUE", repeat_String);
             //VERIFICA QUE SEA BOOL
             if (condicion.getDataType != DataType.BOOLEAN)
             {

@@ -102,8 +102,8 @@ namespace CompiPascalC3D.Analizer.AST
             }
             else if (actual.Term.ToString().Equals("FOR"))
             {
-               // FOR _for = ((new ForAST())).SENCECIA_FOR(actual);
-                //return _for;
+                For _for = ((new ForAST())).SENCECIA_FOR(actual, cant_tabs);
+                return _for;
             }
             else if (actual.Term.ToString().Equals("SENTENCE_CASE"))
             {
