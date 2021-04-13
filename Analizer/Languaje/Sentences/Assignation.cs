@@ -67,7 +67,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
                             if (val.IsTemporal)
                             {
-                                generator.free_temps(val.Value);
+                                //generator.free_temps(val.Value);
                             }
 
                             if (variable.IsGlobal)
@@ -90,20 +90,21 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                             else
                             {
 
+                                var temp = generator.newTemporal();
+                                assignation_string += generator.addExpression(temp, "SP", variable.Position.ToString(), "+", tabs);
+
                                 if (variable.DataType == DataType.BOOLEAN)
                                 {
                                     var templabel = generator.newLabel();
                                     assignation_string += generator.addLabel(val.TrueLabel, tabs);
-                                    assignation_string += generator.set_stack(variable.Position.ToString(), "1", tabs);
+                                    assignation_string += generator.set_stack(temp, "1", tabs);
                                     assignation_string += generator.add_Goto(templabel, tabs + 1);
                                     assignation_string += generator.addLabel(val.FalseLabel, tabs);
-                                    assignation_string += generator.set_stack(variable.Position.ToString(), "0", tabs);
+                                    assignation_string += generator.set_stack(temp, "0", tabs);
                                     assignation_string += generator.addLabel(templabel, tabs);
                                 }
                                 else
                                 {
-                                    var temp = generator.newTemporal();
-                                    assignation_string += generator.addExpression(temp, "SP", variable.Position.ToString(), "+", tabs);
                                     assignation_string += generator.set_stack(temp, val.getValue(), tabs);
                                 }
 

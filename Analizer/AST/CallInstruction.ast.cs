@@ -14,7 +14,7 @@ namespace CompiPascalC3D.Analizer.AST
             // CALL.Rule = IDENTIFIER + PAR_IZQ + CALL_PARAMETERS + PAR_DER + PUNTO_COMA;
             ArrayList prametros_llamada = new ArrayList();
 
-            prametros_llamada = ((new ParametersAST())).CALL_PARAMETERS(actual.ChildNodes[2], prametros_llamada);
+            prametros_llamada = ((new ParametersAST())).CALL_PARAMETERS(actual.ChildNodes[2], prametros_llamada, cant_tabs);
             var row = actual.ChildNodes[0].Token.Location.Line;
             var column = actual.ChildNodes[0].Token.Location.Column;
 

@@ -16,7 +16,7 @@ namespace CompiPascalC3D.Analizer.AST
         }
 
 
-        public ArrayList CALL_PARAMETERS(ParseTreeNode actual, ArrayList expresiones)
+        public ArrayList CALL_PARAMETERS(ParseTreeNode actual, ArrayList expresiones, int cant_tabs)
         {
             /*
              CALL_PARAMETERS.Rule
@@ -29,18 +29,18 @@ namespace CompiPascalC3D.Analizer.AST
             {
                 if (actual.ChildNodes.Count == 2)
                 {
-                    var expr = (expressionAST.getExpresion(actual.ChildNodes[0], 0));
+                    var expr = (expressionAST.getExpresion(actual.ChildNodes[0], cant_tabs));
                     expresiones.Add(expr);
-                    expresiones = CALL_PARAMETERS(actual.ChildNodes[1], expresiones);
+                    expresiones = CALL_PARAMETERS(actual.ChildNodes[1], expresiones, cant_tabs);
                 }
 
                 else
                 {
-                    var expr = expressionAST.getExpresion(actual.ChildNodes[1], 0);
+                    var expr = expressionAST.getExpresion(actual.ChildNodes[1], cant_tabs);
 
                     expresiones.Add(expr);
 
-                    expresiones = CALL_PARAMETERS(actual.ChildNodes[2], expresiones);
+                    expresiones = CALL_PARAMETERS(actual.ChildNodes[2], expresiones, cant_tabs);
                 }
 
 

@@ -81,9 +81,6 @@ namespace CompiPascalC3D.Analizer.C3D
 
         //TEMPORALES
 
-
-
-
         public string newTemporal() {
             var temp = "";
 
