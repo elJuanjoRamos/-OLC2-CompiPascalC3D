@@ -36,7 +36,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             this.column = c;
             this.isConst = false;
             this.isAssigned = isAs;
-            
         }
         //CONSTRUCTOR PARA CONSTANTES
         public Declaration(string i, Expresion e, int r, int c, bool isc)
@@ -87,14 +86,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
                     if (this.type == DataType.CONST)
                     {
-                        variable = ambit.save(this.id, val.Value, val.getDataType, true, true, false);
-                        
+                        variable = ambit.save(this.id, val.Value, val.Valor_original, val.getDataType, true, true, false, "Constant");
                     }
                     else
                     {
                         if (val.getDataType == this.type)
                         {
-                            variable = ambit.save(this.id, val.Value, val.getDataType, false, isAssigned, false);
+                            variable = ambit.save(this.id, val.Value, val.Valor_original, val.getDataType, false, isAssigned, false, "Variable");
                         } else
                         {
                             set_error("El tipo " + val.getDataType + " no es asignable con " + this.type.ToString(), row, column);

@@ -321,7 +321,7 @@ namespace CompiPascalC3D.Analizer.Grammar
             ASSIGNATION.Rule
                 = EQUALS + EXPLOGICA
                 | Empty;
-            ;
+                ;
 
             MORE_ID.Rule = COMA + IDENTIFIER + MORE_ID
                 | Empty

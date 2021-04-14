@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CompiPascalC3D.Analizer.Languaje.Sentences.Array
 {
-    class Array : Instruction
+    public class Arrays : Instruction
     {
         private string id;
         private LinkedList<Dimention> dimensiones;
@@ -16,7 +16,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences.Array
         private int column;
         private int cant_tabs;
 
-        public Array(string id, LinkedList<Dimention> dimensiones, DataType dataType, int row, int column, int cant_tabs)
+        public Arrays(string id, LinkedList<Dimention> dimensiones, DataType dataType, int row, int column, int cant_tabs)
         {
             this.id = id;
             this.dimensiones = dimensiones;
@@ -26,9 +26,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences.Array
             this.cant_tabs = cant_tabs;
         }
 
+        public LinkedList<Dimention> Dimensiones { get => dimensiones; set => dimensiones = value; }
+        public DataType DataType { get => dataType; set => dataType = value; }
+
         public override object Execute(Ambit ambit)
         {
-            throw new NotImplementedException();
+            ambit.saveArray(id, this);
+            return "";
         }
     }
 }

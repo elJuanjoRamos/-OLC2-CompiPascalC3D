@@ -1,4 +1,5 @@
-﻿using CompiPascalC3D.Analizer.Languaje.Abstracts;
+﻿using CompiPascalC3D.Analizer.Controller;
+using CompiPascalC3D.Analizer.Languaje.Abstracts;
 using CompiPascalC3D.Analizer.Languaje.Ambits;
 using System;
 using System.Collections;
@@ -74,7 +75,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             foreach (var param in parametos)
             {
                 Declaration dec = (Declaration)param;
-                ambit_func.saveVarFunction(dec.Id, "0", dec.Type);
+
+                ambit_func.saveVarFunction(dec.Id, "0", "0", dec.Type, "Parameter");
             }
 
             //FUNCIONES HIJAS
@@ -121,6 +123,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             funcion_total += generator.save_code(" return;\n", 2);
             funcion_total += generator.save_code("}\n", 0);
 
+            ReporteController.Instance.save_ambit(ambit_func, ambit_func.Ambit_name);
+
             return funcion_total;
 
         }
@@ -152,6 +156,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             return DataType.STRING;
 
         }
+
+
+
         public Instruction getParameterAt(int i)
         {
             var cont = 0;

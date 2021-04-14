@@ -35,6 +35,9 @@
             this.areaanalizar = new System.Windows.Forms.RichTextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.optimo = new System.Windows.Forms.Button();
+            this.errores = new System.Windows.Forms.Button();
+            this.tablasimbolos = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -83,6 +86,9 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.optimo);
+            this.tabPage1.Controls.Add(this.errores);
+            this.tabPage1.Controls.Add(this.tablasimbolos);
             this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.label4);
             this.tabPage1.Controls.Add(this.label2);
@@ -98,6 +104,46 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // optimo
+            // 
+            this.optimo.BackColor = System.Drawing.Color.White;
+            this.optimo.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.optimo.Image = ((System.Drawing.Image)(resources.GetObject("optimo.Image")));
+            this.optimo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.optimo.Location = new System.Drawing.Point(725, 526);
+            this.optimo.Name = "optimo";
+            this.optimo.Size = new System.Drawing.Size(156, 50);
+            this.optimo.TabIndex = 12;
+            this.optimo.Text = "     Optimizacion";
+            this.optimo.UseVisualStyleBackColor = false;
+            // 
+            // errores
+            // 
+            this.errores.BackColor = System.Drawing.Color.White;
+            this.errores.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.errores.Image = ((System.Drawing.Image)(resources.GetObject("errores.Image")));
+            this.errores.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.errores.Location = new System.Drawing.Point(725, 470);
+            this.errores.Name = "errores";
+            this.errores.Size = new System.Drawing.Size(156, 50);
+            this.errores.TabIndex = 11;
+            this.errores.Text = "      Reporte Error";
+            this.errores.UseVisualStyleBackColor = false;
+            // 
+            // tablasimbolos
+            // 
+            this.tablasimbolos.BackColor = System.Drawing.Color.White;
+            this.tablasimbolos.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.tablasimbolos.Image = ((System.Drawing.Image)(resources.GetObject("tablasimbolos.Image")));
+            this.tablasimbolos.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.tablasimbolos.Location = new System.Drawing.Point(725, 412);
+            this.tablasimbolos.Name = "tablasimbolos";
+            this.tablasimbolos.Size = new System.Drawing.Size(156, 52);
+            this.tablasimbolos.TabIndex = 10;
+            this.tablasimbolos.Text = "      Tabla Simbolos";
+            this.tablasimbolos.UseVisualStyleBackColor = false;
+            this.tablasimbolos.Click += new System.EventHandler(this.tablasimbolos_Click);
             // 
             // label3
             // 
@@ -218,6 +264,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button tablasimbolos;
+        private System.Windows.Forms.Button optimo;
+        private System.Windows.Forms.Button errores;
     }
 }
 

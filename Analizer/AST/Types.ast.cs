@@ -4,7 +4,7 @@ using Irony.Parsing;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Array = CompiPascalC3D.Analizer.Languaje.Sentences.Array.Array;
+using Array = CompiPascalC3D.Analizer.Languaje.Sentences.Array.Arrays;
 
 namespace CompiPascalC3D.Analizer.AST
 {

@@ -18,6 +18,10 @@ namespace CompiPascalC3D.Analizer.Syntactic
 
         public void analizer(String cadena, string paths)
         {
+
+            ReporteController.Instance.set_path(paths);
+
+
             GrammarC3D grammar = new GrammarC3D();
             LanguageData languageData = new LanguageData(grammar);
             //ArrayList elemetos_heredados = new ArrayList();
@@ -85,6 +89,8 @@ namespace CompiPascalC3D.Analizer.Syntactic
             LinkedList<Instruction> funciones,
             LinkedList<Instruction> instrucciones)
         {
+
+            ReporteController.Instance.save_ambit(general, general.Ambit_name);
             
             var main = C3D.C3DController.Instance.save_code("\n\nint main(){\n", 0);
 
@@ -149,6 +155,8 @@ namespace CompiPascalC3D.Analizer.Syntactic
             #endregion
 
             C3D.C3DController.Instance.save_Genenal(nativas, funcion_String, main);
+
+            ReporteController.Instance.save_ambit(general, general.Ambit_name);
 
         }
     }

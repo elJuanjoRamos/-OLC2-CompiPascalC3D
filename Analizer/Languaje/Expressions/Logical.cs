@@ -77,8 +77,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             set_error("Operador '" + this.type + "' NO puede ser aplicado alos tipos " + varIz.getDataType + " con " + valDer.getDataType, row, column);
                             return result;
                         }
-                        
-                        return new Returned("", DataType.BOOLEAN, false, this.right.TrueLabel, this.right.FalseLabel, logical_str);
+
+                        return new Returned("", DataType.BOOLEAN, false, this.right.TrueLabel, this.right.FalseLabel, logical_str, "false");
 
                     }
                     set_error("Operador '" + this.type + "' NO puede ser aplicado al tipo " + varIz.getDataType, row, column);
@@ -107,7 +107,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             set_error("Operador '" + this.type + "' NO puede ser aplicado alos tipos " + valIz.getDataType + " con " + valDer.getDataType, row, column);
                             return result;
                         }
-                        return new Returned("", DataType.BOOLEAN, false,this.right.TrueLabel, this.right.FalseLabel, logical_str);
+                        return new Returned("", DataType.BOOLEAN, false,this.right.TrueLabel, this.right.FalseLabel, logical_str, "false");
 
                     }
                     set_error("Operador '" + this.type + "' NO puede ser aplicado al tipo " + valIz.getDataType, row, column);
@@ -128,7 +128,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                         set_error("Operador '" + this.type + "' NO puede ser aplicado al tipo " + varrIz.getDataType , row, column);
                         return result;
                     }
-                    return new Returned("", DataType.BOOLEAN, false, varrIz.FalseLabel, varrIz.TrueLabel, logical_str);
+                    return new Returned("", DataType.BOOLEAN, false, varrIz.FalseLabel, varrIz.TrueLabel, logical_str, "false");
 
 
 

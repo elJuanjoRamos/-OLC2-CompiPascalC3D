@@ -64,7 +64,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             relational_Str += generator.add_If(valIz.getValue(), valDer.getValue(), "==", this.TrueLabel, cant_tabs);
                             relational_Str += generator.add_Goto(this.FalseLabel, cant_tabs);
 
-                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str);
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "");
 
                         }
                         else
@@ -94,7 +94,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                         //VERIFICA QUE EL DERECHO SEA BOOLEAN
                         if (valDer.getDataType == DataType.BOOLEAN)
                         {
-                            result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel, relational_Str);
+                            result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel, relational_Str, "");
 
                         } else
                         {
@@ -178,7 +178,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
                             generator.add_Goto(label_recurrecia, cant_tabs);*/
 
-                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str);
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "");
 
                         }
                         else
@@ -216,7 +216,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             relational_Str += generator.add_If(valIz.getValue(), valDer.getValue(), "!=", this.TrueLabel, cant_tabs);
                             relational_Str += generator.add_Goto(this.FalseLabel, cant_tabs);
 
-                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str);
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "");
 
                         }
                         else
@@ -250,7 +250,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                         //VERIFICA QUE EL DERECHO SEA BOOLEAN
                         if (valDer.getDataType == DataType.BOOLEAN)
                         {
-                            result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel, relational_Str);
+                            result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel, relational_Str, "");
 
                         }
                         else
@@ -287,7 +287,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             }
                             relational_Str += generator.add_If(valIz.getValue(), valDer.getValue(), this.type, this.TrueLabel, cant_tabs);
                             relational_Str += generator.add_Goto(this.FalseLabel, cant_tabs);
-                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str);
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "");
 
                         } else
                         {

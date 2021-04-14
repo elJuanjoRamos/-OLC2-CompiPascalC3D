@@ -1,5 +1,6 @@
 ﻿using CompiPascalC3D.Analizer.Languaje.Abstracts;
 using CompiPascalC3D.Analizer.Languaje.Sentences;
+using CompiPascalC3D.Analizer.Languaje.Sentences.Array;
 using CompiPascalC3D.Analizer.Languaje.Symbols;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
     {
         Dictionary<string, Identifier> variables;
         Dictionary<string, Function> functions;
+        Dictionary<string, Arrays> arrays;
         // Dictionary<string, Arrays> arrays;
         private Ambit anterior;
         private string ambit_name = "";
@@ -31,6 +33,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         {
             this.variables = new Dictionary<string, Identifier>();
             this.functions = new Dictionary<string, Function>();
+            this.arrays = new Dictionary<string, Arrays>();
             this.ambit_name = n;
             this.ambit_name_inmediato = ni;
             this.anterior = a;
@@ -49,6 +52,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         {
             this.variables = new Dictionary<string, Identifier>();
             this.functions = new Dictionary<string, Function>();
+            this.arrays = new Dictionary<string, Arrays>();
             this.ambit_name = n;
             this.ambit_name_inmediato = ni;
             this.anterior = a;
@@ -65,6 +69,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
 
             this.variables = new Dictionary<string, Identifier>();
             this.functions = new Dictionary<string, Function>();
+            this.arrays = new Dictionary<string, Arrays>();
             //this.procedures = new Dictionary<string, string>();
             this.ambit_null = true;
             this.ambit_name = "General";
@@ -78,12 +83,12 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
 
         #region VARIABLES
 
-        public Identifier save(string id, object valor, DataType type, bool esconstante, bool isAssigned, bool isheap)
+        public Identifier save(string id, object valor, string valor_Def, DataType type, bool esconstante, bool isAssigned, bool isheap, string tipo_dato)
         {
             Ambit amb = this;
 
-            Identifier ident = new Identifier(valor.ToString(), id, type, esconstante, 
-                isAssigned, this.size++, (anterior == null), isheap);
+            Identifier ident = new Identifier(valor.ToString(), valor_Def, id, type, esconstante, 
+                isAssigned, this.size++, (anterior == null), isheap, tipo_dato);
             
             
             if (!amb.Ambit_name_inmediato.Equals("Function"))
@@ -102,7 +107,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
 
         }
 
-        public void setVariableInAmbit(string id, string valor, DataType type, int pos)
+        public void setVariableInAmbit(string id, string valor, string val_Def, DataType type, int pos, string tipo_Dato)
         {
             Ambit env = this;
 
@@ -110,21 +115,21 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             {
                 if (env.Variables.ContainsKey(id.ToLower()))
                 {
-                    env.Variables[id.ToLower()] = new Identifier(valor, id, type, false, false,  pos, false, false);
+                    env.Variables[id.ToLower()] = new Identifier(valor, val_Def, id, type, false, false,  pos, false, false, tipo_Dato);
                 }
                 env = env.anterior;
             }
         }
-        public void setVariableFuncion(string id, string valor, DataType type, int posi)
+        public void setVariableFuncion(string id, string valor, string valdef, DataType type, int posi, string tipo_Dato)
         {
             Ambit env = this;
 
             if (env.Variables.ContainsKey(id.ToLower()))
             {
-                env.Variables[id.ToLower()] = new Identifier(valor, id, type, false, false, posi, false, false);
+                env.Variables[id.ToLower()] = new Identifier(valor, valdef, id, type, false, false, posi, false, false, tipo_Dato);
             }
         }
-        public void setVariable(string id, string valor, DataType type, bool isAssigned, int posi, bool isglobal)
+        public void setVariable(string id, string valor, string valdef, DataType type, bool isAssigned, int posi, bool isglobal, string tipo_Dato)
         {
             Ambit env = this;
 
@@ -132,14 +137,45 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             {
                 if (env.Variables.ContainsKey(id.ToLower()))
                 {
-                    env.Variables[id.ToLower()] = new Identifier(valor, id, type, false, isAssigned, posi, isglobal, false);
+                    env.Variables[id.ToLower()] = new Identifier(valor, valdef, id, type, false, isAssigned, posi, isglobal, false, tipo_Dato);
                     return;
                 }
                 env = env.anterior;
             }
         }
+        
+      
+        public Identifier getVariable(string id)
+        {
+            Identifier identifier = new Identifier();
+            Ambit amb = this;
+            while (amb != null)
+            {
+                if (amb.Variables.ContainsKey(id.ToLower()))
+                {
+                    identifier = amb.Variables[id.ToLower()];
+                    break;
+                }
+                amb = amb.anterior;
+            }
+            return identifier;
+        }
 
-        #region FUNCIONES
+        public Identifier getVariableFunctionInAmbit(string id)
+        {
+            Identifier identifier = new Identifier();
+            Ambit amb = this;
+            if (amb.Variables.ContainsKey(id))
+            {
+                identifier = amb.Variables[id];
+            }
+            return identifier;
+        }
+        
+#endregion
+
+
+  #region FUNCIONES
         public void saveVarFunction(Identifier ident)
         {
             Ambit amb = this;
@@ -150,13 +186,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             }
 
         }
-        public void saveVarFunction(string id, string valor, DataType type)
+        public void saveVarFunction(string id, string valor, string valdef, DataType type, string tipo_Dato)
         {
             Ambit amb = this;
 
             if (!amb.variables.ContainsKey(id))
             {
-                amb.variables[id] = (new Identifier(valor, id, type, false, false, Size++, false, false));
+                amb.variables[id] = (new Identifier(valor, valdef, id, type, false, false, Size++, false, false, tipo_Dato));
             }
 
         }
@@ -198,36 +234,54 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         }
         #endregion
 
-        public Identifier getVariable(string id)
+        #region ARREGLOS
+
+        public void saveArray(string id, Arrays arrays)
         {
-            Identifier identifier = new Identifier();
             Ambit amb = this;
+
+            if (!amb.Arrayss.ContainsKey(id.ToLower()))
+            {
+                amb.Arrayss[id.ToLower()] = arrays;
+            }
+        }
+
+
+        public Arrays getArray(string id)
+        {
+            Ambit amb = this;
+
             while (amb != null)
             {
-                if (amb.Variables.ContainsKey(id.ToLower()))
+                if (amb.Arrayss.ContainsKey(id.ToLower()))
                 {
-                    identifier = amb.Variables[id.ToLower()];
-                    break;
+                    return amb.Arrayss[id.ToLower()];
                 }
                 amb = amb.anterior;
             }
-            return identifier;
+
+
+            return null;
         }
 
-        public Identifier getVariableFunctionInAmbit(string id)
+        public void setArray(string id, Arrays tipo_dato)
         {
-            Identifier identifier = new Identifier();
-            Ambit amb = this;
-            if (amb.Variables.ContainsKey(id))
+            Ambit env = this;
+
+            while (env != null)
             {
-                identifier = amb.Variables[id];
+                if (env.Arrayss.ContainsKey(id.ToLower()))
+                {
+                    env.Arrayss[id.ToLower()] = tipo_dato;
+                    return;
+                }
+                env = env.anterior;
             }
-            return identifier;
         }
+
+
+
         #endregion
-        
-
-
 
         internal Dictionary<string, Identifier> Variables { get => variables; set => variables = value; }
         public Dictionary<string, Function> Functions { get => functions; set => functions = value; }
@@ -241,5 +295,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         public bool IsFunction { get => isFunction; set => isFunction = value; }
         public Ambit Anterior { get => anterior; set => anterior = value; }
         public DataType Tipo_fun { get => tipo_fun; set => tipo_fun = value; }
+        public Dictionary<string, Arrays> Arrayss { get => arrays; set => arrays = value; }
     }
 }

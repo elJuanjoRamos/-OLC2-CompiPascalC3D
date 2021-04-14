@@ -19,6 +19,7 @@ namespace CompiPascal
         public Form1()
         {
             InitializeComponent();
+            this.optimo.Enabled = this.tablasimbolos.Enabled = this.errores.Enabled = false;
         }
 
         private void contextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -46,7 +47,7 @@ namespace CompiPascal
             Syntactic s = new Syntactic();
             C3DController.Instance.clearCode();
             ErrorController.Instance.Clean();
-            s.analizer(areaanalizar.Text, "");
+            s.analizer(areaanalizar.Text, Application.StartupPath);
             
             if (ErrorController.Instance.containSemantycError())
             {
@@ -63,9 +64,16 @@ namespace CompiPascal
                 consola.Text += "int SP = 0; //puntero Stack pointer\nint HP = 0; //puntero Heap pointer\n\n";
                 consola.Text += C3DController.Instance.getTemps();
                 consola.Text += C3DController.Instance.get_Genenal();
+                this.optimo.Enabled = this.tablasimbolos.Enabled = this.errores.Enabled = true;
 
             }
 
+        }
+
+        private void tablasimbolos_Click(object sender, EventArgs e)
+        {
+            ReporteController.Instance.set_path(Application.StartupPath);
+            ReporteController.Instance.generate_report();
         }
     }
 }

@@ -76,7 +76,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
                 if (variable.Type == result.getDataType)
                 {
-                    function_ambit.setVariableFuncion(variable.Id, result.Value, result.getDataType, 0);
+                    function_ambit.setVariableFuncion(variable.Id, result.Value, result.Valor_original, result.getDataType, i, "Parameter");
                     paramsValues.Add(result);
                 }
                 else
@@ -119,7 +119,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             call_String += generator.save_comment("Fin Llamada: " + funcion_llamada.UniqId, cant_tabs, true);
 
             
-            return new Returned("T13", funcion_llamada.Tipe, true, call_String);
+            return new Returned("T13", funcion_llamada.Tipe, true, call_String, "");
 
         }
         public void set_error(string texto, int row, int column)

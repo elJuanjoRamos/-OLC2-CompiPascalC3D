@@ -79,7 +79,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
                 if (variable.Type == result.getDataType)
                 {
-                    function_ambit.setVariableFuncion(variable.Id, result.Value, result.getDataType, 0);
+                    function_ambit.setVariableFuncion(variable.Id, result.Value, result.Valor_original, result.getDataType, i, "Parameter");
                     paramsValues.Add(result);
                 }
                 else

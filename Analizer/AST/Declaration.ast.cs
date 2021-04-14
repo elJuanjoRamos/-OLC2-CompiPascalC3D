@@ -1,6 +1,7 @@
 ﻿using CompiPascalC3D.Analizer.Languaje.Abstracts;
 using CompiPascalC3D.Analizer.Languaje.Expressions;
 using CompiPascalC3D.Analizer.Languaje.Sentences;
+using CompiPascalC3D.Analizer.Languaje.Sentences.Array;
 using Irony.Parsing;
 using System;
 using System.Collections;
@@ -181,8 +182,8 @@ namespace CompiPascalC3D.Analizer.AST
                 }
                 else
                 {
-                    //lista_actual.AddLast(new Declaration_Array(elementos_her[0].ToString(), elementos_her[1].ToString(), row, col));
-                    //elementos_her.Clear();
+                    lista_actual.AddLast(new DeclarationArray(elementos_her[0].ToString(), elementos_her[1].ToString(), row, col, cant_tabs));
+                    elementos_her.Clear();
                 }
             }
             return lista_actual;

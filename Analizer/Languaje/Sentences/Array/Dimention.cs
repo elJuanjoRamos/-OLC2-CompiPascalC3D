@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CompiPascalC3D.Analizer.Languaje.Sentences.Array
 {
-    class Dimention : Instruction
+    public class Dimention : Instruction
     {
         private Expresion inferior;
         private Expresion superior;
