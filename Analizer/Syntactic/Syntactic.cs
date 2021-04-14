@@ -60,6 +60,9 @@ namespace CompiPascalC3D.Analizer.Syntactic
             
             var program_body = root.ChildNodes[0].ChildNodes[3];
 
+            //LISTADO DE TYPES Y ARREGLOS
+            LinkedList<Instruction> lista_types = new LinkedList<Instruction>();
+            lista_types = (new TypeAST()).TYPE_LIST(program_body.ChildNodes[0], lista_types, 1);
 
             //LISTADO DE DECLARACIONES
             LinkedList<Instruction> lista_declaraciones = new LinkedList<Instruction>();

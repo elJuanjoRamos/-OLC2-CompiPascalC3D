@@ -372,13 +372,14 @@ namespace CompiPascalC3D.Analizer.Grammar
 
 
             ARRAY.Rule = RESERV_ARRAY
-                + COR_IZQ + EXPLOGICA + PUNTO + PUNTO + EXPLOGICA + COR_DER + RESERV_OF + MORE_ARRAY + PUNTO_COMA;
-            ;
+                + COR_IZQ + EXPLOGICA + PUNTO + PUNTO + EXPLOGICA + MORE_ARRAY + COR_DER + RESERV_OF + DATA_TYPE + PUNTO_COMA;
+                ;
 
             MORE_ARRAY.Rule
-                = DATA_TYPE
-                | RESERV_ARRAY + COR_IZQ + EXPLOGICA + PUNTO + PUNTO + EXPLOGICA + COR_DER + RESERV_OF + MORE_ARRAY;
-            ;
+                = COMA + EXPLOGICA + PUNTO + PUNTO + EXPLOGICA + MORE_ARRAY
+                | Empty
+                ;
+                
 
             OBJECT.Rule =
                 RESERV_OBJ + DECLARATION_LIST + RESERV_END + PUNTO_COMA;
@@ -446,31 +447,6 @@ namespace CompiPascalC3D.Analizer.Grammar
             ID_TIPE.Rule
                 = COR_IZQ + EXPLOGICA + COR_DER + MORE_ACCES
                 | Empty;
-
-            /*EXPRESION.Rule
-                = EXPRESION + PLUS + EXPRESION
-                | EXPRESION + MIN + EXPRESION
-                | EXPRESION + POR + EXPRESION
-                | EXPRESION + DIVI + EXPRESION
-                | EXPRESION + MODULE + EXPRESION
-                | EXPRESION + LESS + EXPRESION
-                | EXPRESION + HIGHER + EXPRESION
-                | EXPRESION + LESS_EQUAL + EXPRESION
-                | EXPRESION + HIGHER_EQUAL + EXPRESION
-                | EXPRESION + EQUALS + EXPRESION
-                | EXPRESION + DISCTINCT + EXPRESION
-                | EXPRESION + AND + EXPRESION
-                | EXPRESION + OR + EXPRESION
-                | NOT + EXPRESION
-                | CALL_FUNCTION_PROCEDURE
-                | IDENTIFIER
-                | NUMERO
-                | CADENA
-                | REAL
-                | RESERV_TRUE
-                | RESERV_FALSE
-                | PAR_IZQ + EXPRESION + PAR_DER
-                ;*/
             #endregion
 
 
