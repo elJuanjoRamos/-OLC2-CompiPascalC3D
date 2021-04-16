@@ -76,7 +76,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
                 if (variable.Type == result.getDataType)
                 {
-                    function_ambit.setVariableFuncion(variable.Id, result.Value, result.Valor_original, result.getDataType, i, "Parameter");
+                    function_ambit.setVariableFuncion(variable.Id, result.Value, result.Valor_original, result.getDataType, i, variable.isRefer, "Parameter");
                     paramsValues.Add(result);
                 }
                 else

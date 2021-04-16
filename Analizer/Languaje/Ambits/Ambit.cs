@@ -83,12 +83,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
 
         #region VARIABLES
 
-        public Identifier save(string id, object valor, string valor_Def, DataType type, bool esconstante, bool isAssigned, bool isheap, string tipo_dato)
+        public Identifier save(string id, object valor, string valor_Def, DataType type, bool esconstante,
+            bool isAssigned, bool isheap, bool isrefer, string tipo_dato)
         {
             Ambit amb = this;
 
             Identifier ident = new Identifier(valor.ToString(), valor_Def, id, type, esconstante, 
-                isAssigned, this.size++, (anterior == null), isheap, tipo_dato);
+                isAssigned, this.size++, (anterior == null), isheap, isrefer, tipo_dato);
             
             
             if (!amb.Ambit_name_inmediato.Equals("Function"))
@@ -107,7 +108,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
 
         }
 
-        public void setVariableInAmbit(string id, string valor, string val_Def, DataType type, int pos, string tipo_Dato)
+        public void setVariableInAmbit(string id, string valor, string val_Def, DataType type, int pos, bool isrefer, string tipo_Dato)
         {
             Ambit env = this;
 
@@ -115,21 +116,22 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             {
                 if (env.Variables.ContainsKey(id.ToLower()))
                 {
-                    env.Variables[id.ToLower()] = new Identifier(valor, val_Def, id, type, false, false,  pos, false, false, tipo_Dato);
+                    env.Variables[id.ToLower()] = new Identifier(valor, val_Def, id, type, false, false,  pos, false, false, isrefer, tipo_Dato);
                 }
                 env = env.anterior;
             }
         }
-        public void setVariableFuncion(string id, string valor, string valdef, DataType type, int posi, string tipo_Dato)
+        public void setVariableFuncion(string id, string valor, string valdef, DataType type, int posi, bool isrefe, string tipo_Dato)
         {
             Ambit env = this;
 
             if (env.Variables.ContainsKey(id.ToLower()))
             {
-                env.Variables[id.ToLower()] = new Identifier(valor, valdef, id, type, false, false, posi, false, false, tipo_Dato);
+                env.Variables[id.ToLower()] = new Identifier(valor, valdef, id, type, false, false, posi, false, false, isrefe, tipo_Dato);
             }
         }
-        public void setVariable(string id, string valor, string valdef, DataType type, bool isAssigned, int posi, bool isglobal, string tipo_Dato)
+        public void setVariable(string id, string valor, string valdef, DataType type, bool isAssigned, 
+            int posi, bool isglobal, bool isrefe, string tipo_Dato)
         {
             Ambit env = this;
 
@@ -137,7 +139,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             {
                 if (env.Variables.ContainsKey(id.ToLower()))
                 {
-                    env.Variables[id.ToLower()] = new Identifier(valor, valdef, id, type, false, isAssigned, posi, isglobal, false, tipo_Dato);
+                    env.Variables[id.ToLower()] = new 
+                        Identifier(valor, valdef, id, type, false, isAssigned, posi, isglobal, false, isrefe, tipo_Dato);
                     return;
                 }
                 env = env.anterior;
@@ -186,13 +189,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             }
 
         }
-        public void saveVarFunction(string id, string valor, string valdef, DataType type, string tipo_Dato)
+        public void saveVarFunction(string id, string valor, string valdef, DataType type, bool isrefe, string tipo_Dato)
         {
             Ambit amb = this;
 
             if (!amb.variables.ContainsKey(id))
             {
-                amb.variables[id] = (new Identifier(valor, valdef, id, type, false, false, Size++, false, false, tipo_Dato));
+                amb.variables[id] = (new Identifier(valor, valdef, id, type, false, false, Size++, false, false, isrefe, tipo_Dato));
             }
 
         }

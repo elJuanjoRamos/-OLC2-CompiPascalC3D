@@ -45,7 +45,7 @@ namespace CompiPascalC3D.Analizer.AST
                 {
 
                     var identifier = actual.ChildNodes[1].Token.Text;
-                    lista_actual.AddLast(new Declaration(identifier, expressionAST.getExpresion(actual.ChildNodes[3], cant_tabs), row, col, true));
+                    lista_actual.AddLast(new Declaration(identifier, expressionAST.getExpresion(actual.ChildNodes[3], cant_tabs), row, col, true, false));
                     lista_actual = CONST_DECLARATION(actual.ChildNodes[5], lista_actual, elementos_her, cant_tabs);
                     lista_actual = LIST_DECLARATIONS(actual.ChildNodes[6], lista_actual, elementos_her, cant_tabs);
                 }
@@ -150,7 +150,7 @@ namespace CompiPascalC3D.Analizer.AST
                 int row = actual.ChildNodes[0].Token.Location.Line;
                 int col = actual.ChildNodes[0].Token.Location.Column;
                 var identifier = actual.ChildNodes[0].Token.Text;
-                lista_actual.AddLast(new Declaration(identifier, expressionAST.getExpresion(actual.ChildNodes[2], cant_tabs), row, col, true));
+                lista_actual.AddLast(new Declaration(identifier, expressionAST.getExpresion(actual.ChildNodes[2], cant_tabs), row, col, true, false));
                 lista_actual = CONST_DECLARATION(actual.ChildNodes[4], lista_actual, elementos_her, cant_tabs);
             }
             return lista_actual;

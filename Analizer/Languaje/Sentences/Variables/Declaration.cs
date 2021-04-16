@@ -18,6 +18,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         public int column;
         public bool isConst;
         public bool isAssigned;
+        public bool isRefer;
+
 
         public DataType Type { get => type; set => type = value; }
         public string Id { get => id; set => id = value; }
@@ -36,9 +38,10 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             this.column = c;
             this.isConst = false;
             this.isAssigned = isAs;
+            this.isRefer = refe;
         }
         //CONSTRUCTOR PARA CONSTANTES
-        public Declaration(string i, Expresion e, int r, int c, bool isc)
+        public Declaration(string i, Expresion e, int r, int c, bool isc, bool isrefe)
             : base("Declaration")
         {
             this.id = i;
@@ -48,6 +51,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             this.column = c;
             this.isConst = isc;
             this.isAssigned = true;
+            this.isRefer = isrefe;
         }
 
 
@@ -86,19 +90,21 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
                     if (this.type == DataType.CONST)
                     {
-                        variable = ambit.save(this.id, val.Value, val.Valor_original, val.getDataType, true, true, false, "Constant");
+                        variable = ambit.save(this.id, val.Value, val.Valor_original, val.getDataType, true, true, false, this.isRefer, "Constant");
                     }
                     else
                     {
                         if (val.getDataType == this.type)
                         {
-                            variable = ambit.save(this.id, val.Value, val.Valor_original, val.getDataType, false, isAssigned, false, "Variable");
+                            variable = ambit.save(this.id, val.Value, val.Valor_original, val.getDataType, false, isAssigned, false, this.isRefer, "Variable");
                         } else
                         {
                             set_error("El tipo " + val.getDataType + " no es asignable con " + this.type.ToString(), row, column);
                             return null;
                         }
                     }
+
+
                     var generator = C3DController.Instance;
                     if (val.IsTemporal)
                     {
@@ -109,7 +115,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                     {
 
 
-                        if (this.type == DataType.BOOLEAN)
+                        if (this.type == DataType.BOOLEAN || val.Valor_original.ToLower().Equals("false") || val.Valor_original.ToLower().Equals("true"))
                         {
                             var templabel = generator.newLabel();
                             string_declaracion += generator.addLabel(val.TrueLabel, 1);

@@ -65,7 +65,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 var element = el.Execute(ambit);
                 if (element.IsTemporal)
                 {
-                    generator.free_temps(element.Value.ToString());
+                    //generator.free_temps(element.Value.ToString());
                 }
 
                 write_Str += element.Texto_anterior;
@@ -110,15 +110,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
                         write_Str += generator.addLabel(element.TrueLabel, cant_tabs);
                         write_Str += generator.addLabel(element.FalseLabel, cant_tabs);
-                        if (element.Value.ToString().Equals("false"))
-                        {
-                            write_Str += generator.print_boolean(cant_tabs, "false");
-                        }
-                        else
-                        {
-                            write_Str += generator.print_boolean(cant_tabs, "true");
-                        }
-                        
+                        write_Str += generator.print_boolean(cant_tabs, element.Valor_original);                        
                         break;
                     case DataType.REAL:
                         write_Str += generator.generate_print("f", element.getValue(), "(float)", cant_tabs);

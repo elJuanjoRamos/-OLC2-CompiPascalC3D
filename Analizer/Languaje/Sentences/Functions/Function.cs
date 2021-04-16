@@ -76,7 +76,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             {
                 Declaration dec = (Declaration)param;
 
-                ambit_func.saveVarFunction(dec.Id, "0", "0", dec.Type, "Parameter");
+                ambit_func.saveVarFunction(dec.Id, "0", "0", dec.Type, dec.isRefer, "Parameter");
             }
 
             //FUNCIONES HIJAS
