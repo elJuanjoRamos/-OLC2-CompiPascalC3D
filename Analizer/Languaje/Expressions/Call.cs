@@ -42,6 +42,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 return new Returned();
 
             }
+
+            
+
             //GUARDAR LOS PARAMETROS EN LA TABLA DE SIMBOLOS
 
             Ambit function_ambit = new Ambit();
@@ -59,12 +62,30 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             }
 
             var generator = C3D.C3DController.Instance;
+
+
+            //ETIQUETAS VERDADERAS Y FALSAS EN CASO DE QUE SEA BOOL
+            if (funcion_llamada.Tipe == DataType.BOOLEAN)
+            {
+                if (this.TrueLabel == "")
+                {
+                    this.TrueLabel = generator.newLabel();
+                }
+                if (this.FalseLabel == "")
+                {
+                    this.FalseLabel = generator.newLabel();
+                }
+            }
+
             var call_String = "";
 
             var size = ambit.Size;
 
 
             var paramsValues = new ArrayList();
+
+            
+
 
             for (int i = 0; i < parametros.Count; i++)
             {
@@ -115,11 +136,17 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             call_String += generator.ant_Env(ambit.Size, cant_tabs);
             //generator.freeTemp(temp);
             //generator.recoverTemps(ambit, size, cant_tabs);
-
+            call_String += generator.get_stack("T14", "T13", cant_tabs);
             call_String += generator.save_comment("Fin Llamada: " + funcion_llamada.UniqId, cant_tabs, true);
 
-            
-            return new Returned("T13", funcion_llamada.Tipe, true, call_String, "");
+            if (funcion_llamada.Tipe == DataType.BOOLEAN)
+            {
+                call_String += generator.add_If("T14", "1", "==", this.TrueLabel, cant_tabs);
+                call_String += generator.add_Goto(this.FalseLabel, cant_tabs);
+
+            }
+
+            return new Returned("T14", funcion_llamada.Tipe, true, this.TrueLabel, this.FalseLabel, call_String, "",0);
 
         }
         public void set_error(string texto, int row, int column)

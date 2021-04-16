@@ -47,12 +47,11 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 this.FalseLabel = generator.newLabel();
             }
 
-            
 
+            logical_str += generator.save_comment("Empieza " + operacion, cant_tabs, false);
             switch (operacion)
             {
                 case OpLogical.AND:
-
 
                     this.left.TrueLabel = this.TrueLabel;
                     this.left.FalseLabel = this.FalseLabel;
@@ -77,8 +76,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             set_error("Operador '" + this.type + "' NO puede ser aplicado alos tipos " + varIz.getDataType + " con " + valDer.getDataType, row, column);
                             return result;
                         }
-
-                        return new Returned("", DataType.BOOLEAN, false, this.right.TrueLabel, this.right.FalseLabel, logical_str, "false");
+                        logical_str += generator.save_comment("Termina " + operacion, cant_tabs, true);
+                        return new Returned("", DataType.BOOLEAN, false, valDer.TrueLabel, valDer.FalseLabel, logical_str, "false",0);
 
                     }
                     set_error("Operador '" + this.type + "' NO puede ser aplicado al tipo " + varIz.getDataType, row, column);
@@ -107,7 +106,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             set_error("Operador '" + this.type + "' NO puede ser aplicado alos tipos " + valIz.getDataType + " con " + valDer.getDataType, row, column);
                             return result;
                         }
-                        return new Returned("", DataType.BOOLEAN, false,this.right.TrueLabel, this.right.FalseLabel, logical_str, "false");
+                        logical_str += generator.save_comment("Termina " + operacion, cant_tabs, true);
+                        return new Returned("", DataType.BOOLEAN, false,valDer.TrueLabel, valDer.FalseLabel, logical_str, "false",0);
 
                     }
                     set_error("Operador '" + this.type + "' NO puede ser aplicado al tipo " + valIz.getDataType, row, column);
@@ -128,7 +128,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                         set_error("Operador '" + this.type + "' NO puede ser aplicado al tipo " + varrIz.getDataType , row, column);
                         return result;
                     }
-                    return new Returned("", DataType.BOOLEAN, false, varrIz.FalseLabel, varrIz.TrueLabel, logical_str, "false");
+                    logical_str += generator.save_comment("Termina " + operacion, cant_tabs, true);
+                    return new Returned("", DataType.BOOLEAN, false, varrIz.FalseLabel, varrIz.TrueLabel, logical_str, "false",0);
 
 
 

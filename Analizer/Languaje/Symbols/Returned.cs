@@ -16,8 +16,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
         private string falseLabel;
         private string texto_anterior;
         private string valor_original;
+        private int position;
 
-        public Returned(string v, DataType d, bool istemp, string texto_ant, string valori)
+        public Returned(string v, DataType d, bool istemp, string texto_ant, string valori, int pos)
         {
             this._value = v;
             this.type = d;
@@ -26,17 +27,19 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
             this.trueLabel = this.falseLabel =  "";
             this.texto_anterior = texto_ant;
             this.valor_original = valori;
+            this.position = pos;
         }
-        public Returned(string v, DataType d, bool ist, string truel, string falsel, string texto_ant, string valori)
+        public Returned(string v, DataType d, bool istemp, string truel, string falsel, string texto_ant, string valori, int posi)
         {
             this._value = v;
             this.type = d;
-            this.isTemporal = ist;
+            this.isTemporal = istemp;
             this.isNull = false;
             this.trueLabel = truel;
             this.falseLabel = falsel;
             this.texto_anterior = texto_ant;
             this.valor_original = valori;
+            this.position = posi;
         }
         public Returned()
         {
@@ -77,6 +80,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
         public string FalseLabel { get => falseLabel; set => falseLabel = value; }
         public string Texto_anterior { get => texto_anterior; set => texto_anterior = value; }
         public string Valor_original { get => valor_original; set => valor_original = value; }
+        public int Position { get => position; set => position = value; }
 
         public string getValue()
         {

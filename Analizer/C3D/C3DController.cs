@@ -84,14 +84,14 @@ namespace CompiPascalC3D.Analizer.C3D
         public string newTemporal() {
             var temp = "";
 
-            if (micola.Count == 0)
-            {
+            //if (micola.Count == 0)
+            //{
                 temp = "T" + this.temporal_number++;
                 this.tempStorage.Add(temp);
-            } else
-            {
-                temp = micola.Pop().ToString();
-            }
+            //} else
+            //{
+            //    temp = micola.Pop().ToString();
+            //}
 
             return temp;
         }
@@ -115,6 +115,12 @@ namespace CompiPascalC3D.Analizer.C3D
                 this.tempStorage.Remove(temp);
             }
         }
+
+        public ArrayList getTempStorage()
+        {
+            return this.tempStorage;
+        }
+
 
         public void free_temps(string temp)
         {
@@ -328,7 +334,7 @@ namespace CompiPascalC3D.Analizer.C3D
         // OBTIENE LOS TEMPORALES
         public string getTemps()
         {
-            var text = "float T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13";
+            var text = "float T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14";
             var cont = 0;
 
             if (tempStorage.Count == 0)

@@ -44,7 +44,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             switch (op)
             {
                 case OpRelational.EQUALS:
-
+                    relational_Str += generator.save_comment("Empieza EQUALS", cant_tabs, false);
                     //VERIFICA SI EL IZQUIERDO ES REAL O INT
                     if (valIz.getDataType == DataType.REAL || valIz.getDataType == DataType.INTEGER)
                     {
@@ -63,8 +63,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             }
                             relational_Str += generator.add_If(valIz.getValue(), valDer.getValue(), "==", this.TrueLabel, cant_tabs);
                             relational_Str += generator.add_Goto(this.FalseLabel, cant_tabs);
+                            relational_Str += generator.save_comment("Termina EQUALS", cant_tabs, true);
 
-                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "");
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "",0);
 
                         }
                         else
@@ -94,7 +95,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                         //VERIFICA QUE EL DERECHO SEA BOOLEAN
                         if (valDer.getDataType == DataType.BOOLEAN)
                         {
-                            result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel, relational_Str, "");
+                            relational_Str += generator.save_comment("Termina EQUALS", cant_tabs, true);
+
+                            result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel, relational_Str, "",0);
 
                         } else
                         {
@@ -177,8 +180,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             generator.addExpression(tempo_der, tempo_der, "1", "+", cant_tabs);
 
                             generator.add_Goto(label_recurrecia, cant_tabs);*/
+                            relational_Str += generator.save_comment("Termina EQUALS", cant_tabs, true);
 
-                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "");
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "",0);
 
                         }
                         else
@@ -197,6 +201,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
                     break;
                 case OpRelational.DISCTINCT:
+                    relational_Str += generator.save_comment("Empieza DISTICT", cant_tabs, false);
+
                     //VERIFICA QUE EL IZQUIERDO ESA REAL O INTEGER
                     if (valIz.getDataType == DataType.REAL || valIz.getDataType == DataType.INTEGER)
                     {
@@ -213,10 +219,11 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             {
                                 this.FalseLabel = generator.newLabel();
                             }
+
                             relational_Str += generator.add_If(valIz.getValue(), valDer.getValue(), "!=", this.TrueLabel, cant_tabs);
                             relational_Str += generator.add_Goto(this.FalseLabel, cant_tabs);
-
-                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "");
+                            relational_Str += generator.save_comment("Termina DISTICT", cant_tabs, true);
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "",0);
 
                         }
                         else
@@ -250,7 +257,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                         //VERIFICA QUE EL DERECHO SEA BOOLEAN
                         if (valDer.getDataType == DataType.BOOLEAN)
                         {
-                            result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel, relational_Str, "");
+                            relational_Str += generator.save_comment("Termina DISTICT", cant_tabs, true);
+                            result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel, relational_Str, "",0);
 
                         }
                         else
@@ -270,6 +278,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 case OpRelational.LESS_EQUALS:
                 case OpRelational.HIGHER:
                 case OpRelational.HIGHER_EQUALS:
+                    relational_Str += generator.save_comment("Empieza " + op, cant_tabs, false);
                     if (valIz.getDataType == DataType.REAL || valIz.getDataType == DataType.INTEGER)
                     {
                         var valDer = this.right.Execute(ambit);
@@ -287,7 +296,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             }
                             relational_Str += generator.add_If(valIz.getValue(), valDer.getValue(), this.type, this.TrueLabel, cant_tabs);
                             relational_Str += generator.add_Goto(this.FalseLabel, cant_tabs);
-                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "");
+                            relational_Str += generator.save_comment("Termina " + op, cant_tabs, true);
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "",0);
 
                         } else
                         {

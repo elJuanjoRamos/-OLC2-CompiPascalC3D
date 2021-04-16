@@ -47,7 +47,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 access_string += generator.get_stack(temp, variable.Position.ToString(), cant_Tabs);
 
                 if (variable.DataType!= DataType.BOOLEAN) {
-                    return new Returned(temp, variable.DataType, true, access_string, variable.Default_value);
+                    return new Returned(temp, variable.DataType, true, access_string, variable.Default_value, variable.Position);
                 }
 
                 
@@ -62,7 +62,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 access_string += generator.add_If(temp, "1", "==", this.TrueLabel, cant_Tabs);
                 access_string += generator.add_Goto(this.FalseLabel, cant_Tabs);
 
-                return new Returned("", variable.DataType, false, this.TrueLabel, this.FalseLabel, access_string, variable.Default_value);
+                return new Returned("", variable.DataType, false, this.TrueLabel, 
+                    this.FalseLabel, access_string, variable.Default_value, variable.Position);
 
 
             }
@@ -77,7 +78,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
                 if (variable.DataType != DataType.BOOLEAN)
                 {
-                    return new Returned(temp, variable.DataType, true, access_string, variable.Default_value);
+                    return new Returned(temp, variable.DataType, true, access_string, variable.Default_value, variable.Position);
                 }
 
 
@@ -92,7 +93,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
                 access_string += generator.add_If(temp, "1", "==", this.TrueLabel, cant_Tabs);
                 access_string += generator.add_Goto(this.FalseLabel, cant_Tabs);
-                return new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, access_string, variable.Default_value);
+                return new Returned("", DataType.BOOLEAN, false, this.TrueLabel, 
+                    this.FalseLabel, access_string, variable.Default_value, variable.Position);
             }
         }
 

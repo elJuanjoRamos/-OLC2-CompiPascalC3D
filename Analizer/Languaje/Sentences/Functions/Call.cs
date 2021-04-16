@@ -1,6 +1,7 @@
 ﻿using CompiPascalC3D.Analizer.Controller;
 using CompiPascalC3D.Analizer.Languaje.Abstracts;
 using CompiPascalC3D.Analizer.Languaje.Ambits;
+using CompiPascalC3D.Analizer.Languaje.Expressions;
 using CompiPascalC3D.Analizer.Languaje.Symbols;
 using System;
 using System.Collections;
@@ -47,49 +48,80 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             {
                 set_error("La funcion '" + this.id + "' no recibe la misma cantidad de parametros", Row, Column);
                 return null;
-
             }
-            //GUARDAR LOS PARAMETROS EN LA TABLA DE SIMBOLOS
 
-            Ambit function_ambit = new Ambit();
 
-            if (funcion_llamada.IsProcedure)
-            {
-                function_ambit = new Ambit(ambit, funcion_llamada.Id, "Procedure", false, ambit.IsFunction);
-            }
-            else
-            {
-                function_ambit = new Ambit(ambit, funcion_llamada.Id, "Function", false, ambit.IsFunction);
-            }
+
+            //AMBITO DE LA FUNCION
+            var tipo = (funcion_llamada.IsProcedure ? "Procedure" : "Function");
+            Ambit function_ambit = new Ambit(ambit, funcion_llamada.UniqId, tipo, false, ambit.IsFunction);
+
+            //INSTANCIA DEL GENERADOR DE CODIGO
             var generator = C3D.C3DController.Instance;
+
+
+            //COPIA DE LOS TEMPORALES
+            var tempStorage = generator.getTempStorage();
+
 
 
             var size = ambit.Size;
 
-
+            //PASO DE PARAMETROS
             var paramsValues = new ArrayList();
+
+
+
 
             for (int i = 0; i < parametros.Count; i++)
             {
-                var variable = (Declaration)(funcion_llamada.getParameterAt(i));
 
-                
-                var result = ((Expresion)parametros[i]).Execute(ambit);
-                call_String += result.Texto_anterior;
+                var parametro = (Declaration)(funcion_llamada.getParameterAt(i));
 
-                if (variable.Type == result.getDataType)
+                if (parametro.isRefer)
                 {
-                    function_ambit.setVariableFuncion(variable.Id, result.Value, result.Valor_original, result.getDataType, i, variable.isRefer, "Parameter");
-                    paramsValues.Add(result);
-                }
-                else
+
+                    var parametro_referencia = parametros[i];
+
+                    if (parametro_referencia is Access)
+                    {
+                        var index = (Access)parametro_referencia;
+
+
+
+                    }
+
+
+                    //var result = ((Expresion)).Execute(ambit);
+
+
+
+
+
+                } else
                 {
-                    set_error("El tipo " + result.getDataType + " no es asignable con " + variable.Type, Row, Column);
-                    return null;
+
+                    var result = ((Expresion)parametros[i]).Execute(ambit);
+                    call_String += result.Texto_anterior;
+
+                    if (parametro.Type == result.getDataType)
+                    {
+                        function_ambit.setVariableFuncion(parametro.Id, result.Value,
+                            result.Valor_original, result.getDataType, i, parametro.isRefer, "Parameter");
+                        paramsValues.Add(result);
+                    }
+                    else
+                    {
+                        set_error("El tipo " + result.getDataType + " no es asignable con " + parametro.Type, Row, Column);
+                        return null;
+                    }
                 }
 
 
             }
+
+
+
 
             call_String += generator.save_comment("Inicia Llamada: " + funcion_llamada.UniqId, cant_tabs, false);
 
@@ -99,6 +131,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 call_String += generator.save_comment("Inicia:Parametros, Cambio de ambito", cant_tabs, false);
 
                 var temp = generator.newTemporal();
+
+
                 call_String += generator.addExpression(temp, "SP", (ambit.Size+1).ToString(), "+", cant_tabs );
                 int i = 0;
                 foreach (Returned item in paramsValues)
@@ -115,6 +149,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             }
             call_String += generator.next_Env(ambit.Size, cant_tabs);
             call_String += generator.save_code(funcion_llamada.UniqId+"();", cant_tabs);
+            
             //generator.get_stack(temp, "SP", cant_tabs);
             call_String += generator.ant_Env(ambit.Size, cant_tabs);
             //generator.freeTemp(temp);

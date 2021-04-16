@@ -73,10 +73,10 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             {
                 return null;
             }
-            if (if_sentencias is Instruction)
+            /*if (if_sentencias is Instruction)
             {
                 return if_sentencias;
-            }
+            }*/
             if_string += if_sentencias.ToString();
 
             if (!this.elif.IsNull)

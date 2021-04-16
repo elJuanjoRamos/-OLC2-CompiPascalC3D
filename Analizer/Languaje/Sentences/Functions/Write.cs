@@ -115,8 +115,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                     case DataType.REAL:
                         write_Str += generator.generate_print("f", element.getValue(), "(float)", cant_tabs);
                         break;
-                    case DataType.IDENTIFIER:
-                        break;
                     default:
                         break;
                 }

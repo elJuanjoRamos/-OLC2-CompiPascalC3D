@@ -61,25 +61,24 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                     return null;
                 }
 
-                texto += val.Texto_anterior;
-                texto += generator.set_stack(ambit.Temp_return, val.Value.ToString(), cant_tabs);
+
+                var res = "";
+                if (val.getDataType == DataType.BOOLEAN)
+                {
+                    res = (val.Value.ToString().ToLower().Equals("true") ? "1" : "0");
+                } else
+                {
+                    texto += val.Texto_anterior;
+                    res = val.Value.ToString();
+                }
+
+                texto += generator.set_stack(ambit.Temp_return, res, cant_tabs);
                 texto += generator.add_Goto(ambit.Exit, Cant_tabs);
+
 
             }
             return texto;
         }
 
-        public bool validateAmbit(string ambit_name, string ambit_inmediato)
-        {
-            if (ambit_inmediato.Equals("Function"))
-            {
-                return true;
-            }
-            if (ambit_name.Contains("Function"))
-            {
-                return true;
-            }
-            return false;
-        }
     }
 }
