@@ -63,7 +63,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
                     if (varIz.getDataType == DataType.BOOLEAN)
                     {
-                        logical_str += generator.addLabel(this.left.TrueLabel, cant_tabs);
+                        logical_str += generator.addLabel(varIz.TrueLabel, cant_tabs);
 
                         this.right.TrueLabel = generator.newLabel();
                         this.right.FalseLabel = varIz.FalseLabel;
@@ -93,7 +93,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     logical_str += valIz.Texto_anterior;
                     if (valIz.getDataType == DataType.BOOLEAN)
                     {
-                        logical_str += generator.addLabel(this.left.FalseLabel, cant_tabs);
+                        logical_str += generator.addLabel(valIz.FalseLabel, cant_tabs);
 
                         this.right.TrueLabel = valIz.TrueLabel;
                         this.right.FalseLabel = generator.newLabel();
