@@ -54,25 +54,51 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             //AMBITO DE LA FUNCION
             var tipo = (funcion_llamada.IsProcedure ? "Procedure" : "Function");
-            Ambit function_ambit = new Ambit(ambit, funcion_llamada.UniqId, tipo, false, ambit.IsFunction);
+
+
+
+
+
+
+
 
             //INSTANCIA DEL GENERADOR DE CODIGO
             var generator = C3D.C3DController.Instance;
+            generator.update_posision_global();
 
 
             //COPIA DE LOS TEMPORALES
             var tempStorage = generator.getTempStorage();
 
 
-
-            var size = ambit.Size;
-
             //PASO DE PARAMETROS
             var paramsValues = new ArrayList();
 
 
+            //TEXTO DE LA FUNCION
+            var funcion_total = generator.save_code("void " + funcion_llamada.UniqId 
+                + "(" + ") { \n", 0);
+
+            var tempo_return = "T13";
+            var exit_label = "";
+            if (!funcion_llamada.IsProcedure)
+            {
+                exit_label = generator.newLabel();
+                funcion_total += generator.save_code("//Temporal de retorno", 1);
+                funcion_total += generator.addExpression(tempo_return, "SP", "0", "+", 1);
+            }
+            Ambit function_ambit = new Ambit(ambit, funcion_llamada.UniqId, tipo, tempo_return, exit_label, !funcion_llamada.IsProcedure, funcion_llamada.Tipe);
 
 
+            //SE GUARDAN LOS PARAMETROS EN EL AMBITO
+            foreach (var param in funcion_llamada.Parametos)
+            {
+                Declaration dec = (Declaration)param;
+                function_ambit.saveVarFunction(dec.Id, "0", "0", dec.Type, dec.isRefer, "Parameter", 0);
+            }
+
+
+            //SE ENVIAN LOS PARAMTETROS POR REFERENCIA Y VALOR
             for (int i = 0; i < parametros.Count; i++)
             {
 
@@ -83,13 +109,14 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
                 if (parametro.Type == result.getDataType)
                 {
-                    function_ambit.setVariableFuncion(parametro.Id, result.Value,
-                        result.Valor_original, result.getDataType, i, parametro.isRefer, "Parameter");
-
+                    
                     if (parametro.isRefer)
                     {
-                        result.Value = result.Pos_global.ToString();
+                        result.Value = result.Pos_refer.ToString();
                     }
+                    function_ambit.setVariableFuncion(parametro.Id, result.Value,
+                        result.Valor_original, result.getDataType,  parametro.isRefer, "Parameter", result.Pos_refer);
+
                     paramsValues.Add(result);
                 }
                 else
@@ -98,6 +125,55 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                     return null;
                 }
             }
+
+
+            //SE HACEN LAS DECLARACIONES Y FUNCIONES HIJAS 
+            //DECLARACIONES 
+            foreach (var declas in funcion_llamada.Declaraciones)
+            {
+                var result = declas.Execute(function_ambit);
+                if (result == null)
+                {
+                    return null;
+                }
+                funcion_total += result;
+            }
+
+            //FUNCIONES HIJAS
+            var funcion_hija = "";
+            foreach (var fun_hija in funcion_llamada.Funciones_hijas)
+            {
+                var result = fun_hija.Execute(function_ambit);
+                if (result == null)
+                {
+                    return null;
+                }
+                funcion_hija += result;
+            }
+
+            //INSTRUCCIONES
+            foreach (Instruction instruction in funcion_llamada.Sentences)
+            {
+                var instruccion = instruction.Execute(function_ambit);
+                if (instruccion == null)
+                {
+                    return null;
+                }
+                funcion_total += instruccion;
+            }
+
+
+            if (!funcion_llamada.IsProcedure)
+            {
+                funcion_total += generator.addLabel(exit_label, 1);
+            }
+
+            funcion_total += generator.save_code(" return;\n", 2);
+            funcion_total += generator.save_code("}\n", 0);
+
+            generator.set_function_code(funcion_total, funcion_llamada.UniqId);
+
+            ReporteController.Instance.save_ambit(function_ambit, function_ambit.Ambit_name);
 
 
 

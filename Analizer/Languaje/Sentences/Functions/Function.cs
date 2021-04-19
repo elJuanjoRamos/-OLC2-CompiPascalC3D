@@ -48,13 +48,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 this.UniqId = ambit.Ambit_name + "_" + id;
             }
 
-            //this.UniqId = ambit.Anterior != null ? ambit.Ambit_name + "_" + id : "Function_" + id;
-
-
-
             ambit.saveFuncion(this.id, this);
 
-            var generator = C3D.C3DController.Instance;
+            /*var generator = C3D.C3DController.Instance;
             generator.update_posision_global();
 
             var funcion_total = generator.save_code("void " + uniqId + "(" + ") { \n", 0);
@@ -76,8 +72,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             foreach (var param in parametos)
             {
                 Declaration dec = (Declaration)param;
-
-                ambit_func.saveVarFunction(dec.Id, "0", "0", dec.Type, dec.isRefer, "Parameter");
+                ambit_func.saveVarFunction(dec.Id, "0", "0", dec.Type, dec.isRefer, "Parameter", 0);
             }
 
             //DECLARACIONES 
@@ -132,7 +127,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             ReporteController.Instance.save_ambit(ambit_func, ambit_func.Ambit_name);
 
             return funcion_hija + funcion_total;
+            */
 
+            return "";
         }
 
 

@@ -63,7 +63,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     return new Returned("", variableAmbit.DataType, false, this.TrueLabel,
                         this.FalseLabel, access_string, variableAmbit.Default_value, variableAmbit.Position, variableAmbit.Position_global);
 
-
                 }
                 else
                 {
@@ -83,7 +82,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     if (variableAmbit.DataType != DataType.BOOLEAN)
                     {
                         return new Returned(temp, variableAmbit.DataType, true, "", "",
-                            access_string, variableAmbit.Default_value, variableAmbit.Position, variableAmbit.Position_global);
+                            access_string, variableAmbit.Default_value, variableAmbit.Position, variableAmbit.Position_reference);
                     }
 
 
@@ -99,7 +98,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     access_string += generator.add_If(temp, "1", "==", this.TrueLabel, cant_Tabs);
                     access_string += generator.add_Goto(this.FalseLabel, cant_Tabs);
                     return new Returned("", DataType.BOOLEAN, false, this.TrueLabel,
-                        this.FalseLabel, access_string, variableAmbit.Default_value, variableAmbit.Position, variableAmbit.Position_global);
+                        this.FalseLabel, access_string, variableAmbit.Default_value, variableAmbit.Position, variableAmbit.Position_reference);
                 }
             }
 
@@ -136,13 +135,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             }
 
 
-
-
-
-
-            
-
-            
         }
 
 

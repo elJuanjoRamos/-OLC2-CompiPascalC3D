@@ -89,9 +89,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             var generator = C3D.C3DController.Instance;
 
             Ambit amb = this;
-
+            var position = generator.get_posision_global();
             Identifier ident = new Identifier(valor.ToString(), valor_Def, id, type, esconstante, 
-                isAssigned, this.size++, (anterior == null), isheap, isrefer, tipo_dato, generator.get_posision_global());
+                isAssigned, this.size++, (anterior == null), isheap, isrefer, tipo_dato, position, position);
             
             
             if (!amb.Ambit_name_inmediato.Equals("Function"))
@@ -110,18 +110,19 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
 
         }
 
-        public void setVariableFuncion(string id, string valor, string valdef, DataType type, int posi, bool isrefe, string tipo_Dato)
+        public void setVariableFuncion(string id, string valor, string valdef, DataType type, bool isrefe, string tipo_Dato, int reference_to)
         {
             Ambit env = this;
 
             if (env.Variables.ContainsKey(id.ToLower()))
             {
                 var variable = env.Variables[id.ToLower()];
-                env.Variables[id.ToLower()] = new Identifier(valor, valdef, id, type, false, false, posi, false, false, isrefe, tipo_Dato, variable.Position_global);
+                env.Variables[id.ToLower()] = new Identifier(valor, valdef, id, type, false, false, 
+                    variable.Position, false, false, isrefe, tipo_Dato, variable.Position_global, reference_to);
             }
         }
         public void setVariable(string id, string valor, string valdef, DataType type, bool isAssigned, 
-            int posi, bool isglobal, bool isrefe, string tipo_Dato)
+            int posi, bool isglobal, bool isrefe, string tipo_Dato, int position_refence)
         {
             Ambit env = this;
 
@@ -131,7 +132,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
                 {
                     var variable = env.Variables[id.ToLower()];
                     env.Variables[id.ToLower()] = new 
-                        Identifier(valor, valdef, id, type, false, isAssigned, posi, isglobal, false, isrefe, tipo_Dato, variable.Position_global);
+                        Identifier(valor, valdef, id, type, false, isAssigned, posi, isglobal, false, isrefe, tipo_Dato, 
+                        variable.Position_global, position_refence);
                     return;
                 }
                 env = env.anterior;
@@ -180,7 +182,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             }
 
         }
-        public void saveVarFunction(string id, string valor, string valdef, DataType type, bool isrefe, string tipo_Dato)
+        public void saveVarFunction(string id, string valor, string valdef, DataType type, bool isrefe, string tipo_Dato, int reference_to)
         {
             var generator = C3D.C3DController.Instance;
             Ambit amb = this;
@@ -188,7 +190,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             if (!amb.variables.ContainsKey(id))
             {
                 var pos = generator.get_posision_global();
-                amb.variables[id] = (new Identifier(valor, valdef, id, type, false, false, Size++, false, false, isrefe, tipo_Dato,pos));
+                amb.variables[id] = (new Identifier(valor, valdef, id, type, false, false, Size++, false, false, isrefe, tipo_Dato,pos, reference_to));
             }
 
         }

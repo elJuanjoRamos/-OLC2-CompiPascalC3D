@@ -410,6 +410,22 @@ namespace CompiPascalC3D.Analizer.C3D
         }
 
 
+        Dictionary<string, string> functions = new Dictionary<string, string>();
+        public void set_function_code(string code, string id)
+        {
+            this.functions[id] = code;
+        }
+
+        public string get_functions()
+        {
+            string code_function = "";
+            foreach (string code in functions.Values)
+            {
+                code_function += code;
+            }
+            return code_function;
+        }
+
         public string print_natives()
         {
 

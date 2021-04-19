@@ -17,7 +17,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
         private string texto_anterior;
         private string valor_original;
         private int position;
-        private int pos_global;
+        private int pos_refer;
         
         public Returned(string v, DataType d, bool istemp, string truel, string falsel, string texto_ant, string valori, int posi, int posglobal)
         {
@@ -30,7 +30,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
             this.texto_anterior = texto_ant;
             this.valor_original = valori;
             this.position = posi;
-            this.pos_global = posglobal;
+            this.pos_refer = posglobal;
         }
         public Returned()
         {
@@ -64,7 +64,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
         public string Texto_anterior { get => texto_anterior; set => texto_anterior = value; }
         public string Valor_original { get => valor_original; set => valor_original = value; }
         public int Position { get => position; set => position = value; }
-        public int Pos_global { get => pos_global; set => pos_global = value; }
+        public int Pos_refer { get => pos_refer; set => pos_refer = value; }
 
         public string getValue()
         {
