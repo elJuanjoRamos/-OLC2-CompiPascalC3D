@@ -65,7 +65,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             relational_Str += generator.add_Goto(this.FalseLabel, cant_tabs);
                             relational_Str += generator.save_comment("Termina EQUALS", cant_tabs, true);
 
-                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "",0);
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "",0,0);
 
                         }
                         else
@@ -97,7 +97,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                         {
                             relational_Str += generator.save_comment("Termina EQUALS", cant_tabs, true);
 
-                            result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel, relational_Str, "",0);
+                            result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel, relational_Str, "",0,0);
 
                         } else
                         {
@@ -182,7 +182,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             generator.add_Goto(label_recurrecia, cant_tabs);*/
                             relational_Str += generator.save_comment("Termina EQUALS", cant_tabs, true);
 
-                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "",0);
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "",0,0);
 
                         }
                         else
@@ -223,7 +223,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             relational_Str += generator.add_If(valIz.getValue(), valDer.getValue(), "!=", this.TrueLabel, cant_tabs);
                             relational_Str += generator.add_Goto(this.FalseLabel, cant_tabs);
                             relational_Str += generator.save_comment("Termina DISTICT", cant_tabs, true);
-                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "",0);
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "",0,0);
 
                         }
                         else
@@ -258,7 +258,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                         if (valDer.getDataType == DataType.BOOLEAN)
                         {
                             relational_Str += generator.save_comment("Termina DISTICT", cant_tabs, true);
-                            result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel, relational_Str, "",0);
+                            result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel, relational_Str, "",0,0);
 
                         }
                         else
@@ -297,7 +297,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             relational_Str += generator.add_If(valIz.getValue(), valDer.getValue(), this.type, this.TrueLabel, cant_tabs);
                             relational_Str += generator.add_Goto(this.FalseLabel, cant_tabs);
                             relational_Str += generator.save_comment("Termina " + op, cant_tabs, true);
-                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "",0);
+                            result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "",0,0);
 
                         } else
                         {

@@ -17,19 +17,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
         private string texto_anterior;
         private string valor_original;
         private int position;
-
-        public Returned(string v, DataType d, bool istemp, string texto_ant, string valori, int pos)
-        {
-            this._value = v;
-            this.type = d;
-            this.isTemporal = istemp;
-            this.isNull = false;
-            this.trueLabel = this.falseLabel =  "";
-            this.texto_anterior = texto_ant;
-            this.valor_original = valori;
-            this.position = pos;
-        }
-        public Returned(string v, DataType d, bool istemp, string truel, string falsel, string texto_ant, string valori, int posi)
+        private int pos_global;
+        
+        public Returned(string v, DataType d, bool istemp, string truel, string falsel, string texto_ant, string valori, int posi, int posglobal)
         {
             this._value = v;
             this.type = d;
@@ -40,6 +30,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
             this.texto_anterior = texto_ant;
             this.valor_original = valori;
             this.position = posi;
+            this.pos_global = posglobal;
         }
         public Returned()
         {
@@ -49,15 +40,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
             this.isTemporal = false;
             this.trueLabel = this.falseLabel = "";
         }
-        public Returned(string n)
-        {
-            this._value = n;
-            this.type = DataType.ERROR;
-            this.isNull = true;
-            this.isTemporal = false;
-            this.trueLabel = this.falseLabel = "";
-        }
-
+        
         public string Value
         {
             get { return _value; }
@@ -81,6 +64,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
         public string Texto_anterior { get => texto_anterior; set => texto_anterior = value; }
         public string Valor_original { get => valor_original; set => valor_original = value; }
         public int Position { get => position; set => position = value; }
+        public int Pos_global { get => pos_global; set => pos_global = value; }
 
         public string getValue()
         {

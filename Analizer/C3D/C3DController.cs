@@ -37,9 +37,11 @@ namespace CompiPascalC3D.Analizer.C3D
         private bool native_equals;
         private string texto_general;
         private Stack micola;
+        private int pos_global;
 
         private C3DController()
         {
+            this.pos_global = 1;
             this.temporal_number = 15;
             this.code = this.code_function = new ArrayList();
             this.tempStorage = this.tempNatives = new ArrayList();
@@ -50,6 +52,7 @@ namespace CompiPascalC3D.Analizer.C3D
 
         public void clearCode()
         {
+            this.pos_global = 1;
             this.temporal_number = this.label_number = 15;
             this.code.Clear();
             this.code_function.Clear();
@@ -498,6 +501,15 @@ namespace CompiPascalC3D.Analizer.C3D
         public string get_Genenal()
         {
             return this.texto_general;
+        }
+
+        public int get_posision_global()
+        {
+            return pos_global++;
+        }
+        public void update_posision_global()
+        {
+            pos_global++;
         }
     }
 }

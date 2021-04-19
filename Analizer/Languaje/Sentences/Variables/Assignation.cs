@@ -91,7 +91,18 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                             {
 
                                 var temp = generator.newTemporal();
+                                
                                 assignation_string += generator.addExpression(temp, "SP", variable.Position.ToString(), "+", tabs);
+
+
+                                if (variable.IsReference)
+                                {
+                                    var newTemp = generator.newTemporal();
+                                    assignation_string += generator.get_stack(newTemp, temp, tabs);
+                                    temp = newTemp;
+                                }
+
+
 
                                 if (variable.DataType == DataType.BOOLEAN)
                                 {

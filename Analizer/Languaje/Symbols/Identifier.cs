@@ -19,7 +19,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
         private bool isGlobal;
         private bool isHeap;
         private bool isReference;
-        public Identifier(string value, string defaultv, string ids, DataType tipo, bool es_const, bool isassigned, int posi, bool isglobal, bool is_Heap, bool is_reference, string tipoDato)
+        private int position_global;
+        public Identifier(string value, string defaultv, string ids, DataType tipo, bool es_const, 
+            bool isassigned, int posi, bool isglobal, bool is_Heap, bool is_reference, string tipoDato, int pos_global)
         {
             this._value = value;
             this.default_value = defaultv;
@@ -33,6 +35,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
             this.isHeap = is_Heap;
             this.isReference = is_reference;
             this.tipo_dato = tipoDato;
+            this.position_global = pos_global;
         }
         public Identifier()
         {
@@ -74,5 +77,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
         public string Tipo_dato { get => tipo_dato; set => tipo_dato = value; }
         public string Default_value { get => default_value; set => default_value = value; }
         public bool IsReference { get => isReference; set => isReference = value; }
+        public int Position_global { get => position_global; set => position_global = value; }
     }
 }

@@ -47,7 +47,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             var returned = new Returned();
             if (this.type == 1)
             {
-                returned = new Returned(this.value.ToString(), DataType.INTEGER, false, literal_string,  this.value.ToString(),0);
+                returned = new Returned(this.value.ToString(), DataType.INTEGER, false, "","", literal_string,  this.value.ToString(),0,0);
             }
             else if (this.type == 2)
             {
@@ -61,7 +61,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 literal_string += generator.set_Heap("HP", "-1", cant_tabs);
                 literal_string += generator.next_Heap(cant_tabs);
 
-                returned = new Returned(temp, DataType.STRING, true, literal_string, this.value.ToString(),0);
+                returned = new Returned(temp, DataType.STRING, true, "","", literal_string, this.value.ToString(),0,0);
             }
 
             else if (this.type == 3)
@@ -79,22 +79,22 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 if (this.value.ToString() == "false")
                 {
                     literal_string += generator.add_Goto(this.FalseLabel, cant_tabs);
-                    returned = new Returned("false", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, literal_string, "false", 0);
+                    returned = new Returned("false", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, literal_string, "false", 0,0);
                 }
                 else
                 {
                     literal_string += generator.add_Goto(this.TrueLabel, cant_tabs);
-                    returned = new Returned("true", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, literal_string, "true", 0);
+                    returned = new Returned("true", DataType.BOOLEAN, false,  this.TrueLabel, this.FalseLabel, literal_string, "true", 0,0);
                 }
             }
             else if (this.type == 4)
             {
-                returned = new Returned(this.value.ToString(), DataType.REAL, false, literal_string, this.value.ToString(),0);
+                returned = new Returned(this.value.ToString(), DataType.REAL, false, "","", literal_string, this.value.ToString(),0,0);
             }
 
             else if (this.type == 7)
             {
-                returned = new Returned(this.value.ToString(), DataType.IDENTIFIER, false, literal_string, this.value.ToString(),0);
+                returned = new Returned(this.value.ToString(), DataType.IDENTIFIER, false,"","", literal_string, this.value.ToString(),0,0);
             }
             return returned;
 

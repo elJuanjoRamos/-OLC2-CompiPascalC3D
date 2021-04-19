@@ -97,7 +97,12 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
                 if (variable.Type == result.getDataType)
                 {
-                    function_ambit.setVariableFuncion(variable.Id, result.Value, result.Valor_original, result.getDataType, i, variable.isRefer, "Parameter");
+                    function_ambit.setVariableFuncion(variable.Id, result.Value, 
+                        result.Valor_original, result.getDataType, i, variable.isRefer, "Parameter");
+                    if (variable.isRefer)
+                    {
+                        result.Value = result.Pos_global.ToString();
+                    }
                     paramsValues.Add(result);
                 }
                 else
@@ -146,7 +151,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
             }
 
-            return new Returned("T14", funcion_llamada.Tipe, true, this.TrueLabel, this.FalseLabel, call_String, "",0);
+            return new Returned("T14", funcion_llamada.Tipe, true, this.TrueLabel, this.FalseLabel, call_String, "",0,0);
 
         }
         public void set_error(string texto, int row, int column)

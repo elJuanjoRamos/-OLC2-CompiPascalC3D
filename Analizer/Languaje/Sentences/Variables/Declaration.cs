@@ -20,7 +20,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         public bool isAssigned;
         public bool isRefer;
 
-
         public DataType Type { get => type; set => type = value; }
         public string Id { get => id; set => id = value; }
 
@@ -69,7 +68,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             //SIGFINICA QUE ES UNA DECLARACION EN FUNCION
             else
             {
-                buscar = ambit.getVariableFunctionInAmbit(id);
+                buscar = ambit.getVariableInAmbit(id);
             }
 
             if (buscar.IsNull)

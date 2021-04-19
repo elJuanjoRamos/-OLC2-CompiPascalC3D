@@ -78,46 +78,25 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
                 var parametro = (Declaration)(funcion_llamada.getParameterAt(i));
 
-                if (parametro.isRefer)
+                var result = ((Expresion)parametros[i]).Execute(ambit);
+                call_String += result.Texto_anterior;
+
+                if (parametro.Type == result.getDataType)
                 {
+                    function_ambit.setVariableFuncion(parametro.Id, result.Value,
+                        result.Valor_original, result.getDataType, i, parametro.isRefer, "Parameter");
 
-                    var parametro_referencia = parametros[i];
-
-                    if (parametro_referencia is Access)
+                    if (parametro.isRefer)
                     {
-                        var index = (Access)parametro_referencia;
-
-
-
+                        result.Value = result.Pos_global.ToString();
                     }
-
-
-                    //var result = ((Expresion)).Execute(ambit);
-
-
-
-
-
-                } else
-                {
-
-                    var result = ((Expresion)parametros[i]).Execute(ambit);
-                    call_String += result.Texto_anterior;
-
-                    if (parametro.Type == result.getDataType)
-                    {
-                        function_ambit.setVariableFuncion(parametro.Id, result.Value,
-                            result.Valor_original, result.getDataType, i, parametro.isRefer, "Parameter");
-                        paramsValues.Add(result);
-                    }
-                    else
-                    {
-                        set_error("El tipo " + result.getDataType + " no es asignable con " + parametro.Type, Row, Column);
-                        return null;
-                    }
+                    paramsValues.Add(result);
                 }
-
-
+                else
+                {
+                    set_error("El tipo " + result.getDataType + " no es asignable con " + parametro.Type, Row, Column);
+                    return null;
+                }
             }
 
 

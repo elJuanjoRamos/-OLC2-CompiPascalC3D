@@ -20,7 +20,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         private string _break = "";
         private string _continue = "";
         public bool ambit_null;
-        private bool change_continue = false;
         private int size = 1;
 
         //VARIABLES PARA AMBITO DE FUNCION
@@ -28,6 +27,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         private string temp_return = "";
         private string _exit = "";
         private DataType tipo_fun;
+ 
 
         public Ambit(Ambit a, string n, string ni, bool isnull, bool isf)
         {
@@ -86,10 +86,12 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         public Identifier save(string id, object valor, string valor_Def, DataType type, bool esconstante,
             bool isAssigned, bool isheap, bool isrefer, string tipo_dato)
         {
+            var generator = C3D.C3DController.Instance;
+
             Ambit amb = this;
 
             Identifier ident = new Identifier(valor.ToString(), valor_Def, id, type, esconstante, 
-                isAssigned, this.size++, (anterior == null), isheap, isrefer, tipo_dato);
+                isAssigned, this.size++, (anterior == null), isheap, isrefer, tipo_dato, generator.get_posision_global());
             
             
             if (!amb.Ambit_name_inmediato.Equals("Function"))
@@ -108,26 +110,14 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
 
         }
 
-        public void setVariableInAmbit(string id, string valor, string val_Def, DataType type, int pos, bool isrefer, string tipo_Dato)
-        {
-            Ambit env = this;
-
-            while (env != null)
-            {
-                if (env.Variables.ContainsKey(id.ToLower()))
-                {
-                    env.Variables[id.ToLower()] = new Identifier(valor, val_Def, id, type, false, false,  pos, false, false, isrefer, tipo_Dato);
-                }
-                env = env.anterior;
-            }
-        }
         public void setVariableFuncion(string id, string valor, string valdef, DataType type, int posi, bool isrefe, string tipo_Dato)
         {
             Ambit env = this;
 
             if (env.Variables.ContainsKey(id.ToLower()))
             {
-                env.Variables[id.ToLower()] = new Identifier(valor, valdef, id, type, false, false, posi, false, false, isrefe, tipo_Dato);
+                var variable = env.Variables[id.ToLower()];
+                env.Variables[id.ToLower()] = new Identifier(valor, valdef, id, type, false, false, posi, false, false, isrefe, tipo_Dato, variable.Position_global);
             }
         }
         public void setVariable(string id, string valor, string valdef, DataType type, bool isAssigned, 
@@ -139,8 +129,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             {
                 if (env.Variables.ContainsKey(id.ToLower()))
                 {
+                    var variable = env.Variables[id.ToLower()];
                     env.Variables[id.ToLower()] = new 
-                        Identifier(valor, valdef, id, type, false, isAssigned, posi, isglobal, false, isrefe, tipo_Dato);
+                        Identifier(valor, valdef, id, type, false, isAssigned, posi, isglobal, false, isrefe, tipo_Dato, variable.Position_global);
                     return;
                 }
                 env = env.anterior;
@@ -164,7 +155,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             return identifier;
         }
 
-        public Identifier getVariableFunctionInAmbit(string id)
+        public Identifier getVariableInAmbit(string id)
         {
             Identifier identifier = new Identifier();
             Ambit amb = this;
@@ -191,11 +182,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         }
         public void saveVarFunction(string id, string valor, string valdef, DataType type, bool isrefe, string tipo_Dato)
         {
+            var generator = C3D.C3DController.Instance;
             Ambit amb = this;
 
             if (!amb.variables.ContainsKey(id))
             {
-                amb.variables[id] = (new Identifier(valor, valdef, id, type, false, false, Size++, false, false, isrefe, tipo_Dato));
+                var pos = generator.get_posision_global();
+                amb.variables[id] = (new Identifier(valor, valdef, id, type, false, false, Size++, false, false, isrefe, tipo_Dato,pos));
             }
 
         }

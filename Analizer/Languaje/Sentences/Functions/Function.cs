@@ -55,6 +55,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             ambit.saveFuncion(this.id, this);
 
             var generator = C3D.C3DController.Instance;
+            generator.update_posision_global();
 
             var funcion_total = generator.save_code("void " + uniqId + "(" + ") { \n", 0);
 
@@ -79,17 +80,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 ambit_func.saveVarFunction(dec.Id, "0", "0", dec.Type, dec.isRefer, "Parameter");
             }
 
-            //FUNCIONES HIJAS
-            foreach (var fun_hija in funciones_hijas)
-            {
-                var result = fun_hija.Execute(ambit_func);
-                if (result == null)
-                {
-                    return null;
-                }
-                funcion_total += result;
-            }
-
             //DECLARACIONES 
             foreach (var declas in declaraciones)
             {
@@ -100,6 +90,20 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 }
                 funcion_total += result;
             }
+
+            //FUNCIONES HIJAS
+            var funcion_hija = "";
+            foreach (var fun_hija in funciones_hijas)
+            {
+                var result = fun_hija.Execute(ambit_func);
+                if (result == null)
+                {
+                    return null;
+                }
+                funcion_hija += result;
+            }
+
+            
 
 
 
@@ -123,9 +127,11 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             funcion_total += generator.save_code(" return;\n", 2);
             funcion_total += generator.save_code("}\n", 0);
 
+
+
             ReporteController.Instance.save_ambit(ambit_func, ambit_func.Ambit_name);
 
-            return funcion_total;
+            return funcion_hija + funcion_total;
 
         }
 

@@ -77,7 +77,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             return result;
                         }
                         logical_str += generator.save_comment("Termina " + operacion, cant_tabs, true);
-                        return new Returned("", DataType.BOOLEAN, false, valDer.TrueLabel, valDer.FalseLabel, logical_str, "false",0);
+                        return new Returned("", DataType.BOOLEAN, false, valDer.TrueLabel, valDer.FalseLabel, logical_str, "false",0,0);
 
                     }
                     set_error("Operador '" + this.type + "' NO puede ser aplicado al tipo " + varIz.getDataType, row, column);
@@ -107,7 +107,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             return result;
                         }
                         logical_str += generator.save_comment("Termina " + operacion, cant_tabs, true);
-                        return new Returned("", DataType.BOOLEAN, false,valDer.TrueLabel, valDer.FalseLabel, logical_str, "false",0);
+                        return new Returned("", DataType.BOOLEAN, false,valDer.TrueLabel, valDer.FalseLabel, logical_str, "false",0,0);
 
                     }
                     set_error("Operador '" + this.type + "' NO puede ser aplicado al tipo " + valIz.getDataType, row, column);
@@ -129,7 +129,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                         return result;
                     }
                     logical_str += generator.save_comment("Termina " + operacion, cant_tabs, true);
-                    return new Returned("", DataType.BOOLEAN, false, varrIz.FalseLabel, varrIz.TrueLabel, logical_str, "false",0);
+                    return new Returned("", DataType.BOOLEAN, false, varrIz.FalseLabel, varrIz.TrueLabel, logical_str, "false",0,0);
 
 
 
