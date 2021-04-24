@@ -17,5 +17,6 @@ namespace CompiPascalC3D.Optimize.Languaje.Abstract
 
         public string Name { get => name; set => name = value; }
         public abstract object Optimize();
+        public abstract string Code();
     }
 }

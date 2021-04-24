@@ -117,7 +117,7 @@ namespace CompiPascal
             } else
             {
                 this.optimo.Enabled = true;
-                consolaOptimizar.Text = "todo bien";
+                consolaOptimizar.Text = s.get_texto();
             }
 
         }
@@ -126,6 +126,8 @@ namespace CompiPascal
         {
             ReporteController.Instance.set_path(Application.StartupPath);
             ReporteController.Instance.set_optimizacion_reporte();
+
+ 
         }
     }
 }

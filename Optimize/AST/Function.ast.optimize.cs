@@ -3,6 +3,7 @@ using CompiPascalC3D.Optimize.Languaje.Block;
 using CompiPascalC3D.Optimize.Languaje.Function;
 using Irony.Parsing;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -29,7 +30,7 @@ namespace CompiPascalC3D.Optimize.AST
             {
                 var identifier = actual.ChildNodes[1].Token.Text;
 
-                LinkedList<Blocks> blocks = InstructionOptimize.GetInstructions(actual.ChildNodes[5], 1);
+                ArrayList blocks = InstructionOptimize.GetInstructions(actual.ChildNodes[5], 1);
 
                 lista_actual.AddLast(new Function(identifier, blocks));
 

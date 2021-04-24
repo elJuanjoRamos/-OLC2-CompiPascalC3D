@@ -4,6 +4,7 @@ using CompiPascalC3D.Optimize.Languaje.If;
 using CompiPascalC3D.Optimize.Languaje.Jumps;
 using Irony.Parsing;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -18,9 +19,9 @@ namespace CompiPascalC3D.Optimize.AST
         
 
         //INSTRUCCIONES
-        public LinkedList<Blocks> GetInstructions(ParseTreeNode actual, int cant_tabs)
+        public ArrayList GetInstructions(ParseTreeNode actual, int cant_tabs)
         {
-            LinkedList<Blocks> listaInstrucciones = new LinkedList<Blocks>();
+            ArrayList listaInstrucciones = new ArrayList();
 
             Blocks blocks = new Blocks();
             int i = 0;
@@ -28,8 +29,9 @@ namespace CompiPascalC3D.Optimize.AST
             {
 
                 var inst = INSTRUCCION(nodo.ChildNodes[0], cant_tabs);
- 
-                if (inst.Name.Equals("If") || inst.Name.Equals("Goto"))
+
+                listaInstrucciones.Add(inst);
+                /*if (inst.Name.Equals("If") || inst.Name.Equals("Goto"))
                 {
                     blocks.setInstruction(inst, i);
                     listaInstrucciones.AddLast(blocks);
@@ -50,7 +52,7 @@ namespace CompiPascalC3D.Optimize.AST
                     {
                         listaInstrucciones.AddLast(blocks);
                     }
-                }
+                }*/
  
             }
             return listaInstrucciones;
@@ -61,7 +63,7 @@ namespace CompiPascalC3D.Optimize.AST
         {
             if (actual.Term.ToString().Equals("IF"))
             {
-                If _ifs = (new IfOptimize()).IFTHEN(actual, cant_tabs);
+                IF _ifs = (new IfOptimize()).IFTHEN(actual, cant_tabs);
                 return _ifs;
             }
             else if (actual.Term.ToString().Equals("GOTO"))
@@ -77,6 +79,18 @@ namespace CompiPascalC3D.Optimize.AST
             else if (actual.Term.ToString().Equals("ARITMETICA"))
             {
                 return (Instruction)(new ArithmeticOptimizer()).GetArithmetic(actual);
+            }
+            else if (actual.Term.ToString().Equals("PRINT"))
+            {
+                return (new PrintOptimize()).GetPrint(actual);
+            }
+            else if (actual.Term.ToString().Equals("RETURN"))
+            {
+                return (new ReturnOptimize()).GetReturn(actual);
+            }
+            else if (actual.Term.ToString().Equals("CALL"))
+            {
+
             }
 
 

@@ -19,8 +19,9 @@ namespace CompiPascalC3D.Optimize.AST
         public Goto GetGoto(ParseTreeNode actual)
         {
             var label = actual.ChildNodes[1];
-
-            return new Goto(LiteralOptimize.getLabel(label));
+            var row = actual.ChildNodes[0].Token.Location.Line;
+            var col = actual.ChildNodes[0].Token.Location.Column;
+            return new Goto(LiteralOptimize.getLabel(label), row, col);
         }
     }
 }

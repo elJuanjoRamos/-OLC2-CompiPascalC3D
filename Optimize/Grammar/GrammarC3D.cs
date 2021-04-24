@@ -230,7 +230,7 @@ namespace CompiPascalC3D.Optimize.Grammar
 
             #region FUNCTION
             RETURN.Rule
-                = RESERV_RETURN + EXPRESION + PUNTO_COMA
+                = RESERV_RETURN + TERMINAL + PUNTO_COMA
                 | RESERV_RETURN + PUNTO_COMA
                 ;
             CALL.Rule

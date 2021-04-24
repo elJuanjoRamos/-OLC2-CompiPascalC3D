@@ -17,6 +17,13 @@ namespace CompiPascalC3D.Optimize.Languaje.Labels
             this.label = label;
         }
 
+        public Label Label { get => label; set => label = value; }
+
+        public override string Code()
+        {
+            return label.Name + ":\n";
+        }
+
         public override object Optimize()
         {
             return "";

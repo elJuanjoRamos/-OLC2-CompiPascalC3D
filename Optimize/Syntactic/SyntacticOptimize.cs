@@ -12,6 +12,7 @@ namespace CompiPascalC3D.Optimize.Syntactic
 {
     class SyntacticOptimize
     {
+        string texto_general = "";
         public void get_C3D_to_optimize(string c3d_code, string paths)
         {
             ReporteController.Instance.set_path(paths);
@@ -71,6 +72,16 @@ namespace CompiPascalC3D.Optimize.Syntactic
             }
 
 
+            foreach (Function func in lista_actual)
+            {
+                texto_general += func.Code();
+            }
+
+        }
+
+        public string get_texto()
+        {
+            return texto_general;
         }
     }
 }

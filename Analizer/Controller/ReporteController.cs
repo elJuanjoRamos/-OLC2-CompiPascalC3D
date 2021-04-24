@@ -258,7 +258,7 @@ namespace CompiPascalC3D.Analizer.Controller
             this.optimizacionAritmetica.Clear();
         }
 
-        public void set_optimizacion_aritmetica(string rule, string code_deleted, string code_added, int row, int col, string ambit)
+        public void set_optimizacion(string rule, string code_deleted, string code_added, int row, int col, string ambit)
         {
             this.optimizacionAritmetica.Add(new SymbolOptimizado("Bloque", rule, code_deleted, code_added, row, col, ambit));
         }
