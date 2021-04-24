@@ -290,6 +290,7 @@
             this.optimo.TabIndex = 14;
             this.optimo.Text = "     Optimizacion";
             this.optimo.UseVisualStyleBackColor = false;
+            this.optimo.Click += new System.EventHandler(this.optimo_Click);
             // 
             // optimizar
             // 

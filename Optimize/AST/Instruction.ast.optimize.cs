@@ -23,29 +23,35 @@ namespace CompiPascalC3D.Optimize.AST
             LinkedList<Blocks> listaInstrucciones = new LinkedList<Blocks>();
 
             Blocks blocks = new Blocks();
+            int i = 0;
             foreach (ParseTreeNode nodo in actual.ChildNodes)
             {
+
                 var inst = INSTRUCCION(nodo.ChildNodes[0], cant_tabs);
-
-
+ 
                 if (inst.Name.Equals("If") || inst.Name.Equals("Goto"))
                 {
-                    blocks.setInstruction(inst);
+                    blocks.setInstruction(inst, i);
                     listaInstrucciones.AddLast(blocks);
                     blocks = new Blocks();
+                    i = 0;
                 }
                 else if (inst.Name.Equals("SetLabel"))
                 {
                     listaInstrucciones.AddLast(blocks);
                     blocks = new Blocks();
-                    blocks.setInstruction(inst);
+                    i = 0;
+                    blocks.setInstruction(inst, i);
                 } else
                 {
-                    blocks.setInstruction(inst);
-
+                    blocks.setInstruction(inst, i);
+                    i++;
+                    if (i == actual.ChildNodes.Count)
+                    {
+                        listaInstrucciones.AddLast(blocks);
+                    }
                 }
-
-
+ 
             }
             return listaInstrucciones;
         }
@@ -63,8 +69,14 @@ namespace CompiPascalC3D.Optimize.AST
                 
                 Goto @goto = (new GotoOptimize()).GetGoto(actual);
                 return @goto;
-
-
+            }
+            else if (actual.Term.ToString().Equals("SET_LABEL"))
+            {
+                return (new LabelOptimize()).GetSetLabel(actual);
+            }
+            else if (actual.Term.ToString().Equals("ARITMETICA"))
+            {
+                return (Instruction)(new ArithmeticOptimizer()).GetArithmetic(actual);
             }
 
 

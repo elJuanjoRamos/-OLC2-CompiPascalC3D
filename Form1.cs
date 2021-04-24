@@ -72,7 +72,7 @@ namespace CompiPascal
                 consola.Text += "int SP = 0; //puntero Stack pointer\nint HP = 0; //puntero Heap pointer\n\n";
                 consola.Text += C3DController.Instance.getTemps();
                 consola.Text += C3DController.Instance.get_Genenal();
-                this.optimo.Enabled = this.tablasimbolos.Enabled = this.errores.Enabled = true;
+                this.tablasimbolos.Enabled = this.errores.Enabled = true;
 
             }
 
@@ -96,7 +96,8 @@ namespace CompiPascal
             SyntacticOptimize s = new SyntacticOptimize();
             C3DController.Instance.clearCode();
             ErrorController.Instance.Clean();
-            
+            ReporteController.Instance.Clean();
+
             s.get_C3D_to_optimize(areaOptimizar.Text, Application.StartupPath);
 
             consolaOptimizar.Text = "";
@@ -115,9 +116,16 @@ namespace CompiPascal
                 consolaOptimizar.Text += ErrorController.Instance.getSintactycError("");
             } else
             {
+                this.optimo.Enabled = true;
                 consolaOptimizar.Text = "todo bien";
             }
 
+        }
+
+        private void optimo_Click(object sender, EventArgs e)
+        {
+            ReporteController.Instance.set_path(Application.StartupPath);
+            ReporteController.Instance.set_optimizacion_reporte();
         }
     }
 }

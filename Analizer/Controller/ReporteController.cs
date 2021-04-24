@@ -1,6 +1,7 @@
 ﻿using CompiPascalC3D.Analizer.Languaje.Ambits;
 using CompiPascalC3D.Analizer.Languaje.Sentences;
 using CompiPascalC3D.Analizer.Languaje.Symbols;
+using CompiPascalC3D.Optimize.Languaje.Symbols;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ namespace CompiPascalC3D.Analizer.Controller
     {
 
         Dictionary<string, Ambit> ambit_list;
+        ArrayList optimizacionAritmetica = new ArrayList();
+
         Ambit general;
 
         string path = "";
@@ -227,7 +230,7 @@ namespace CompiPascalC3D.Analizer.Controller
 
         public void print_file_report(string name_file, string text)
         {
-            string path1 = this.path + "\\" + name_file;
+            string path1 = this.path + "\\" + name_file+".html";
 
             try
             {
@@ -245,5 +248,60 @@ namespace CompiPascalC3D.Analizer.Controller
                 Console.WriteLine(ex.ToString());
             }
         }
+
+
+        //////////////////////////////////////////////
+        //  REPORTES DE OPTIMIZACION
+
+        public void Clean()
+        {
+            this.optimizacionAritmetica.Clear();
+        }
+
+        public void set_optimizacion_aritmetica(string rule, string code_deleted, string code_added, int row, int col, string ambit)
+        {
+            this.optimizacionAritmetica.Add(new SymbolOptimizado("Bloque", rule, code_deleted, code_added, row, col, ambit));
+        }
+
+        public void set_optimizacion_reporte()
+        {
+            string table_head =
+            "<th scope =\"col\">No</th>\n" +
+              "          <th scope=\"col\">Tipo Optimizacion</th>\n" +
+              "          <th scope=\"col\">Regla</th>\n" +
+              "          <th scope=\"col\">Codigo Eliminado</th>\n" +
+              "          <th scope=\"col\">Codigo Agregado</th>\n" +
+              "          <th scope=\"col\">Ambito</th>\n" +
+              "          <th scope=\"col\">Linea</th>\n" +
+              "          <th scope=\"col\">Columna</th>\n" +
+            "</tr>\n" +
+            "      </thead>" +
+            "<tbody>";
+
+            var cadena = "";
+
+            int i = 1;
+
+            if (optimizacionAritmetica.Count > 0)
+            {
+                foreach (SymbolOptimizado error in optimizacionAritmetica)
+                {
+                    cadena += "<tr><td>" + i + "</td><td>" + error.Tipo + "</td><td> "+error.Regla+" </td><td>" + error.Codigo_eliminado+ "</td><td>" 
+                        + error.Codigo_agregado + "</td><td>" + error.Ambit + "</td><td>" + error.Row + "</td><td>" + error.Column + "</td></tr>";
+                    i++;
+                }
+            }
+            string html = head + open_table + table_head + cadena + close_table +
+            script +
+            "</body>" +
+            "</html>";
+
+
+            print_file_report("3.Reporte Optimizacion", html);
+
+
+        }
+
+
     }
 }

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title> Repote </title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head><body>
+  <nav class="navbar navbar-light bg-light">
+    <span class="navbar-brand mb-0 h1">Lenguajes formales</span>
+  </nav><div class="container">
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4"> Tabla de Simbolos</h1>
+        <p class="lead">Listado de variables, funciones y procedimientos detectados por el analizador</p>
+      </div>
+    </div>
+    <div class="row">
+    <table id="data"  cellspacing="0" style="width: 100 %" class="table table-striped table-bordered table-sm">
+      <thead class="thead-dark">
+        <tr>
+<th scope ="col">No</th>
+          <th scope="col">Tipo Optimizacion</th>
+          <th scope="col">Regla</th>
+          <th scope="col">Codigo Eliminado</th>
+          <th scope="col">Codigo Agregado</th>
+          <th scope="col">Ambito</th>
+          <th scope="col">Linea</th>
+          <th scope="col">Columna</th>
+</tr>
+      </thead><tbody><tr><td>1</td><td>Bloque</td><td> Regla 6 </td><td>T1=T1+0</td><td></td><td>native_print_str</td><td>1</td><td>4</td></tr><tr><td>2</td><td>Bloque</td><td> Regla 7 </td><td>T1=T1-0</td><td></td><td>native_print_str</td><td>2</td><td>4</td></tr><tr><td>3</td><td>Bloque</td><td> Regla 8 </td><td>T1=T1*1</td><td></td><td>native_print_str</td><td>3</td><td>4</td></tr><tr><td>4</td><td>Bloque</td><td> Regla 9 </td><td>T1=T1/1</td><td></td><td>native_print_str</td><td>4</td><td>4</td></tr><tr><td>5</td><td>Bloque</td><td> Regla 10 </td><td>T1=T2+0</td><td>T1=T2</td><td>native_print_str</td><td>5</td><td>4</td></tr><tr><td>6</td><td>Bloque</td><td> Regla 11 </td><td>T1=T2-0</td><td>T1=T2</td><td>native_print_str</td><td>6</td><td>4</td></tr><tr><td>7</td><td>Bloque</td><td> Regla 12 </td><td>T1=T5*1</td><td>T1=T5</td><td>native_print_str</td><td>7</td><td>4</td></tr><tr><td>8</td><td>Bloque</td><td> Regla 13 </td><td>T1=T5/1</td><td>T1=T5</td><td>native_print_str</td><td>8</td><td>4</td></tr><tr><td>9</td><td>Bloque</td><td> Regla 14 </td><td>T1=T4*2</td><td>T1=T4+T4</td><td>native_print_str</td><td>9</td><td>4</td></tr><tr><td>10</td><td>Bloque</td><td> Regla 15 </td><td>T1=T4*0</td><td>T1=0</td><td>native_print_str</td><td>10</td><td>4</td></tr><tr><td>11</td><td>Bloque</td><td> Regla 16 </td><td>T1=0/T20</td><td>T1=0</td><td>native_print_str</td><td>11</td><td>4</td></tr></tbody>
+    </table>
+</div>
+  </div>  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" ></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js" ></script>
+<script>$(document).ready(function () { $('#data').DataTable({ "aLengthMenu" : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]], "iDisplayLength" : 10});}); </script></body></html>

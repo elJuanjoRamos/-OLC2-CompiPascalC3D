@@ -2,6 +2,7 @@
 using CompiPascalC3D.Optimize.AST;
 using CompiPascalC3D.Optimize.Grammar;
 using CompiPascalC3D.Optimize.Languaje.Abstract;
+using CompiPascalC3D.Optimize.Languaje.Function;
 using Irony.Parsing;
 using System;
 using System.Collections.Generic;
@@ -55,8 +56,20 @@ namespace CompiPascalC3D.Optimize.Syntactic
             LinkedList<Instruction> lista_funciones = new LinkedList<Instruction>();
             lista_funciones = (new FunctionOptimize()).FUNCTION_LIS(funciones, lista_funciones);
 
+            get_code_to_optimize(lista_funciones);
 
-            System.Diagnostics.Debug.WriteLine("true");
+        }
+
+
+
+        public void get_code_to_optimize(LinkedList<Instruction> lista_actual)
+        {
+            
+            foreach (Function func in lista_actual)
+            {
+                var res = func.Optimize();
+            }
+
 
         }
     }
