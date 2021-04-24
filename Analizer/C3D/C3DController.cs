@@ -230,13 +230,13 @@ namespace CompiPascalC3D.Analizer.C3D
         ///STACK
         public string set_stack(string index, string value, int cant_tabs)
         {
-            var texto = getTabs(cant_tabs, false) + "Stack[" + IsNumeric(index) + "] = " + value + ";";
+            var texto = getTabs(cant_tabs, false) + "Stack[(int)" + index + "] = " + value + ";";
             //this.code.Add(texto);
             return texto + "\n";
         }
         public string get_stack(string target, string index,  int cant_tabs)
         {
-            var texto = getTabs(cant_tabs, false) + target + " = Stack[" + IsNumeric(index) + "];";
+            var texto = getTabs(cant_tabs, false) + target + " = Stack[(int)" + index + "];";
             //this.code.Add(texto);
             return texto + "\n";
         }
@@ -266,14 +266,14 @@ namespace CompiPascalC3D.Analizer.C3D
 
         public string get_Heap(string target, string index, int cant_tabs)
         {
-            var texto = getTabs(cant_tabs, false) + target + "= Heap[" + IsNumeric(index) + "];";
+            var texto = getTabs(cant_tabs, false) + target + "= Heap[(int)" + index + "];";
             this.code.Add(texto);
             return texto + "\n";
         }
 
         public string set_Heap(string index, string value, int cant_tabs)
         {
-            var texto = getTabs(cant_tabs, false) + "Heap[" + IsNumeric(index) + "] = " + value + ";";
+            var texto = getTabs(cant_tabs, false) + "Heap[(int)" + index + "] = " + value + ";";
             //this.code.Add(texto);
             return texto + "\n"; 
         }
@@ -306,7 +306,7 @@ namespace CompiPascalC3D.Analizer.C3D
         //EXPRESION
         public string addExpression(string target, string left, string right, string symbol_operator, int cant_tabs)
         {
-            var text = getTabs(cant_tabs, false) + target + " = " + left + symbol_operator + right + ";";
+            var text = getTabs(cant_tabs, false) + target + " = " + left + " " +  symbol_operator +" " + right + ";";
             //this.code.Add(text);
             return text + "\n";
         }
@@ -385,30 +385,7 @@ namespace CompiPascalC3D.Analizer.C3D
             return texto;
         }
 
-        public string IsNumeric(string s)
-        {
-            if (s.Equals("HP") || s.Equals("SP"))
-            {
-                return s;
-            }
-
-            var _soyNumero = true;
-            foreach (char c in s)
-            {
-                if (!char.IsDigit(c) && c != '.')
-                {
-                    _soyNumero = false;
-                }
-            }
-
-            if (!_soyNumero)
-            {
-                return "(int)" + s;
-            }
-            return s;
-
-        }
-
+        
 
         Dictionary<string, string> functions = new Dictionary<string, string>();
         public void set_function_code(string code, string id)

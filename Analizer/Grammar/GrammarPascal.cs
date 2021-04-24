@@ -5,10 +5,10 @@ using System.Text;
 
 namespace CompiPascalC3D.Analizer.Grammar
 {
-    class GrammarC3D : Irony.Parsing.Grammar
+    class GrammarPascal : Irony.Parsing.Grammar
     {
 
-        public GrammarC3D()
+        public GrammarPascal()
             : base(caseSensitive: false)
         {
             #region Lexical structure

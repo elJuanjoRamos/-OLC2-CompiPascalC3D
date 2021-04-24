@@ -22,7 +22,7 @@ namespace CompiPascalC3D.Analizer.Syntactic
             ReporteController.Instance.set_path(paths);
 
 
-            GrammarC3D grammar = new GrammarC3D();
+            GrammarPascal grammar = new GrammarPascal();
             LanguageData languageData = new LanguageData(grammar);
             //ArrayList elemetos_heredados = new ArrayList();
 
@@ -116,6 +116,7 @@ namespace CompiPascalC3D.Analizer.Syntactic
             }
             main += C3D.C3DController.Instance.save_comment("Fin declaracion variables", 1, true);
 
+            var funcion_String = "";
             foreach (var funcion in funciones)
             {
                 var result = funcion.Execute(general);
@@ -123,6 +124,7 @@ namespace CompiPascalC3D.Analizer.Syntactic
                 {
                     continue;
                 }
+                funcion_String += result;
             }
 
 
@@ -150,7 +152,7 @@ namespace CompiPascalC3D.Analizer.Syntactic
 
             var nativas = C3D.C3DController.Instance.print_natives();
 
-            var funcion_String = C3D.C3DController.Instance.get_functions();
+            //var funcion_String = C3D.C3DController.Instance.get_functions();
             #endregion
 
             C3D.C3DController.Instance.save_Genenal(nativas, funcion_String, main);

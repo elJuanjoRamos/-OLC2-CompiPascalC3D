@@ -31,8 +31,10 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         {
             try
             {
+                var val = this.value.Execute(ambit);
 
                 Identifier variableAmbit = ambit.getVariableInAmbit(id);
+                var generator = C3DController.Instance;
 
                 if (!variableAmbit.IsNull)
                 {
@@ -52,8 +54,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                         }
                         else
                         {
-                            var val = this.value.Execute(ambit);
-
+                            
                             assignation_string += val.Texto_anterior;
 
                             if (val == null || val.getDataType == DataType.ERROR)
@@ -66,8 +67,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                             */
                             if (variableAmbit.DataType == val.getDataType)
                             {
-                                var generator = C3DController.Instance;
-
+                                
                                 if (val.IsTemporal)
                                 {
                                     //generator.free_temps(val.Value);
@@ -189,8 +189,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                         }
                         else
                         {
-                            var val = this.value.Execute(ambit);
-
+                            
                             assignation_string += val.Texto_anterior;
 
                             if (val == null || val.getDataType == DataType.ERROR)
@@ -203,8 +202,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                             */
                             if (variable.DataType == val.getDataType)
                             {
-                                var generator = C3DController.Instance;
-
+                                
                                 
                                 var temp = generator.newTemporal();
 
@@ -241,7 +239,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                     }
                     else
                     {
-                        /*Function function = ambit.getFuncion(id);
+                        Function function = ambit.getFuncion(id);
                         if (function != null)
                         {
                             if (function.IsProcedure)
@@ -252,11 +250,12 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                             /**
                            * VALIDAR VALOR: VERIFICA SI EL TIPO DE LA VARIABLE ES IGUAL AL DEL VALOR A ASIGNAR
                            */
-                        /* if (function.Tipe == val.getDataType)
+                         if (function.Tipe == val.getDataType)
                          {
-                             function.Retorno = val.Value.ToString();
-                             ambit.setFunction(Id, function);
-                             return new Returned(function.Retorno, function.Tipe, false);
+                                function.Retorno = val.Value.ToString();
+                                ambit.setFunction(Id, function);
+                                assignation_string  += val.Texto_anterior;
+                                assignation_string += generator.set_stack("T13", val.Value, tabs);
                          }
                          else
                          {
@@ -268,7 +267,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                      {
                          setError("La variable '" + id + "' no esta declara", row, column);
                          return null;
-                     }*/
+                     }
                     }
 
 

@@ -64,7 +64,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             //INSTANCIA DEL GENERADOR DE CODIGO
             var generator = C3D.C3DController.Instance;
-            generator.update_posision_global();
+            //generator.update_posision_global();
 
 
             //COPIA DE LOS TEMPORALES
@@ -76,18 +76,18 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
 
             //TEXTO DE LA FUNCION
-            var funcion_total = generator.save_code("void " + funcion_llamada.UniqId 
-                + "(" + ") { \n", 0);
+            /*var funcion_total = generator.save_code("void " + funcion_llamada.UniqId 
+                + "(" + ") { \n", 0);*/
 
-            var tempo_return = "T13";
+            /*var tempo_return = "T13";
             var exit_label = "";
             if (!funcion_llamada.IsProcedure)
             {
                 exit_label = generator.newLabel();
                 funcion_total += generator.save_code("//Temporal de retorno", 1);
                 funcion_total += generator.addExpression(tempo_return, "SP", "0", "+", 1);
-            }
-            Ambit function_ambit = new Ambit(ambit, funcion_llamada.UniqId, tipo, tempo_return, exit_label, !funcion_llamada.IsProcedure, funcion_llamada.Tipe);
+            }*/
+            Ambit function_ambit = new Ambit(ambit, funcion_llamada.UniqId, tipo, "", "", !funcion_llamada.IsProcedure, funcion_llamada.Tipe);
 
 
             //SE GUARDAN LOS PARAMETROS EN EL AMBITO
@@ -129,7 +129,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             //SE HACEN LAS DECLARACIONES Y FUNCIONES HIJAS 
             //DECLARACIONES 
-            foreach (var declas in funcion_llamada.Declaraciones)
+            /*foreach (var declas in funcion_llamada.Declaraciones)
             {
                 var result = declas.Execute(function_ambit);
                 if (result == null)
@@ -137,10 +137,10 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                     return null;
                 }
                 funcion_total += result;
-            }
+            }*/
 
             //FUNCIONES HIJAS
-            var funcion_hija = "";
+            /*var funcion_hija = "";
             foreach (var fun_hija in funcion_llamada.Funciones_hijas)
             {
                 var result = fun_hija.Execute(function_ambit);
@@ -149,10 +149,10 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                     return null;
                 }
                 funcion_hija += result;
-            }
+            }*/
 
             //INSTRUCCIONES
-            foreach (Instruction instruction in funcion_llamada.Sentences)
+            /*foreach (Instruction instruction in funcion_llamada.Sentences)
             {
                 var instruccion = instruction.Execute(function_ambit);
                 if (instruccion == null)
@@ -160,10 +160,10 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                     return null;
                 }
                 funcion_total += instruccion;
-            }
+            }*/
 
 
-            if (!funcion_llamada.IsProcedure)
+            /*if (!funcion_llamada.IsProcedure)
             {
                 funcion_total += generator.addLabel(exit_label, 1);
             }
@@ -173,7 +173,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             generator.set_function_code(funcion_total, funcion_llamada.UniqId);
 
-            ReporteController.Instance.save_ambit(function_ambit, function_ambit.Ambit_name);
+            ReporteController.Instance.save_ambit(function_ambit, function_ambit.Ambit_name);*/
 
 
 

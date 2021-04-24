@@ -33,8 +33,63 @@ namespace CompiPascalC3D.Analizer.Controller
         }
 
 
-       
-        
+        //VARIABLES GLOBALES
+        private string head = "<!DOCTYPE html>\n" +
+           "<html>\n" +
+           "<head>\n" +
+           "    <meta charset='utf-8'>\n" +
+           "    <meta http-equiv='X-UA-Compatible' content='IE=edge'>\n" +
+           "    <title> Repote </title>\n" +
+           "    <meta name='viewport' content='width=device-width, initial-scale=1'>\n" +
+           "    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>\n" +
+           "    <script src='main.js'></script>\n" +
+           "    <link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\">\n" +
+           "    <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css\">\n" +
+           "</head>" +
+           "<body>\n" +
+           "  <nav class=\"navbar navbar-light bg-light\">\n" +
+           "    <span class=\"navbar-brand mb-0 h1\">Lenguajes formales</span>\n" +
+           "  </nav>" + "<div class=\"container\">\n" +
+            "    <div class=\"jumbotron jumbotron-fluid\">\n" +
+            "      <div class=\"container\">\n" +
+            "        <h1 class=\"display-4\"> Tabla de Simbolos</h1>\n" +
+            "        <p class=\"lead\">Listado de variables, funciones y procedimientos detectados por el analizador</p>\n" +
+            "      </div>\n" +
+            "    </div>\n";
+
+        private string open_table =   
+            "    <div class=\"row\">\n" +
+            "    <table id=\"data\"  cellspacing=\"0\" style=\"width: 100 %\" class=\"table table-striped table-bordered table-sm\">\n" +
+            "      <thead class=\"thead-dark\">\n" +
+            "        <tr>\n";
+
+
+
+
+        private string close_table = "</tbody>\n" +
+                            "    </table>\n" +
+                            "</div>\n" +
+                            "  </div>";
+
+        private string script =
+            "  <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js\" ></script>\n" +
+            "  <script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js\"></script>\n" +
+            "  <script src=\"https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js\"></script>\n" +
+            "  <script src=\"https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js\" ></script>\n" +
+            "<script>" +
+            "$(document).ready(function () { " +
+             "$('#data').DataTable(" +
+
+             "{ \"aLengthMenu\" " + ":" + " [[10, 25, 50, 100, -1], [10, 25, 50, 100, \"All\"]], \"iDisplayLength\" : 10" +
+             "}" +
+             ");" +
+             "}" +
+             "); " +
+           "</script>";
+
+
+
+
         //SET PATH PARA REPORTE
         public void set_path(string pt)
         {
@@ -61,34 +116,8 @@ namespace CompiPascalC3D.Analizer.Controller
 
         public void generate_report()
         {
-            string head = "<!DOCTYPE html>\n" +
-           "<html>\n" +
-           "<head>\n" +
-           "    <meta charset='utf-8'>\n" +
-           "    <meta http-equiv='X-UA-Compatible' content='IE=edge'>\n" +
-           "    <title> Repote </title>\n" +
-           "    <meta name='viewport' content='width=device-width, initial-scale=1'>\n" +
-           "    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>\n" +
-           "    <script src='main.js'></script>\n" +
-           "    <link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\">\n" +
-           "    <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css\">\n" +
-           "</head>" +
-           "<body>\n" +
-           "  <nav class=\"navbar navbar-light bg-light\">\n" +
-           "    <span class=\"navbar-brand mb-0 h1\">Lenguajes formales</span>\n" +
-           "  </nav>";
-
-            string body1 = "<div class=\"container\">\n" +
-          "    <div class=\"jumbotron jumbotron-fluid\">\n" +
-          "      <div class=\"container\">\n" +
-          "        <h1 class=\"display-4\"> Tabla de Simbolos</h1>\n" +
-          "        <p class=\"lead\">Listado de variables, funciones y procedimientos detectados por el analizador</p>\n" +
-          "      </div>\n" +
-          "    </div>\n" +
-          "    <div class=\"row\">\n" +
-          "    <table id=\"data\"  cellspacing=\"0\" style=\"width: 100 %\" class=\"table table-striped table-bordered table-sm\">\n" +
-          "      <thead class=\"thead-dark\">\n" +
-          "        <tr>\n"+
+           
+            string body1 = 
           "<th scope =\"col\">No</th>\n" +
             "          <th scope=\"col\">Nombre</th>\n" +
             "          <th scope=\"col\">Tipo</th>\n" +
@@ -128,30 +157,9 @@ namespace CompiPascalC3D.Analizer.Controller
             }
 
             
-            string body2 = "</tbody>\n" +
-           "    </table>\n" +
-           "</div>\n" +
-           "  </div>";
 
-            string script =
-                "  <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js\" ></script>\n" +
-                "  <script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js\"></script>\n" +
-                "  <script src=\"https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js\"></script>\n" +
-                "  <script src=\"https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js\" ></script>\n" +
-                "<script>" +
-                "$(document).ready(function () { " +
-                 "$('#data').DataTable(" +
 
-                 "{ \"aLengthMenu\" " + ":" + " [[10, 25, 50, 100, -1], [10, 25, 50, 100, \"All\"]], \"iDisplayLength\" : 10" +
-                 "}" +
-                 ");" +
-                 "}" +
-                 "); " +
-               "</script>";
-
-            string html;
-
-            html = head + body1 + cadena + body2 +
+            string html = head + open_table+ body1 + cadena + close_table +
             script +
             "</body>" +
             "</html>";
@@ -160,14 +168,73 @@ namespace CompiPascalC3D.Analizer.Controller
 
             /*creando archivo html*/
 
-            string path1 = this.path + "\\1.Tabla_Simbolos.html";
+            print_file_report("1.Tabla_Simbolos.html", html);
+
+        }
+
+
+        public void generate_error_retort()
+        {
+            string table_head =
+            "<th scope =\"col\">No</th>\n" +
+              "          <th scope=\"col\">Error</th>\n" +
+              "          <th scope=\"col\">Tipo</th>\n" +
+              "          <th scope=\"col\">Linea</th>\n" +
+              "          <th scope=\"col\">Columna</th>\n" +
+            "</tr>\n" +
+            "      </thead>" +
+            "<tbody>";
+
+
+            ArrayList array_lexico = Controller.ErrorController.Instance.returnLexicalErrors();
+            string error_lexico = get_errors(array_lexico);
+            
+
+            ArrayList array_semant = Controller.ErrorController.Instance.returnSemanticErrors();
+            string error_seman = get_errors(array_semant); ;
+
+            ArrayList array_sint = Controller.ErrorController.Instance.returnSintacticErrors();
+            string error_sints = get_errors(array_sint); ;
+
+            string html = head + open_table + table_head + array_lexico + close_table +
+            script +
+            "</body>" +
+            "</html>";
+
+
+            print_file_report("2.Reporte Errores", html);
+
+        }
+
+        public string get_errors(ArrayList lista_error)
+        {
+            var cadena = "";
+
+            int i = 1;
+
+            if (lista_error.Count > 0)
+            {
+                foreach (Error error in lista_error)
+                {
+                    cadena += "<tr><td>" + i + "</td><td>" + error.Message + "</td><td> Lexico </td><td>" + error.Row + "</td><td>" + error.Column + "</td></tr>";
+                    i++;
+                }
+            }
+
+            return cadena;
+        }
+
+
+        public void print_file_report(string name_file, string text)
+        {
+            string path1 = this.path + "\\" + name_file;
 
             try
             {
                 // Create the file, or overwrite if the file exists.
                 using (FileStream fs = File.Create(path1))
                 {
-                    byte[] info = new UTF8Encoding(true).GetBytes(html);
+                    byte[] info = new UTF8Encoding(true).GetBytes(text);
                     // Add some information to the file.
                     fs.Write(info, 0, info.Length);
                 }
@@ -177,8 +244,6 @@ namespace CompiPascalC3D.Analizer.Controller
             {
                 Console.WriteLine(ex.ToString());
             }
-
-
         }
     }
 }

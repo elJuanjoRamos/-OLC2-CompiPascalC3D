@@ -1,6 +1,7 @@
 ﻿using CompiPascalC3D.Analizer.C3D;
 using CompiPascalC3D.Analizer.Controller;
 using CompiPascalC3D.Analizer.Syntactic;
+using CompiPascalC3D.Optimize.Syntactic;
 using MaterialSkin.Controls;
 using System;
 using System.Collections.Generic;
@@ -48,14 +49,21 @@ namespace CompiPascal
             C3DController.Instance.clearCode();
             ErrorController.Instance.Clean();
             s.analizer(areaanalizar.Text, Application.StartupPath);
-            
-            if (ErrorController.Instance.containSemantycError())
+
+
+            if (ErrorController.Instance.containLexicalError())
             {
-                consola.Text = ErrorController.Instance.getSemantycError(""); 
+                var texto = ErrorController.Instance.getLexicalError("");
+                consola.Text += texto;
+
+            }
+            else if (ErrorController.Instance.containSemantycError())
+            {
+                consola.Text += ErrorController.Instance.getSemantycError(""); 
             }
             else if (ErrorController.Instance.containSyntacticError())
             {
-                consola.Text = ErrorController.Instance.getSintactycError("");
+                consola.Text += ErrorController.Instance.getSintactycError("");
             }
             else
             {
@@ -74,6 +82,42 @@ namespace CompiPascal
         {
             ReporteController.Instance.set_path(Application.StartupPath);
             ReporteController.Instance.generate_report();
+        }
+
+        private void errores_Click(object sender, EventArgs e)
+        {
+            ReporteController.Instance.set_path(Application.StartupPath);
+            ReporteController.Instance.generate_error_retort();
+
+        }
+
+        private void optimizar_Click(object sender, EventArgs e)
+        {
+            SyntacticOptimize s = new SyntacticOptimize();
+            C3DController.Instance.clearCode();
+            ErrorController.Instance.Clean();
+            
+            s.get_C3D_to_optimize(areaOptimizar.Text, Application.StartupPath);
+
+            consolaOptimizar.Text = "";
+            if (ErrorController.Instance.containLexicalError())
+            {
+                var texto = ErrorController.Instance.getLexicalError("");
+                consolaOptimizar.Text += texto;
+
+            }
+            else if (ErrorController.Instance.containSemantycError())
+            {
+                consolaOptimizar.Text += ErrorController.Instance.getSemantycError("");
+            }
+            else if (ErrorController.Instance.containSyntacticError())
+            {
+                consolaOptimizar.Text += ErrorController.Instance.getSintactycError("");
+            } else
+            {
+                consolaOptimizar.Text = "todo bien";
+            }
+
         }
     }
 }

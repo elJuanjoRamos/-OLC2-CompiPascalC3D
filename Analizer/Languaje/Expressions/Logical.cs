@@ -52,7 +52,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             switch (operacion)
             {
                 case OpLogical.AND:
-
                     this.left.TrueLabel = this.TrueLabel;
                     this.left.FalseLabel = this.FalseLabel;
 

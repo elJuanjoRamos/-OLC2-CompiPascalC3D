@@ -50,7 +50,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             ambit.saveFuncion(this.id, this);
 
-            /*var generator = C3D.C3DController.Instance;
+            var generator = C3D.C3DController.Instance;
             generator.update_posision_global();
 
             var funcion_total = generator.save_code("void " + uniqId + "(" + ") { \n", 0);
@@ -127,9 +127,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             ReporteController.Instance.save_ambit(ambit_func, ambit_func.Ambit_name);
 
             return funcion_hija + funcion_total;
-            */
-
-            return "";
         }
 
 
