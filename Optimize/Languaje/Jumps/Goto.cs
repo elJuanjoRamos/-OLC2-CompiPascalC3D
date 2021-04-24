@@ -6,11 +6,12 @@ using System.Text;
 
 namespace CompiPascalC3D.Optimize.Languaje.Jumps
 {
-    class Goto : Instruction
+    public class Goto : Instruction
     {
         private Label label;
 
         public Goto(Label lb)
+            : base("Goto")
         {
             this.label = lb;
         }

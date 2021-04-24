@@ -12,12 +12,16 @@ namespace CompiPascalC3D.Optimize.Languaje.If
         private Literal right;
         private string simbol;
         private Label label;
-        
-        public If()
+
+        public If(Literal left, Literal right, string simbol, Label label)
             : base("If")
         {
-
+            this.left = left;
+            this.right = right;
+            this.simbol = simbol;
+            this.label = label;
         }
+
         public override object Optimize()
         {
             return "";

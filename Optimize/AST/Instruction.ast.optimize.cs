@@ -1,6 +1,7 @@
 ﻿using CompiPascalC3D.Optimize.Languaje.Abstract;
 using CompiPascalC3D.Optimize.Languaje.Block;
 using CompiPascalC3D.Optimize.Languaje.If;
+using CompiPascalC3D.Optimize.Languaje.Jumps;
 using Irony.Parsing;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace CompiPascalC3D.Optimize.AST
                 var inst = INSTRUCCION(nodo.ChildNodes[0], cant_tabs);
 
 
-                if (inst.Name.Equals("If"))
+                if (inst.Name.Equals("If") || inst.Name.Equals("Goto"))
                 {
                     blocks.setInstruction(inst);
                     listaInstrucciones.AddLast(blocks);
@@ -41,6 +42,7 @@ namespace CompiPascalC3D.Optimize.AST
                 } else
                 {
                     blocks.setInstruction(inst);
+
                 }
 
 
@@ -55,6 +57,14 @@ namespace CompiPascalC3D.Optimize.AST
             {
                 If _ifs = (new IfOptimize()).IFTHEN(actual, cant_tabs);
                 return _ifs;
+            }
+            else if (actual.Term.ToString().Equals("GOTO"))
+            {
+                
+                Goto @goto = (new GotoOptimize()).GetGoto(actual);
+                return @goto;
+
+
             }
 
 

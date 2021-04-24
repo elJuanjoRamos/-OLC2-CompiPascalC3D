@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CompiPascalC3D.Optimize.Languaje.Symbols
 {
-    class Label
+    public class Label
     {
         private string name;
         public Label(string lb)

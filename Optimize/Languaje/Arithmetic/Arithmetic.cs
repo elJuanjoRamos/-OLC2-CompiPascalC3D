@@ -14,6 +14,7 @@ namespace CompiPascalC3D.Optimize.Languaje.Arithmetic
         private string simbol;
 
         public Arithmetic(string temp, Literal left, Literal right, string simbol)
+            : base("Aritmetica")
         {
             this.temp = temp;
             this.left = left;
