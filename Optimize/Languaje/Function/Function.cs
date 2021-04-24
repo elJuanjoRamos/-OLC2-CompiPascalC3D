@@ -161,6 +161,10 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
                             }
 
                         }
+                        else
+                        {
+                            newInstructions.Add(_if);
+                        }
 
                     } else
                     {
@@ -196,8 +200,6 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
 
                                             newInstructions.Add(if_otimo);
                                             i = i + 2;
-
-
                                         }
                                         else
                                         {
@@ -205,6 +207,14 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
                                         }
                                     }
                                 }
+                                else
+                                {
+                                    newInstructions.Add(_if);
+                                }
+                            }
+                            else
+                            {
+                                newInstructions.Add(_if);
                             }
                         }
                     }
