@@ -22,6 +22,7 @@ namespace CompiPascalC3D.Optimize.Languaje.Jumps
             this.isEmpty = false;
         }
         public Goto()
+            : base("Goto")
         {
             this.isEmpty = true;
         }

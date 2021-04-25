@@ -19,6 +19,9 @@ namespace CompiPascalC3D.Optimize.Languaje.Arithmetics
         private string ambit_name;
 
         public bool IsEmpty { get => isEmpty; set => isEmpty = value; }
+        internal Literal Right { get => right; set => right = value; }
+        internal Literal Left { get => left; set => left = value; }
+        public string Temp { get => temp; set => temp = value; }
 
         public Expresion(string temp, Literal left, Literal right, string simbol, int r, int c)
             : base("Aritmetica")
@@ -50,6 +53,12 @@ namespace CompiPascalC3D.Optimize.Languaje.Arithmetics
         public override object Optimize()
         {
             var controller = ReporteController.Instance;
+            
+
+            if (right == null)
+            {
+                return this;
+            }
             var iz = left.Value;
             var der = right.Value;
 

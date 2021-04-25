@@ -35,6 +35,7 @@ namespace CompiPascalC3D.Optimize.Languaje.If
             this.column = col;
         }
         public IF()
+            : base("If")
         {
             this.isEmpty = true;
         }

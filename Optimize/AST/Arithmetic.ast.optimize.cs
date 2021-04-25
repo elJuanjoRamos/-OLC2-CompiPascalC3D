@@ -1,4 +1,5 @@
 ﻿using CompiPascalC3D.Optimize.Languaje.Arithmetics;
+using CompiPascalC3D.Optimize.Languaje.Heap_and_Stack;
 using Irony.Parsing;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,27 @@ namespace CompiPascalC3D.Optimize.AST
                 return new Expresion(data.Value, izquierdo, derecho, simb, row, col);
 
             }
+            else if (actual.ChildNodes[2].ChildNodes.Count == 1)
+            {
+                var expresion = actual.ChildNodes[2].ChildNodes[0];
+
+                if (expresion.ChildNodes.Count == 1)
+                {
+                    var izquierdo = LiteralOptimize.getLiteral(expresion);
+                    return new Expresion(data.Value, izquierdo, row, col);
+                }
+                //ES ACCESO
+                // RESERV_HEAP + COR_IZQ + PAR_IZQ + RESERV_INT + PAR_DER + TERMINAL + COR_DER 
+                else
+                {
+                    var structure = expresion.ChildNodes[0].Token.Text;
+                    var indice = LiteralOptimize.getLiteral(expresion.ChildNodes[5]);
+                    return new Access(data, structure, indice);
+                }
+
+
+            }
+            
 
             return null;
         }

@@ -17,6 +17,7 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
         private string id;
         private ArrayList block_instructions;
         public Function(string id, ArrayList block_instructions)
+            : base("Function")
         {
             this.id = id;
             this.block_instructions = block_instructions;
@@ -103,7 +104,7 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
             #endregion
 
 
-            #region REGLA 2
+            #region REGLA 2, 3
             newInstructions = new ArrayList();
             for (int i = 0; i < block_instructions.Count; i++)
             {
@@ -227,8 +228,64 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
             this.block_instructions = newInstructions;
             #endregion
 
+            #region Eliminación de instrucciones redundantes de carga y almacenamiento
+            newInstructions = new ArrayList();
+            for (int i = 0; i < block_instructions.Count; i++)
+            {
+                var instruction = block_instructions[i];
+                if (instruction is Expresion)
+                {
+                    Expresion arithmetic = (Expresion)instruction;
+                    arithmetic.set_ambit(Id);
 
-            //Simplificación algebraica y reducción por fuerza
+                    if (arithmetic.Right == null && !arithmetic.Left.IsNumber)
+                    {
+
+                        for (int j = i + 1; j < block_instructions.Count; j++)
+                        {
+                            var instruccion2 = block_instructions[j];
+                            if (instruccion2 is SetLabel)
+                            {
+                                newInstructions.Add(instruction);
+                                break;
+                            }
+                            else if (instruccion2 is Expresion)
+                            {
+                                Expresion expresion = (Expresion)instruccion2;
+
+                                if (expresion.Right == null && !expresion.Left.IsNumber)
+                                {
+                                    if (arithmetic.Temp.Equals(expresion.Left.Value) && arithmetic.Left.Value.Equals(expresion.Temp))
+                                    {
+                                        Console.WriteLine("trie");
+                                    }
+                                }
+
+                                
+                            }
+                        }
+
+                    } else
+                    {
+                        newInstructions.Add(arithmetic);
+                    }
+
+                    
+
+                    //var result = arithmetic.Optimize();
+                    //newInstructions.Add(result);
+                    //newDictionary[i] = (Instruction)result;       
+                    //i++;
+                }
+                else
+                {
+                    newInstructions.Add(instruction);
+                }
+            }
+            #endregion
+
+
+            #region Simplificación algebraica y reducción por fuerza
             newInstructions = new ArrayList();
             foreach (Instruction instruction in block_instructions)
             {
@@ -240,13 +297,16 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
                     newInstructions.Add(result);
                     //newDictionary[i] = (Instruction)result;       
                     //i++;
-                } else
+                }
+                else
                 {
                     newInstructions.Add(instruction);
                 }
 
             }
             this.block_instructions = newInstructions;
+            #endregion
+
 
             return true;
         }

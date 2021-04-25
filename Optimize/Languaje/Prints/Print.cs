@@ -17,6 +17,7 @@ namespace CompiPascalC3D.Optimize.Languaje.Prints
         public bool IsEmpty { get => isEmpty; set => isEmpty = value; }
 
         public Print(string cadena, Literal literal, int row, int column)
+            : base("Print")
         {
             this.formato = cadena;
             this.literal = literal;
@@ -25,6 +26,7 @@ namespace CompiPascalC3D.Optimize.Languaje.Prints
             this.isEmpty = false;
         }
         public Print()
+            : base("Print")
         {
             this.isEmpty = true;
         }

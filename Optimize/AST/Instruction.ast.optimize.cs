@@ -90,7 +90,7 @@ namespace CompiPascalC3D.Optimize.AST
             }
             else if (actual.Term.ToString().Equals("CALL"))
             {
-
+                return (new CallOptimize()).GetCall(actual);
             }
 
 

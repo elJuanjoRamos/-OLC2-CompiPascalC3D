@@ -13,6 +13,7 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
         private int column;
 
         public Return(string value, int row, int column)
+            : base("Return")
         {
             this.value = value;
             this.row = row;
@@ -21,6 +22,7 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
         }
 
         public Return()
+            : base("Return")
         {
             this.value = "";
             this.isEmpty = true;
