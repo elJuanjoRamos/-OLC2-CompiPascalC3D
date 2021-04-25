@@ -33,7 +33,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             {
                 var val = this.value.Execute(ambit);
 
-                Identifier variableAmbit = ambit.getVariableInAmbit(id);
+                Identifier variableAmbit = ambit.getVariable(id);
                 var generator = C3DController.Instance;
 
                 if (!variableAmbit.IsNull)
@@ -167,109 +167,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                          return null;
                      }*/
                     }
-
-                }
-                else
-                {
-
-                    Identifier variable = ambit.getVariable(id);
-
-                    /**
-                    * VALIDAR EXISTENCIA
-                    */
-                    if (!variable.IsNull)
-                    {
-                        /**
-                        * VERIFICA QUE NO SEA CONSTABTE
-                        */
-                        if (variable.Esconstante)
-                        {
-                            setError("No se puede cambiar el valor a una constante", row, column);
-                            return null;
-                        }
-                        else
-                        {
-                            
-                            assignation_string += val.Texto_anterior;
-
-                            if (val == null || val.getDataType == DataType.ERROR)
-                            {
-                                return null;
-                            }
-
-                            /**
-                            * VALIDAR VALOR: VERIFICA SI EL TIPO DE LA VARIABLE ES IGUAL AL DEL VALOR A ASIGNAR
-                            */
-                            if (variable.DataType == val.getDataType)
-                            {
-                                
-                                
-                                var temp = generator.newTemporal();
-
-                                assignation_string += generator.get_stack(temp, variable.Position_global.ToString(), tabs);
-
-
-                                if (variable.DataType == DataType.BOOLEAN)
-                                {
-                                    var templabel = generator.newLabel();
-                                    assignation_string += generator.addLabel(val.TrueLabel, tabs);
-                                    assignation_string += generator.set_stack(temp, "1", tabs);
-                                    assignation_string += generator.add_Goto(templabel, tabs + 1);
-                                    assignation_string += generator.addLabel(val.FalseLabel, tabs);
-                                    assignation_string += generator.set_stack(temp, "0", tabs);
-                                    assignation_string += generator.addLabel(templabel, tabs);
-                                }
-                                else
-                                {
-                                    assignation_string += generator.set_stack(temp, val.getValue(), tabs);
-                                }
-
-                            
-
-                                return assignation_string;
-
-                            }
-                            else
-                            {
-                                setError("El tipo " + val.getDataType + " no es asignable con " + variable.DataType, row, column);
-                                return null;
-                            }
-                        }
-
-                    }
-                    else
-                    {
-                        Function function = ambit.getFuncion(id);
-                        if (function != null)
-                        {
-                            if (function.IsProcedure)
-                            {
-                                setError("No puede asignarse ningun valor al procedimiento '" + id + "' ", row, column);
-                                return null;
-                            }
-                            /**
-                           * VALIDAR VALOR: VERIFICA SI EL TIPO DE LA VARIABLE ES IGUAL AL DEL VALOR A ASIGNAR
-                           */
-                         if (function.Tipe == val.getDataType)
-                         {
-                                function.Retorno = val.Value.ToString();
-                                ambit.setFunction(Id, function);
-                                assignation_string  += val.Texto_anterior;
-                                assignation_string += generator.set_stack("T13", val.Value, tabs);
-                         }
-                         else
-                         {
-                             setError("El tipo " + val.getDataType + " no es asignable con " + variable.DataType, row, column);
-                             return null;
-                         }
-                     }
-                     else
-                     {
-                         setError("La variable '" + id + "' no esta declara", row, column);
-                         return null;
-                     }
-                    }
-
 
                 }
 

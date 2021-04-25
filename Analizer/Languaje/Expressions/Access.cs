@@ -30,22 +30,94 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
         public override Returned Execute(Ambit ambit)
         {
+            var generator = C3DController.Instance;
+            var temp = generator.newTemporal();
+            Identifier variable = ambit.getVariable(this.id);
 
-            Identifier variableAmbit = ambit.getVariableInAmbit(this.id);
+            if (variable.IsNull)
+            {
+                set_error("La variable " + this.id + " No esta declarada", row, column);
+                return new Returned();
+            }
+
+
+            if (variable.IsGlobal)
+            {
+                access_string += generator.get_stack(temp, variable.Position.ToString(), cant_Tabs);
+
+                if (variable.DataType != DataType.BOOLEAN)
+                {
+                    return new Returned(temp, variable.DataType, true, "", "", access_string, variable.Default_value, variable.Position, variable.Position_global);
+                }
+
+
+                if (this.TrueLabel == "")
+                {
+                    this.TrueLabel = generator.newLabel();
+                }
+                if (this.FalseLabel == "")
+                {
+                    this.FalseLabel = generator.newLabel();
+                }
+                access_string += generator.add_If(temp, "1", "==", this.TrueLabel, cant_Tabs);
+                access_string += generator.add_Goto(this.FalseLabel, cant_Tabs);
+
+                return new Returned("", variable.DataType, false, this.TrueLabel,
+                    this.FalseLabel, access_string, variable.Default_value, variable.Position, variable.Position_global);
+
+            }
+            else
+            {
+                var tempAux = generator.newTemporal();
+                //generator.freeTemp(tempAux);
+
+                access_string += generator.addExpression(tempAux, "SP", variable.Position.ToString(), "+", cant_Tabs);
+                access_string += generator.get_stack(temp, tempAux, cant_Tabs);
+
+                if (variable.IsReference)
+                {
+                    tempAux = generator.newTemporal();
+                    access_string += generator.get_stack(tempAux, temp, cant_Tabs);
+                    temp = tempAux;
+                }
+
+                if (variable.DataType != DataType.BOOLEAN)
+                {
+                    return new Returned(temp, variable.DataType, true, "", "",
+                        access_string, variable.Default_value, variable.Position, variable.Position_reference);
+                }
+
+
+                if (this.TrueLabel == "")
+                {
+                    this.TrueLabel = generator.newLabel();
+                }
+                if (this.FalseLabel == "")
+                {
+                    this.FalseLabel = generator.newLabel();
+                }
+
+                access_string += generator.add_If(temp, "1", "==", this.TrueLabel, cant_Tabs);
+                access_string += generator.add_Goto(this.FalseLabel, cant_Tabs);
+                return new Returned("", DataType.BOOLEAN, false, this.TrueLabel,
+                    this.FalseLabel, access_string, variable.Default_value, variable.Position, variable.Position_reference);
+            }
+
+            /*Identifier variable = ambit.getVariableInAmbit(this.id);
             var generator = C3DController.Instance;
             var temp = generator.newTemporal();
 
 
-            if (!variableAmbit.IsNull)
+            if (!variable.IsNull)
             {
 
-                if (variableAmbit.IsGlobal)
+                if (variable.IsGlobal)
                 {
-                    access_string += generator.get_stack(temp, variableAmbit.Position.ToString(), cant_Tabs);
+                    access_string += generator.get_stack(temp, variable.Position.ToString(), cant_Tabs);
 
-                    if (variableAmbit.DataType != DataType.BOOLEAN)
+                    if (variable.DataType != DataType.BOOLEAN)
                     {
-                        return new Returned(temp, variableAmbit.DataType, true, "", "", access_string, variableAmbit.Default_value, variableAmbit.Position, variableAmbit.Position_global);
+                        return new Returned(temp, variable.DataType, true, "", "", access_string, variable.Default_value, variable.Position, variable.Position_global);
                     }
 
 
@@ -60,8 +132,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     access_string += generator.add_If(temp, "1", "==", this.TrueLabel, cant_Tabs);
                     access_string += generator.add_Goto(this.FalseLabel, cant_Tabs);
 
-                    return new Returned("", variableAmbit.DataType, false, this.TrueLabel,
-                        this.FalseLabel, access_string, variableAmbit.Default_value, variableAmbit.Position, variableAmbit.Position_global);
+                    return new Returned("", variable.DataType, false, this.TrueLabel,
+                        this.FalseLabel, access_string, variable.Default_value, variable.Position, variable.Position_global);
 
                 }
                 else
@@ -69,20 +141,20 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     var tempAux = generator.newTemporal();
                     //generator.freeTemp(tempAux);
 
-                    access_string += generator.addExpression(tempAux, "SP", variableAmbit.Position.ToString(), "+", cant_Tabs);
+                    access_string += generator.addExpression(tempAux, "SP", variable.Position.ToString(), "+", cant_Tabs);
                     access_string += generator.get_stack(temp, tempAux, cant_Tabs);
 
-                    if (variableAmbit.IsReference)
+                    if (variable.IsReference)
                     {
                         tempAux = generator.newTemporal();
                         access_string += generator.get_stack(tempAux, temp, cant_Tabs);
                         temp = tempAux;
                     }
 
-                    if (variableAmbit.DataType != DataType.BOOLEAN)
+                    if (variable.DataType != DataType.BOOLEAN)
                     {
-                        return new Returned(temp, variableAmbit.DataType, true, "", "",
-                            access_string, variableAmbit.Default_value, variableAmbit.Position, variableAmbit.Position_reference);
+                        return new Returned(temp, variable.DataType, true, "", "",
+                            access_string, variable.Default_value, variable.Position, variable.Position_reference);
                     }
 
 
@@ -98,7 +170,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     access_string += generator.add_If(temp, "1", "==", this.TrueLabel, cant_Tabs);
                     access_string += generator.add_Goto(this.FalseLabel, cant_Tabs);
                     return new Returned("", DataType.BOOLEAN, false, this.TrueLabel,
-                        this.FalseLabel, access_string, variableAmbit.Default_value, variableAmbit.Position, variableAmbit.Position_reference);
+                        this.FalseLabel, access_string, variable.Default_value, variable.Position, variable.Position_reference);
                 }
             }
 
@@ -132,7 +204,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 return new Returned("", variable.DataType, false, this.TrueLabel,
                     this.FalseLabel, access_string, variable.Default_value, variable.Position, variable.Position_global);
 
-            }
+            }*/
 
 
         }
