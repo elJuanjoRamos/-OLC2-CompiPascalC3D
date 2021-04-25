@@ -86,6 +86,7 @@ namespace CompiPascalC3D.Optimize.Grammar
             NonTerminal INSTRUCTIONS = new NonTerminal("INSTRUCTIONS");
 
             NonTerminal FUNCTION_LIST = new NonTerminal("FUNCTION_LIST", "FUNCTION_LIST");
+            NonTerminal TIPOFUNCTION = new NonTerminal("TIPOFUNCTION");
 
             NonTerminal start = new NonTerminal("start");
 
@@ -152,11 +153,15 @@ namespace CompiPascalC3D.Optimize.Grammar
 
 
             FUNCTION_LIST.Rule
-               = RESERV_VOID + IDENTIFIER + PAR_IZQ + PAR_DER + KEY_IZQ + INSTRUCTIONS + KEY_DER
+               = TIPOFUNCTION + IDENTIFIER + PAR_IZQ + PAR_DER + KEY_IZQ + INSTRUCTIONS + KEY_DER
                + FUNCTION_LIST
                | Empty
                ;
 
+            TIPOFUNCTION.Rule
+                = RESERV_VOID
+                | RESERV_INT
+                ;
 
             INSTRUCTIONS.Rule = MakePlusRule(INSTRUCTIONS, INSTRUCTION);
 

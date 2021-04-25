@@ -15,15 +15,19 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
     class Function : Instruction
     {
         private string id;
-        private ArrayList block_instructions;
-        public Function(string id, ArrayList block_instructions)
+        private ArrayList instrucciones;
+        private LinkedList<Blocks> block_instructions;
+        private string tipo;
+        public Function(string id, string tipo, ArrayList instrucciones)
             : base("Function")
         {
             this.id = id;
-            this.block_instructions = block_instructions;
+            this.tipo = tipo;
+            this.instrucciones = instrucciones;
+            this.block_instructions = new LinkedList<Blocks>();
         }
 
-        public ArrayList Block_instructions { get => block_instructions; set => block_instructions = value; }
+        public ArrayList Instrucciones { get => instrucciones; set => instrucciones = value; }
         public string Id { get => id; set => id = value; }
 
         public override object Optimize()
@@ -31,23 +35,23 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
 
             var controller = ReporteController.Instance;
 
-            //Eliminación de código muerto
+            #region Eliminación de código muerto
 
             #region REGLA 1
             ArrayList newInstructions = new ArrayList();
             var texto_eliminado = "";
-            for (int i = 0; i < block_instructions.Count; i++)
+            for (int i = 0; i < instrucciones.Count; i++)
             {
-                var instrucion = block_instructions[i];
+                var instrucion = instrucciones[i];
                 //REGLA 1
                 if (instrucion is Goto)
                 {
                     Goto @goto = (Goto)instrucion;
                     newInstructions.Add(@goto);
 
-                    if (i+1 <= block_instructions.Count)
+                    if (i+1 <= instrucciones.Count)
                     {
-                        var instruccion_temp = block_instructions[i + 1];
+                        var instruccion_temp = instrucciones[i + 1];
 
                         if (instruccion_temp is SetLabel)
                         {
@@ -55,9 +59,9 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
                             i = i + 1;
                         } else
                         {
-                            for (int j = i + 1; j < block_instructions.Count; j++)
+                            for (int j = i + 1; j < instrucciones.Count; j++)
                             {
-                                var instruccion2 = block_instructions[j];
+                                var instruccion2 = instrucciones[j];
                                 newInstructions.Add(instruccion2);
                                 if (instruccion2 is SetLabel)
                                 {
@@ -100,15 +104,14 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
                 }
             }
 
-            this.block_instructions = newInstructions;
+            this.instrucciones = newInstructions;
             #endregion
 
-
-            #region REGLA 2, 3
+            #region REGLA 2, 3, 4
             newInstructions = new ArrayList();
-            for (int i = 0; i < block_instructions.Count; i++)
+            for (int i = 0; i < instrucciones.Count; i++)
             {
-                var instrucion = block_instructions[i];
+                var instrucion = instrucciones[i];
                 //REGLRA 2
                 if (instrucion is IF)
                 {
@@ -120,9 +123,9 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
                         bool resultado = _if.evaluate_condition();
 
 
-                        if (i + 1 <= block_instructions.Count)
+                        if (i + 1 <= instrucciones.Count)
                         {
-                            var instrucion2 = block_instructions[i + 1];
+                            var instrucion2 = instrucciones[i + 1];
                             //VERIFICA QUE LO QUE VENGA DESPUES DEL IF SEA GOTO
                             if (instrucion2 is Goto)
                             {
@@ -169,16 +172,16 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
 
                     } else
                     {
-                        if (i + 1 <= block_instructions.Count)
+                        if (i + 1 <= instrucciones.Count)
                         {
-                            var instrucion2 = block_instructions[i + 1];
+                            var instrucion2 = instrucciones[i + 1];
 
                             if (instrucion2 is Goto)
                             {
 
-                                if (i + 2 <= block_instructions.Count)
+                                if (i + 2 <= instrucciones.Count)
                                 {
-                                    var instruccion3 = block_instructions[i + 2];
+                                    var instruccion3 = instrucciones[i + 2];
 
                                     if (instruccion3 is SetLabel)
                                     {
@@ -225,69 +228,88 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
                     newInstructions.Add(instrucion);
                 }
             }
-            this.block_instructions = newInstructions;
+            this.instrucciones = newInstructions;
             #endregion
-
+            #endregion
+            
             #region Eliminación de instrucciones redundantes de carga y almacenamiento
             newInstructions = new ArrayList();
-            for (int i = 0; i < block_instructions.Count; i++)
+            for (int i = 0; i < instrucciones.Count; i++)
             {
-                var instruction = block_instructions[i];
-                if (instruction is Expresion)
+                var instruccion = instrucciones[i];
+                if (newInstructions.Count == 0)
                 {
-                    Expresion arithmetic = (Expresion)instruction;
-                    arithmetic.set_ambit(Id);
-
-                    if (arithmetic.Right == null && !arithmetic.Left.IsNumber)
-                    {
-
-                        for (int j = i + 1; j < block_instructions.Count; j++)
-                        {
-                            var instruccion2 = block_instructions[j];
-                            if (instruccion2 is SetLabel)
-                            {
-                                newInstructions.Add(instruction);
-                                break;
-                            }
-                            else if (instruccion2 is Expresion)
-                            {
-                                Expresion expresion = (Expresion)instruccion2;
-
-                                if (expresion.Right == null && !expresion.Left.IsNumber)
-                                {
-                                    if (arithmetic.Temp.Equals(expresion.Left.Value) && arithmetic.Left.Value.Equals(expresion.Temp))
-                                    {
-                                        Console.WriteLine("trie");
-                                    }
-                                }
-
-                                
-                            }
-                        }
-
-                    } else
-                    {
-                        newInstructions.Add(arithmetic);
-                    }
-
-                    
-
-                    //var result = arithmetic.Optimize();
-                    //newInstructions.Add(result);
-                    //newDictionary[i] = (Instruction)result;       
-                    //i++;
+                    newInstructions.Add(instruccion);
                 }
                 else
                 {
-                    newInstructions.Add(instruction);
+                    //REGLA 5;
+                    if (instruccion is Expresion)
+                    {
+                        //EXPRESION QUE VOY A BUSCAR
+                        Expresion expresion = (Expresion)instruccion;
+                        var encontrado = false;
+                        if (expresion.Right == null && !expresion.Left.IsNumber)
+                        {
+
+                            for (int j = i-1; j > 0; j--)
+                            {
+                                var instruccion_temporal = instrucciones[j];
+                                if (instruccion_temporal is Expresion)
+                                {
+                                    Expresion expresion_temporal = (Expresion)instruccion_temporal;
+
+
+                                    if (expresion_temporal.Temp.Equals(expresion.Left.Value))
+                                    {
+                                        if (expresion_temporal.Right == null && !expresion_temporal.Left.IsNumber)
+                                        {
+                                            if (expresion.Left.Value.Equals(expresion_temporal.Temp) && expresion.Temp.Equals(expresion_temporal.Left.Value))
+                                            {
+                                                controller.set_optimizacion("Regla 5", expresion.Code(), "", expresion.Row, expresion.Column, id);
+                                                encontrado = true;
+                                                break;
+                                            }
+                                        } else
+                                        {
+                                            encontrado = false;
+                                            break;
+                                        }
+                                    }
+
+                                }
+                                else if (instruccion_temporal is SetLabel)
+                                {
+                                    break;
+                                }
+                            }
+
+                            if (!encontrado)
+                            {
+                                newInstructions.Add(expresion);
+                            }
+
+                        }
+                        else
+                        {
+                            newInstructions.Add(instruccion);
+                        }
+                    }
+                    else
+                    {
+                        newInstructions.Add(instruccion);
+                    }
                 }
+
+
             }
+            this.instrucciones = newInstructions;
             #endregion
 
 
             #region Simplificación algebraica y reducción por fuerza
             newInstructions = new ArrayList();
-            foreach (Instruction instruction in block_instructions)
+            foreach (Instruction instruction in instrucciones)
             {
                 if (instruction is Expresion)
                 {
@@ -304,18 +326,41 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
                 }
 
             }
-            this.block_instructions = newInstructions;
+            this.instrucciones = newInstructions;
             #endregion
 
 
-            return true;
+            Blocks blocks = new Blocks();
+            foreach (Instruction inst in instrucciones)
+            {
+                if (inst.Name.Equals("If") || inst.Name.Equals("Goto"))
+                {
+                    blocks.setInstruction(inst);
+                    block_instructions.AddLast(blocks);
+                    blocks = new Blocks();
+                }
+                else if (inst.Name.Equals("SetLabel"))
+                {
+                    block_instructions.AddLast(blocks);
+                    blocks = new Blocks();
+                    blocks.setInstruction(inst);
+                } else
+                {
+                    blocks.setInstruction(inst);
+                }
+            }
+            block_instructions.AddLast(blocks);
+
+
+
+            return this;
         }
 
         public override string Code()
         {
-            var cadena = "void " + id + "(){\n";
+            var cadena = tipo +" " + id + "(){\n\n";
 
-            foreach (Instruction instruction in block_instructions)
+            foreach (Instruction instruction in instrucciones)
             {
                 if (instruction is Expresion)
                 {
@@ -331,16 +376,6 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
                 }
             }
 
-            /*foreach (Blocks blocks in block_instructions)
-            {
-                foreach (Instruction instruction in blocks.Instructions.Values)
-                {
-                    if (instruction is Expresion && (!((Expresion)instruction).IsEmpty))
-                    {
-                        cadena += "  " + instruction.Code();
-                    }
-                }
-            }*/
             cadena += "\n}";
             return cadena;
         }

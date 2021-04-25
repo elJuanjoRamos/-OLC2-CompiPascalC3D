@@ -28,11 +28,12 @@ namespace CompiPascalC3D.Optimize.AST
              */
             if (actual.ChildNodes.Count > 0)
             {
+                var tipo = actual.ChildNodes[0].ChildNodes[0].Token.Text;
                 var identifier = actual.ChildNodes[1].Token.Text;
 
                 ArrayList blocks = InstructionOptimize.GetInstructions(actual.ChildNodes[5], 1);
 
-                lista_actual.AddLast(new Function(identifier, blocks));
+                lista_actual.AddLast(new Function(identifier, tipo, blocks));
 
                 lista_actual = FUNCTION_LIS(actual.ChildNodes[7], lista_actual);
 

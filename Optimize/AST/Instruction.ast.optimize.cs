@@ -31,28 +31,7 @@ namespace CompiPascalC3D.Optimize.AST
                 var inst = INSTRUCCION(nodo.ChildNodes[0], cant_tabs);
 
                 listaInstrucciones.Add(inst);
-                /*if (inst.Name.Equals("If") || inst.Name.Equals("Goto"))
-                {
-                    blocks.setInstruction(inst, i);
-                    listaInstrucciones.AddLast(blocks);
-                    blocks = new Blocks();
-                    i = 0;
-                }
-                else if (inst.Name.Equals("SetLabel"))
-                {
-                    listaInstrucciones.AddLast(blocks);
-                    blocks = new Blocks();
-                    i = 0;
-                    blocks.setInstruction(inst, i);
-                } else
-                {
-                    blocks.setInstruction(inst, i);
-                    i++;
-                    if (i == actual.ChildNodes.Count)
-                    {
-                        listaInstrucciones.AddLast(blocks);
-                    }
-                }*/
+                
  
             }
             return listaInstrucciones;

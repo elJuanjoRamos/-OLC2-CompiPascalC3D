@@ -65,14 +65,14 @@ namespace CompiPascalC3D.Optimize.Syntactic
 
         public void get_code_to_optimize(LinkedList<Instruction> lista_actual)
         {
-            
+            LinkedList<Instruction> newList = new LinkedList<Instruction>();
             foreach (Function func in lista_actual)
             {
                 var res = func.Optimize();
+                newList.AddLast((Instruction)res);
             }
 
-
-            foreach (Function func in lista_actual)
+            foreach (Function func in newList)
             {
                 texto_general += func.Code();
             }

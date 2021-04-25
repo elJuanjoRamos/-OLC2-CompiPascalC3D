@@ -8,22 +8,18 @@ namespace CompiPascalC3D.Optimize.Languaje.Block
 {
     public class Blocks
     {
-        private Dictionary<int, Instruction> instructions;
+        private ArrayList instructions;
 
         public Blocks()
         {
-            this.instructions = new Dictionary<int, Instruction>();
+            this.instructions = new ArrayList();
         }
 
-        public Dictionary<int, Instruction> Instructions { get => instructions; set => instructions = value; }
+        public ArrayList Instructions { get => instructions; set => instructions = value; }
 
-        public void setInstruction(Instruction instruction, int i)
+        public void setInstruction(Instruction instruction)
         {
-            this.instructions[i] =  instruction;
-        }
-        public void set_new_instruction(Dictionary<int, Instruction> newDict)
-        {
-            this.instructions = newDict;
+            this.instructions.Add(instruction);
         }
 
          

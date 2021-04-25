@@ -22,6 +22,8 @@ namespace CompiPascalC3D.Optimize.Languaje.Arithmetics
         internal Literal Right { get => right; set => right = value; }
         internal Literal Left { get => left; set => left = value; }
         public string Temp { get => temp; set => temp = value; }
+        public int Row { get => row; set => row = value; }
+        public int Column { get => column; set => column = value; }
 
         public Expresion(string temp, Literal left, Literal right, string simbol, int r, int c)
             : base("Aritmetica")
