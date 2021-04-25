@@ -92,10 +92,10 @@ namespace CompiPascalC3D.Optimize.AST
             {
                 return (new CallOptimize()).GetCall(actual);
             }
-
-
-            return null;
-
+            else
+            {
+                return (new AssignationOptimize()).GetAssignation(actual);
+            }
         }
     }
 }

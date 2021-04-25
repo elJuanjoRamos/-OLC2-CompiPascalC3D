@@ -22,7 +22,7 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
 
         public override string Code()
         {
-            return  id+"();";
+            return  id+"();\n";
         }
 
         public override object Optimize()

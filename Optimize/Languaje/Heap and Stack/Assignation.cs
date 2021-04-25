@@ -11,18 +11,22 @@ namespace CompiPascalC3D.Optimize.Languaje.Heap_and_Stack
         private Literal temp;
         private string dataStructure;
         private Literal index;
+        private int row;
+        private int column;
 
-        public Assignation(Literal temp, string dataStructure, Literal index)
+        public Assignation(Literal temp, string dataStructure, Literal index, int row, int column)
             : base("Assignation")
         {
             this.temp = temp;
             this.dataStructure = dataStructure;
             this.index = index;
+            this.row = row;
+            this.column = column;
         }
 
         public override string Code()
         {
-            return dataStructure + "[(int)" + index.Value + "] = " + temp.Value;
+            return dataStructure + "[(int)" + index.Value + "] = " + temp.Value + ";\n";
         }
 
         public override object Optimize()
