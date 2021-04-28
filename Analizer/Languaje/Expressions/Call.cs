@@ -43,7 +43,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
             }
 
-            
+
 
             //GUARDAR LOS PARAMETROS EN LA TABLA DE SIMBOLOS
 
@@ -125,7 +125,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             {
                 call_String += generator.addExpression(temp_index, "SP", i.ToString(), "+", cant_tabs);
                 call_String += generator.get_stack(temp_save, temp_index, cant_tabs);
-                call_String += generator.addExpression(temp_index, "SP", (ambit.Size + 1 + i).ToString(), "+", cant_tabs);
+                call_String += generator.addExpression(temp_index, "SP", (ambit.Size + i).ToString(), "+", cant_tabs);
                 call_String += generator.set_stack(temp_index, temp_save, cant_tabs);
             }
             call_String += generator.save_comment("Fin Salvado Temporales: " + ambit.Ambit_name, cant_tabs, true);
@@ -139,7 +139,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 call_String += generator.save_comment("Inicia:Parametros, Cambio de ambito", cant_tabs, false);
 
                 var temp = generator.newTemporal();
-                call_String += generator.addExpression(temp, "SP", (ambit.Size*2 + 1).ToString(), "+", cant_tabs);
+                call_String += generator.addExpression(temp, "SP", (ambit.Size * 2 + 1).ToString(), "+", cant_tabs);
                 int i = 0;
                 foreach (Returned item in paramsValues)
                 {
@@ -152,21 +152,21 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 }
                 call_String += generator.save_comment("Fin:Parametros, Cambio de ambito", cant_tabs, false);
             }
-            call_String += generator.next_Env(ambit.Size*2, cant_tabs);
+            call_String += generator.next_Env(ambit.Size * 2, cant_tabs);
             call_String += generator.save_code(funcion_llamada.UniqId + "();", cant_tabs);
-            call_String += generator.ant_Env(ambit.Size*2, cant_tabs);
-            
+            call_String += generator.ant_Env(ambit.Size * 2, cant_tabs);
+
             call_String += generator.get_stack("T14", "T13", cant_tabs);
 
 
             //COPIA DE LOS TEMPORALES
             call_String += generator.save_comment("Inicia Recuperado Temporales: " + ambit.Ambit_name, cant_tabs, false);
 
-            for (int i = ambit.Size * 2; i > ambit.Size; i--)
+            for(int i = ambit.Size * 2 - 1; i >= ambit.Size; i--)
             {
                 call_String += generator.addExpression(temp_index, "SP", (i).ToString(), "+", cant_tabs);
                 call_String += generator.get_stack(temp_save, temp_index, cant_tabs);
-                call_String += generator.addExpression(temp_index, "SP", (i - ambit.Size - 1).ToString(), "+", cant_tabs);
+                call_String += generator.addExpression(temp_index, "SP", (i - ambit.Size).ToString(), "+", cant_tabs);
                 call_String += generator.set_stack(temp_index, temp_save, cant_tabs);
             }
 
@@ -179,7 +179,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
             }
 
-            return new Returned("T14", funcion_llamada.Tipe, true, this.TrueLabel, this.FalseLabel, call_String, "",0,0);
+            return new Returned("T14", funcion_llamada.Tipe, true, this.TrueLabel, this.FalseLabel, call_String, "", 0, 0);
 
         }
         public void set_error(string texto, int row, int column)

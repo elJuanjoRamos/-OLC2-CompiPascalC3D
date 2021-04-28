@@ -36,7 +36,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         {
             var call_String = "";
             var funcion_llamada = ambit.getFuncion(this.id);
-            
+
             //VALIDACION DE EXISTENCIA
             if (funcion_llamada == null)
             {
@@ -62,7 +62,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             //generator.update_posision_global();
 
 
-           
+
 
 
 
@@ -91,13 +91,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
                 if (parametro.Type == result.getDataType)
                 {
-                    
+
                     if (parametro.isRefer)
                     {
                         result.Value = result.Pos_refer.ToString();
                     }
                     function_ambit.setVariableFuncion(parametro.Id, result.Value,
-                        result.Valor_original, result.getDataType,  parametro.isRefer, "Parameter", result.Pos_refer);
+                        result.Valor_original, result.getDataType, parametro.isRefer, "Parameter", result.Pos_refer);
 
                     paramsValues.Add(result);
                 }
@@ -120,8 +120,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             for (int i = 0; i < ambit.Size; i++)
             {
                 call_String += generator.addExpression(temp_index, "SP", i.ToString(), "+", cant_tabs);
-                call_String += generator.get_stack(temp_save, temp_index, cant_tabs );
-                call_String += generator.addExpression(temp_index, "SP", (ambit.Size + 1 + i).ToString(), "+",cant_tabs);
+                call_String += generator.get_stack(temp_save, temp_index, cant_tabs);
+                call_String += generator.addExpression(temp_index, "SP", (ambit.Size + i).ToString(), "+", cant_tabs);
                 call_String += generator.set_stack(temp_index, temp_save, cant_tabs);
             }
             call_String += generator.save_comment("Fin Salvado Temporales: " + ambit.Ambit_name, cant_tabs, true);
@@ -138,7 +138,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 var index = (funcion_llamada.IsProcedure) ? ambit.Size * 2 + 1 : ambit.Size * 2 + 2;
 
 
-                call_String += generator.addExpression(temp, "SP", (index).ToString(), "+", cant_tabs );
+                call_String += generator.addExpression(temp, "SP", (index).ToString(), "+", cant_tabs);
                 int i = 0;
                 foreach (Returned item in paramsValues)
                 {
@@ -152,21 +152,21 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 generator.free_temps(temp);
                 call_String += generator.save_comment("Fin:Parametros, Cambio de ambito", cant_tabs, false);
             }
-            call_String += generator.next_Env(ambit.Size*2, cant_tabs);
-            call_String += generator.save_code(funcion_llamada.UniqId+"();", cant_tabs);
-            
-            call_String += generator.ant_Env(ambit.Size*2, cant_tabs);
+            call_String += generator.next_Env(ambit.Size * 2, cant_tabs);
+            call_String += generator.save_code(funcion_llamada.UniqId + "();", cant_tabs);
+
+            call_String += generator.ant_Env(ambit.Size * 2, cant_tabs);
 
             //COPIA DE LOS TEMPORALES
             call_String += generator.save_comment("Inicia Recuperado Temporales: " + ambit.Ambit_name, cant_tabs, false);
-            for (int i = ambit.Size*2; i >ambit.Size; i--)
+            for (int i = ambit.Size * 2-1; i >= ambit.Size; i--)
             {
                 call_String += generator.addExpression(temp_index, "SP", (i).ToString(), "+", cant_tabs);
                 call_String += generator.get_stack(temp_save, temp_index, cant_tabs);
-                call_String += generator.addExpression(temp_index, "SP", (i - ambit.Size-1).ToString(), "+", cant_tabs);
+                call_String += generator.addExpression(temp_index, "SP", (i - ambit.Size).ToString(), "+", cant_tabs);
                 call_String += generator.set_stack(temp_index, temp_save, cant_tabs);
             }
-            
+
             call_String += generator.save_comment("Fin Recuperado Temporales: " + ambit.Ambit_name, cant_tabs, true);
 
 
