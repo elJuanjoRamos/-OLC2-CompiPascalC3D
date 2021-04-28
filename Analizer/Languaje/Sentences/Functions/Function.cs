@@ -57,16 +57,19 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
 
 
-            var tempo_return = "T13";
+            var tempo_return = "";
             var exit_label = "";
+            var size = 0;
             if (!IsProcedure)
             {
+                tempo_return = "T13";
                 exit_label = generator.newLabel();
                 funcion_total += generator.save_code("//Temporal de retorno", 1);
                 funcion_total += generator.addExpression(tempo_return, "SP", "0", "+", 1);
+                size = 1;
             }
 
-            Ambit ambit_func = new Ambit(ambit, this.uniqId, tipo, tempo_return, exit_label, !isProcedure, this.tipe);
+            Ambit ambit_func = new Ambit(ambit, this.uniqId, tipo, tempo_return, exit_label, !isProcedure, this.tipe, size);
 
 
             foreach (var param in parametos)
@@ -98,14 +101,27 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 funcion_hija += result;
             }
 
-            
-
-
-
             //INSTRUCCIONES
             foreach (Instruction instruction in sentences)
             {               
                 var instruccion = instruction.Execute(ambit_func);
+
+                if (instruccion is Call)
+                {
+                    funcion_total += generator.save_comment("Inicia salvado de temporales ", 1, false);
+                    //DECLARACIONES 
+                    foreach (var declas in declaraciones)
+                    {
+                        var result = declas.Execute(ambit_func);
+                        if (result == null)
+                        {
+                            return null;
+                        }
+                        funcion_total += result;
+                    }
+                    funcion_total += generator.save_comment("Fin salvado de temporales ", 1, false);
+                }
+
                 if (instruccion == null)
                 {
                     return null;

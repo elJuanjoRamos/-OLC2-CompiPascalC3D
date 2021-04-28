@@ -107,7 +107,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                     var generator = C3DController.Instance;
                     if (val.IsTemporal)
                     {
-                        generator.free_temps(val.Value);
+                        ambit.free_temp(val.Value);
                     }
 
                     if (variable.IsGlobal)

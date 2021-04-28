@@ -65,7 +65,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 var element = el.Execute(ambit);
                 if (element.IsTemporal)
                 {
-                    //generator.free_temps(element.Value.ToString());
+                    ambit.free_temp(element.Value.ToString());
                 }
 
                 write_Str += element.Texto_anterior;

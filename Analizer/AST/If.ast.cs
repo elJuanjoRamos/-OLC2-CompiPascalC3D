@@ -42,29 +42,27 @@ namespace CompiPascalC3D.Analizer.AST
             return new If(LOGIC_EXPRESION, SENTENCES, ELSE, row, col, cant_tabs);
         }
 
-        public Sentence IF_SENTENCE(ParseTreeNode actual, int cant_tabs)
+        public LinkedList<Instruction> IF_SENTENCE(ParseTreeNode actual, int cant_tabs)
         {
             /*
                IF_SENTENCE.Rule = INSTRUCTIONS_BODY
                 | Empty
                 ;
              */
-            Sentence sentence = new Sentence();
-            if (actual.ChildNodes.Count > 0)
+
+            if (actual.ChildNodes.Count == 0)
             {
-                var lista_instrucciones = instructionAST.INSTRUCTIONS_BODY(actual.ChildNodes[0], cant_tabs + 1);
-                sentence = new Sentence(lista_instrucciones);
+                return new LinkedList<Instruction>();
             }
 
-            return sentence;
+            return instructionAST.INSTRUCTIONS_BODY(actual.ChildNodes[0], cant_tabs + 1);
         }
-        public Sentence ELIF(ParseTreeNode actual, int cant_tabs)
+        public LinkedList<Instruction> ELIF(ParseTreeNode actual, int cant_tabs)
         {
-            Sentence sentence = new Sentence();
 
+            LinkedList<Instruction> lista_instrucciones = new LinkedList<Instruction>();
             if (actual.ChildNodes.Count > 0)
             {
-                LinkedList<Instruction> lista_instrucciones = new LinkedList<Instruction>();
                 // ELSE 
                 if (actual.ChildNodes[1].Term.ToString().Equals("IF_SENTENCE"))
                 {
@@ -77,11 +75,8 @@ namespace CompiPascalC3D.Analizer.AST
                     var ifs = IFTHEN(actual.ChildNodes[1], cant_tabs);
                     lista_instrucciones.AddLast(ifs);
                 }
-
-                sentence = new Sentence(lista_instrucciones);
-
             }
-            return sentence;
+            return lista_instrucciones;
         }
         #endregion
 

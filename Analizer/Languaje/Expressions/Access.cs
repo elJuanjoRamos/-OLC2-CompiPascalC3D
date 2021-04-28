@@ -30,8 +30,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
         public override Returned Execute(Ambit ambit)
         {
-            var generator = C3DController.Instance;
-            var temp = generator.newTemporal();
+            
             Identifier variable = ambit.getVariable(this.id);
 
             if (variable.IsNull)
@@ -39,11 +38,15 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 set_error("La variable " + this.id + " No esta declarada", row, column);
                 return new Returned();
             }
-
+            var generator = C3DController.Instance;
+            var temp = generator.newTemporal();
+            
 
             if (variable.IsGlobal)
             {
+                ambit.set_temp(temp);
                 access_string += generator.get_stack(temp, variable.Position.ToString(), cant_Tabs);
+
 
                 if (variable.DataType != DataType.BOOLEAN)
                 {
@@ -69,8 +72,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             else
             {
                 var tempAux = generator.newTemporal();
-                //generator.freeTemp(tempAux);
-
+                
                 access_string += generator.addExpression(tempAux, "SP", variable.Position.ToString(), "+", cant_Tabs);
                 access_string += generator.get_stack(temp, tempAux, cant_Tabs);
 
@@ -80,6 +82,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     access_string += generator.get_stack(tempAux, temp, cant_Tabs);
                     temp = tempAux;
                 }
+
+                ambit.set_temp(temp);
 
                 if (variable.DataType != DataType.BOOLEAN)
                 {

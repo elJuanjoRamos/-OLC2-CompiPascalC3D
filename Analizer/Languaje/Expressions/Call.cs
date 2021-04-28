@@ -58,7 +58,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             }
             else
             {
-                function_ambit = new Ambit(ambit, funcion_llamada.UniqId, "Function", ambit.Temp_return, ambit.Exit, ambit.IsFunction, ambit.Tipo_fun);
+                function_ambit = new Ambit(ambit, funcion_llamada.UniqId, "Function", ambit.Temp_return, ambit.Exit, ambit.IsFunction, ambit.Tipo_fun, ambit.Size);
             }
 
             var generator = C3D.C3DController.Instance;
@@ -83,9 +83,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
 
             var paramsValues = new ArrayList();
-
-            
-
 
             for (int i = 0; i < parametros.Count; i++)
             {
@@ -118,13 +115,31 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
             call_String += generator.save_comment("Inicia Llamada: " + funcion_llamada.UniqId, cant_tabs, false);
 
+
+            //COPIA DE LOS TEMPORALES
+            call_String += generator.save_comment("Inicia Salvado Temporales: " + ambit.Ambit_name, cant_tabs, false);
+
+            var temp_save = generator.newTemporal();
+            var temp_index = generator.newTemporal();
+            for (int i = 0; i < ambit.Size; i++)
+            {
+                call_String += generator.addExpression(temp_index, "SP", i.ToString(), "+", cant_tabs);
+                call_String += generator.get_stack(temp_save, temp_index, cant_tabs);
+                call_String += generator.addExpression(temp_index, "SP", (ambit.Size + 1 + i).ToString(), "+", cant_tabs);
+                call_String += generator.set_stack(temp_index, temp_save, cant_tabs);
+            }
+            call_String += generator.save_comment("Fin Salvado Temporales: " + ambit.Ambit_name, cant_tabs, true);
+
+
+
+
             //PASO DE PARAMETRO, CAMBIO SIMULADO
             if (paramsValues.Count > 0)
             {
                 call_String += generator.save_comment("Inicia:Parametros, Cambio de ambito", cant_tabs, false);
 
                 var temp = generator.newTemporal();
-                call_String += generator.addExpression(temp, "SP", (ambit.Size + 1).ToString(), "+", cant_tabs);
+                call_String += generator.addExpression(temp, "SP", (ambit.Size*2 + 1).ToString(), "+", cant_tabs);
                 int i = 0;
                 foreach (Returned item in paramsValues)
                 {
@@ -137,14 +152,25 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 }
                 call_String += generator.save_comment("Fin:Parametros, Cambio de ambito", cant_tabs, false);
             }
-            call_String += generator.next_Env(ambit.Size, cant_tabs);
+            call_String += generator.next_Env(ambit.Size*2, cant_tabs);
             call_String += generator.save_code(funcion_llamada.UniqId + "();", cant_tabs);
-            //generator.get_stack(temp, "SP", cant_tabs);
-            call_String += generator.ant_Env(ambit.Size, cant_tabs);
-            //generator.freeTemp(temp);
-            //generator.recoverTemps(ambit, size, cant_tabs);
+            call_String += generator.ant_Env(ambit.Size*2, cant_tabs);
+            
             call_String += generator.get_stack("T14", "T13", cant_tabs);
-            call_String += generator.save_comment("Fin Llamada: " + funcion_llamada.UniqId, cant_tabs, true);
+
+
+            //COPIA DE LOS TEMPORALES
+            call_String += generator.save_comment("Inicia Recuperado Temporales: " + ambit.Ambit_name, cant_tabs, false);
+
+            for (int i = ambit.Size * 2; i > ambit.Size; i--)
+            {
+                call_String += generator.addExpression(temp_index, "SP", (i).ToString(), "+", cant_tabs);
+                call_String += generator.get_stack(temp_save, temp_index, cant_tabs);
+                call_String += generator.addExpression(temp_index, "SP", (i - ambit.Size - 1).ToString(), "+", cant_tabs);
+                call_String += generator.set_stack(temp_index, temp_save, cant_tabs);
+            }
+
+            call_String += generator.save_comment("Fin Llamada: " + ambit.Ambit_name, cant_tabs, true);
 
             if (funcion_llamada.Tipe == DataType.BOOLEAN)
             {

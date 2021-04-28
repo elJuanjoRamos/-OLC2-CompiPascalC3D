@@ -70,7 +70,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                                 
                                 if (val.IsTemporal)
                                 {
-                                    //generator.free_temps(val.Value);
+                                    ambit.free_temp(val.Value);
                                 }
 
                                 if (variableAmbit.IsGlobal)
@@ -94,13 +94,15 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                                 {
 
                                     var temp = generator.newTemporal();
-
+                                    ambit.set_temp(temp);
                                     assignation_string += generator.addExpression(temp, "SP", variableAmbit.Position.ToString(), "+", tabs);
 
 
                                     if (variableAmbit.IsReference)
                                     {
                                         var newTemp = generator.newTemporal();
+                                        ambit.set_temp(newTemp);
+                                        ambit.free_temp(temp);
                                         assignation_string += generator.get_stack(newTemp, temp, tabs);
                                         temp = newTemp;
                                     }

@@ -31,7 +31,7 @@ procedure Hanoi(discos:integer; origen,aux,destino:string);
 begin
     if(discos=1) then
         begin
-            writeln('Mover Disco de ',origen,' a ',destino)
+            writeln('Mover Disco de ',origen,' a ',destino);
         end
     else
         Begin

@@ -11,8 +11,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
     class If : Instruction
     {
         private Expresion condition;
-        private Sentence sentences;
-        private Sentence elif;
+        private LinkedList<Instruction> sentences;
+        private LinkedList<Instruction> elif;
         private string labelExit;
         private bool isNull;
         public int row;
@@ -22,7 +22,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         public bool IsNull { get => isNull; set => isNull = value; }
         public string LabelExit { get => labelExit; set => labelExit = value; }
 
-        public If(Expresion condition, Sentence sentences, Sentence elif, int ro, int co, int ct)
+        public If(Expresion condition, LinkedList<Instruction> sentences, LinkedList<Instruction> elif, int ro, int co, int ct)
            : base("If")
         {
             this.condition = condition;
@@ -63,38 +63,47 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             if_string += generator.addLabel(condicion.TrueLabel, tabs);
 
-            if (sentences.IsNull)
-            {
-                return if_string;
-            }
+
             //SENTENCIAS
-            var if_sentencias = this.sentences.Execute(ifAmbit);
-            if (if_sentencias ==null)
+            var if_sentencias = "";
+            foreach (Instruction instruction in sentences)
             {
-                return null;
+                var result = instruction.Execute(ifAmbit);
+                if (result == null)
+                {
+                    return null;
+                }
+                if_sentencias += result;
             }
-            /*if (if_sentencias is Instruction)
-            {
-                return if_sentencias;
-            }*/
+
+           
             if_string += if_sentencias.ToString();
 
-            if (!this.elif.IsNull)
+            if (this.elif.Count != 0)
             {
                 var tempLbl = "";
-                /*if (this.labelExit == "")
-                {
-                    tempLbl = generator.newLabel();
-                } else
-                {
-                    tempLbl = this.labelExit;
-                }*/
                 tempLbl = generator.newLabel();
                 if_string += generator.add_Goto(tempLbl, tabs);
                 if_string += generator.addLabel(condicion.FalseLabel, tabs);
 
-                this.elif.ExitLabel = tempLbl;
-                var else_sentence = this.elif.Execute(ifAmbit);
+                var else_sentence = "";
+
+                foreach (Instruction inst in elif)
+                {
+                    if (inst is If)
+                    {
+                        ((If)inst).LabelExit = tempLbl;
+                    }
+
+                    var result = inst.Execute(ifAmbit);
+
+                    if (result == null)
+                    {
+                        return null;
+                    }
+                    else_sentence += result;
+                }
+
 
                 if (else_sentence == null)
                 {

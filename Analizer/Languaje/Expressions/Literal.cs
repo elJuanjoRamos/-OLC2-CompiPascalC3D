@@ -52,6 +52,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             else if (this.type == 2)
             {
                 var temp = generator.newTemporal();
+                ambit.set_temp(temp);
                 literal_string += generator.addExpression(temp, "HP", "", "", cant_tabs);
                 foreach (char cha in this.value.ToString())
                 {

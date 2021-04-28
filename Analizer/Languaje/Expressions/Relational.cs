@@ -61,6 +61,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             {
                                 this.FalseLabel = generator.newLabel();
                             }
+                            ambit.free_temp(valIz.getValue());
+                            ambit.free_temp(valDer.getValue());
+
                             relational_Str += generator.add_If(valIz.getValue(), valDer.getValue(), "==", this.TrueLabel, cant_tabs);
                             relational_Str += generator.add_Goto(this.FalseLabel, cant_tabs);
                             relational_Str += generator.save_comment("Termina EQUALS", cant_tabs, true);
@@ -96,7 +99,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                         if (valDer.getDataType == DataType.BOOLEAN)
                         {
                             relational_Str += generator.save_comment("Termina EQUALS", cant_tabs, true);
-
+                            ambit.free_temp(valIz.getValue());
+                            ambit.free_temp(valDer.getValue());
                             result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel, relational_Str, "",0,0);
 
                         } else
@@ -136,50 +140,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             relational_Str += generator.add_If("T8", "1", "==", this.TrueLabel, cant_tabs);
                             relational_Str += generator.add_Goto(this.FalseLabel, cant_tabs);
 
+                            ambit.free_temp(tempo_der);
+                            ambit.free_temp(tempo_izq);
 
-
-                            //GENERAR ETIQUETA RECURRENCIA
-                            /*var label_recurrecia = generator.newLabel();
-                            //PRINT TAG RECURRENCIA
-                            generator.addLabel(label_recurrecia, cant_tabs);
-
-                            var tempo_evaluar_iz = generator.newTemporal();
-                            var tempo_evaluar_de = generator.newTemporal();
-
-                            //SETEA A LOS TEMPORALES EL VALOR EN EL HEAP DE LA CADENA
-                            generator.get_Heap(tempo_evaluar_iz, tempo_izq, cant_tabs);
-                            generator.get_Heap(tempo_evaluar_de, tempo_der, cant_tabs);
-
-                            //SE AGREGA LA CONDICION DE IGUALDAD 
-                            var label_igualdad = generator.newLabel();
-                            this.FalseLabel = generator.newLabel();
-
-                            generator.add_If(tempo_evaluar_iz, tempo_evaluar_de, "==",label_igualdad, cant_tabs);
-                            generator.add_Goto(this.FalseLabel, cant_tabs);
-
-                            //IMPRIME TAG VERDADERA
-                            generator.addLabel(label_igualdad, cant_tabs);
-
-                            //TEMPORAL -1 para evaluar fin de candena
-                            var tempo_menos = generator.newTemporal();
-                            generator.addExpression(tempo_menos, "0", "1", "-", cant_tabs);
-
-                            var label_true_menos1_izq = generator.newLabel();
-                            var label_false_menos1_izq = generator.newLabel();
-
-                            generator.add_If(tempo_evaluar_iz, tempo_menos, "==", label_true_menos1_izq, cant_tabs);
-                            generator.add_Goto(label_false_menos1_izq, cant_tabs);
-                            generator.addLabel(label_true_menos1_izq, cant_tabs);
-
-                            this.TrueLabel = generator.newLabel();
-                            generator.add_If(tempo_evaluar_de, tempo_menos, "==", this.TrueLabel, cant_tabs);
-                            generator.add_Goto(label_false_menos1_izq, cant_tabs);
-
-                            generator.addLabel(label_false_menos1_izq, cant_tabs);
-                            generator.addExpression(tempo_izq, tempo_izq, "1", "+", cant_tabs);
-                            generator.addExpression(tempo_der, tempo_der, "1", "+", cant_tabs);
-
-                            generator.add_Goto(label_recurrecia, cant_tabs);*/
                             relational_Str += generator.save_comment("Termina EQUALS", cant_tabs, true);
 
                             result = new Returned("", DataType.BOOLEAN, false, this.TrueLabel, this.FalseLabel, relational_Str, "",0,0);
@@ -219,7 +182,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             {
                                 this.FalseLabel = generator.newLabel();
                             }
-
+                            ambit.free_temp(valIz.getValue());
+                            ambit.free_temp(valDer.getValue());
                             relational_Str += generator.add_If(valIz.getValue(), valDer.getValue(), "!=", this.TrueLabel, cant_tabs);
                             relational_Str += generator.add_Goto(this.FalseLabel, cant_tabs);
                             relational_Str += generator.save_comment("Termina DISTICT", cant_tabs, true);
@@ -231,10 +195,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             set_error("Operador '" + this.type + "' NO puede ser aplicado a los tipos " + valIz.getDataType + " con " + valDer.getDataType, row, column);
                             return result;
                         }
-
-                    }
-                    else if (valIz.getDataType == DataType.STRING)
-                    {
 
                     }
                     else if (valIz.getDataType == DataType.BOOLEAN)
@@ -257,6 +217,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                         //VERIFICA QUE EL DERECHO SEA BOOLEAN
                         if (valDer.getDataType == DataType.BOOLEAN)
                         {
+                            ambit.free_temp(valIz.getValue());
+                            ambit.free_temp(valDer.getValue());
                             relational_Str += generator.save_comment("Termina DISTICT", cant_tabs, true);
                             result = new Returned("", DataType.BOOLEAN, false, trueLabel, falseLabel, relational_Str, "",0,0);
 
@@ -294,6 +256,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                             {
                                 this.FalseLabel = generator.newLabel();
                             }
+                            ambit.free_temp(valIz.getValue());
+                            ambit.free_temp(valDer.getValue());
                             relational_Str += generator.add_If(valIz.getValue(), valDer.getValue(), this.type, this.TrueLabel, cant_tabs);
                             relational_Str += generator.add_Goto(this.FalseLabel, cant_tabs);
                             relational_Str += generator.save_comment("Termina " + op, cant_tabs, true);

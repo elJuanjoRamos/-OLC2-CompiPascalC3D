@@ -54,12 +54,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
             //AMBITO DE LA FUNCION
             var tipo = (funcion_llamada.IsProcedure ? "Procedure" : "Function");
-
-
-
-
-
-
+            var size = (funcion_llamada.IsProcedure ? 0 : 1);
 
 
             //INSTANCIA DEL GENERADOR DE CODIGO
@@ -67,27 +62,14 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             //generator.update_posision_global();
 
 
-            //COPIA DE LOS TEMPORALES
-            var tempStorage = generator.getTempStorage();
+           
+
 
 
             //PASO DE PARAMETROS
             var paramsValues = new ArrayList();
 
-
-            //TEXTO DE LA FUNCION
-            /*var funcion_total = generator.save_code("void " + funcion_llamada.UniqId 
-                + "(" + ") { \n", 0);*/
-
-            /*var tempo_return = "T13";
-            var exit_label = "";
-            if (!funcion_llamada.IsProcedure)
-            {
-                exit_label = generator.newLabel();
-                funcion_total += generator.save_code("//Temporal de retorno", 1);
-                funcion_total += generator.addExpression(tempo_return, "SP", "0", "+", 1);
-            }*/
-            Ambit function_ambit = new Ambit(ambit, funcion_llamada.UniqId, tipo, "", "", !funcion_llamada.IsProcedure, funcion_llamada.Tipe);
+            Ambit function_ambit = new Ambit(ambit, funcion_llamada.UniqId, tipo, "", "", !funcion_llamada.IsProcedure, funcion_llamada.Tipe, size);
 
 
             //SE GUARDAN LOS PARAMETROS EN EL AMBITO
@@ -126,59 +108,25 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 }
             }
 
-
-            //SE HACEN LAS DECLARACIONES Y FUNCIONES HIJAS 
-            //DECLARACIONES 
-            /*foreach (var declas in funcion_llamada.Declaraciones)
-            {
-                var result = declas.Execute(function_ambit);
-                if (result == null)
-                {
-                    return null;
-                }
-                funcion_total += result;
-            }*/
-
-            //FUNCIONES HIJAS
-            /*var funcion_hija = "";
-            foreach (var fun_hija in funcion_llamada.Funciones_hijas)
-            {
-                var result = fun_hija.Execute(function_ambit);
-                if (result == null)
-                {
-                    return null;
-                }
-                funcion_hija += result;
-            }*/
-
-            //INSTRUCCIONES
-            /*foreach (Instruction instruction in funcion_llamada.Sentences)
-            {
-                var instruccion = instruction.Execute(function_ambit);
-                if (instruccion == null)
-                {
-                    return null;
-                }
-                funcion_total += instruccion;
-            }*/
-
-
-            /*if (!funcion_llamada.IsProcedure)
-            {
-                funcion_total += generator.addLabel(exit_label, 1);
-            }
-
-            funcion_total += generator.save_code(" return;\n", 2);
-            funcion_total += generator.save_code("}\n", 0);
-
-            generator.set_function_code(funcion_total, funcion_llamada.UniqId);
-
-            ReporteController.Instance.save_ambit(function_ambit, function_ambit.Ambit_name);*/
-
-
-
-
             call_String += generator.save_comment("Inicia Llamada: " + funcion_llamada.UniqId, cant_tabs, false);
+
+
+
+            //COPIA DE LOS TEMPORALES
+            call_String += generator.save_comment("Inicia Salvado Temporales: " + ambit.Ambit_name, cant_tabs, false);
+
+            var temp_save = generator.newTemporal();
+            var temp_index = generator.newTemporal();
+            for (int i = 0; i < ambit.Size; i++)
+            {
+                call_String += generator.addExpression(temp_index, "SP", i.ToString(), "+", cant_tabs);
+                call_String += generator.get_stack(temp_save, temp_index, cant_tabs );
+                call_String += generator.addExpression(temp_index, "SP", (ambit.Size + 1 + i).ToString(), "+",cant_tabs);
+                call_String += generator.set_stack(temp_index, temp_save, cant_tabs);
+            }
+            call_String += generator.save_comment("Fin Salvado Temporales: " + ambit.Ambit_name, cant_tabs, true);
+
+
 
             //PASO DE PARAMETRO, CAMBIO SIMULADO
             if (paramsValues.Count > 0)
@@ -187,8 +135,10 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
                 var temp = generator.newTemporal();
 
+                var index = (funcion_llamada.IsProcedure) ? ambit.Size * 2 + 1 : ambit.Size * 2 + 2;
 
-                call_String += generator.addExpression(temp, "SP", (ambit.Size+1).ToString(), "+", cant_tabs );
+
+                call_String += generator.addExpression(temp, "SP", (index).ToString(), "+", cant_tabs );
                 int i = 0;
                 foreach (Returned item in paramsValues)
                 {
@@ -202,13 +152,26 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 generator.free_temps(temp);
                 call_String += generator.save_comment("Fin:Parametros, Cambio de ambito", cant_tabs, false);
             }
-            call_String += generator.next_Env(ambit.Size, cant_tabs);
+            call_String += generator.next_Env(ambit.Size*2, cant_tabs);
             call_String += generator.save_code(funcion_llamada.UniqId+"();", cant_tabs);
             
-            //generator.get_stack(temp, "SP", cant_tabs);
-            call_String += generator.ant_Env(ambit.Size, cant_tabs);
-            //generator.freeTemp(temp);
-            //generator.recoverTemps(ambit, size, cant_tabs);
+            call_String += generator.ant_Env(ambit.Size*2, cant_tabs);
+
+            //COPIA DE LOS TEMPORALES
+            call_String += generator.save_comment("Inicia Recuperado Temporales: " + ambit.Ambit_name, cant_tabs, false);
+            for (int i = ambit.Size*2; i >ambit.Size; i--)
+            {
+                call_String += generator.addExpression(temp_index, "SP", (i).ToString(), "+", cant_tabs);
+                call_String += generator.get_stack(temp_save, temp_index, cant_tabs);
+                call_String += generator.addExpression(temp_index, "SP", (i - ambit.Size-1).ToString(), "+", cant_tabs);
+                call_String += generator.set_stack(temp_index, temp_save, cant_tabs);
+            }
+            
+            call_String += generator.save_comment("Fin Recuperado Temporales: " + ambit.Ambit_name, cant_tabs, true);
+
+
+
+
 
             call_String += generator.save_comment("Fin Llamada: " + funcion_llamada.UniqId, cant_tabs, true);
 

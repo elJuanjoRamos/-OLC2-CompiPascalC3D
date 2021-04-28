@@ -3,6 +3,7 @@ using CompiPascalC3D.Analizer.Languaje.Sentences;
 using CompiPascalC3D.Analizer.Languaje.Sentences.Array;
 using CompiPascalC3D.Analizer.Languaje.Symbols;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,6 +14,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         Dictionary<string, Identifier> variables;
         Dictionary<string, Function> functions;
         Dictionary<string, Arrays> arrays;
+        ArrayList temporales;
         // Dictionary<string, Arrays> arrays;
         private Ambit anterior;
         private string ambit_name = "";
@@ -28,12 +30,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         private string _exit = "";
         private DataType tipo_fun;
  
-
+        //CONSTRUCTOR PARA INSTRUCCIONES DE CONTROL
         public Ambit(Ambit a, string n, string ni, bool isnull, bool isf)
         {
-            this.variables = new Dictionary<string, Identifier>();
-            this.functions = new Dictionary<string, Function>();
-            this.arrays = new Dictionary<string, Arrays>();
+            this.variables = a.variables;
+            this.functions = a.functions;
+            this.arrays =  a.arrays;
+            this.temporales = a.temporales;
             this.ambit_name = n;
             this.ambit_name_inmediato = ni;
             this.anterior = a;
@@ -48,7 +51,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         }
 
         //CONSTRUCTOR PARA FUNCIONES
-        public Ambit(Ambit a, string n, string ni, string tempoReturn, string exit_tag, bool isf, DataType dt)
+        public Ambit(Ambit a, string n, string ni, string tempoReturn, string exit_tag, bool isf, DataType dt, int size)
         {
             this.variables = new Dictionary<string, Identifier>();
             this.functions = new Dictionary<string, Function>();
@@ -57,11 +60,12 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             this.ambit_name_inmediato = ni;
             this.anterior = a;
             this.ambit_null = false;
-            this.size = 1;
+            this.size = size;
             this.temp_return = tempoReturn;
             this.isFunction = isf;
             this._exit = exit_tag;
             this.tipo_fun = dt;
+            this.temporales = new ArrayList();
         }
 
         public Ambit()
@@ -70,7 +74,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             this.variables = new Dictionary<string, Identifier>();
             this.functions = new Dictionary<string, Function>();
             this.arrays = new Dictionary<string, Arrays>();
-            //this.procedures = new Dictionary<string, string>();
+            this.temporales = new ArrayList();
             this.ambit_null = true;
             this.ambit_name = "General";
             this.ambit_name_inmediato = "General";
@@ -171,7 +175,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
 #endregion
 
 
-  #region FUNCIONES
+        #region FUNCIONES
         public void saveVarFunction(Identifier ident)
         {
             Ambit amb = this;
@@ -281,6 +285,18 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
 
         #endregion
 
+
+        #region TEMPORALES
+        public void set_temp(string temp)
+        {
+            this.temporales.Add(temp);
+        }
+        public void free_temp(string temp)
+        {
+            this.temporales.Remove(temp);
+        }
+        #endregion
+
         internal Dictionary<string, Identifier> Variables { get => variables; set => variables = value; }
         public Dictionary<string, Function> Functions { get => functions; set => functions = value; }
         public string Ambit_name_inmediato { get => ambit_name_inmediato; set => ambit_name_inmediato = value; }
@@ -294,5 +310,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         public Ambit Anterior { get => anterior; set => anterior = value; }
         public DataType Tipo_fun { get => tipo_fun; set => tipo_fun = value; }
         public Dictionary<string, Arrays> Arrayss { get => arrays; set => arrays = value; }
+        public ArrayList Temporales { get => temporales; set => temporales = value; }
     }
 }
