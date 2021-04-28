@@ -14,7 +14,7 @@ namespace CompiPascalC3D.Optimize.AST
 
         }
         LiteralOptimize LiteralOptimize = new LiteralOptimize();
-
+        string tipo = "";
         public Print GetPrint(ParseTreeNode actual)
         {
             int row = actual.ChildNodes[0].Token.Location.Line;
@@ -23,7 +23,7 @@ namespace CompiPascalC3D.Optimize.AST
             var cadena = actual.ChildNodes[2].Token.Text;
             var literal = PRINT_TERM(actual.ChildNodes[4]);
 
-            return new Print(cadena, literal, row, col);
+            return new Print(cadena, tipo, literal, row, col);
         }
 
         public Literal PRINT_TERM(ParseTreeNode actual)
@@ -32,6 +32,7 @@ namespace CompiPascalC3D.Optimize.AST
             {
                 return new Literal(actual.ChildNodes[0].Token.Text);
             }
+            tipo = actual.ChildNodes[1].Token.Text;
             return LiteralOptimize.getLiteral(actual.ChildNodes[3]);
         }
     }

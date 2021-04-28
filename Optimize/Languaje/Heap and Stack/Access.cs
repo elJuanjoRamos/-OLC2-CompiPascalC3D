@@ -23,7 +23,7 @@ namespace CompiPascalC3D.Optimize.Languaje.Heap_and_Stack
 
         public override string Code()
         {
-            return temp.Value + " = " + dataStructure + "[(int)" + index.Value + "];";
+            return temp.Value + " = " + dataStructure + "[(int)" + index.Value + "];\n";
         }
 
         public override object Optimize()

@@ -103,13 +103,39 @@ namespace CompiPascalC3D.Optimize.Languaje.Arithmetics
                     return this;
                 }
             }
+            else if (temp.Equals(der))
+            {
+                //Regla 6
+                if (iz.Equals("0") && simbol.Equals("+"))
+                {
+                    controller.set_optimizacion("Regla 6", temp + "=" + iz + "+" + der, "", row, column, ambit_name);
+                    return new Expresion();
+                }
+                //Regla 8
+                else if (iz.Equals("1") && simbol.Equals("*"))
+                {
+                    controller.set_optimizacion("Regla 8", temp + "=" + iz + "*" + der, "", row, column, ambit_name);
+                    return new Expresion();
+                }
+                else
+                {
+                    return this;
+                }
+            }
             else
             {
                 //Regla 10
                 if (simbol.Equals("+") && der.Equals("0"))
                 {
                     controller.set_optimizacion("Regla 10", temp + "=" + iz + simbol + der, temp + "=" + iz, row, column, ambit_name);
-                    return new Expresion(temp, left, row, column);  
+                    return new Expresion(temp, left, row, column);
+                }
+                //Regla 10
+                else if (simbol.Equals("+") && iz.Equals("0"))
+                {
+                    controller.set_optimizacion("Regla 10", temp + "=" + iz + simbol + der, temp + "=" + iz, row, column, ambit_name);
+                    return new Expresion(temp, right, row, column);
+
                 }
                 //Regla 11
                 else if (simbol.Equals("-") && der.Equals("0"))
@@ -123,6 +149,12 @@ namespace CompiPascalC3D.Optimize.Languaje.Arithmetics
                     controller.set_optimizacion("Regla 12", temp + "=" + iz + simbol + der, temp + "=" + iz, row, column, ambit_name);
                     return new Expresion(temp, left, row, column);
                 }
+                //Regla 12
+                else if (simbol.Equals("*") && iz.Equals("1"))
+                {
+                    controller.set_optimizacion("Regla 12", temp + "=" + iz + simbol + der, temp + "=" + iz, row, column, ambit_name);
+                    return new Expresion(temp, right, row, column);
+                }
                 //Regla 13
                 else if (simbol.Equals("/") && der.Equals("1"))
                 {
@@ -135,8 +167,20 @@ namespace CompiPascalC3D.Optimize.Languaje.Arithmetics
                     controller.set_optimizacion("Regla 14", temp + "=" + iz + simbol + der, temp + "=" + iz + "+" + iz, row, column, ambit_name);
                     return new Expresion(temp, left, left, "+", row, column);
                 }
+                //Regla 14
+                else if (simbol.Equals("*") && iz.Equals("2"))
+                {
+                    controller.set_optimizacion("Regla 14", temp + "=" + iz + simbol + der, temp + "=" + iz + "+" + iz, row, column, ambit_name);
+                    return new Expresion(temp, right, right, "+", row, column);
+                }
                 //Regla 15
                 else if (simbol.Equals("*") && der.Equals("0"))
+                {
+                    controller.set_optimizacion("Regla 15", temp + "=" + iz + simbol + der, temp + "=" + "0", row, column, ambit_name);
+                    return new Expresion(temp, new Literal("0", true, false, false), row, column);
+                }
+                //Regla 15
+                else if (simbol.Equals("*") && iz.Equals("0"))
                 {
                     controller.set_optimizacion("Regla 15", temp + "=" + iz + simbol + der, temp + "=" + "0", row, column, ambit_name);
                     return new Expresion(temp, new Literal("0", true, false, false), row, column);

@@ -9,6 +9,7 @@ namespace CompiPascalC3D.Optimize.Languaje.Prints
     class Print : Instruction
     {
         private string formato;
+        private string tipo;
         private Literal literal;
         private int row;
         private int column;
@@ -16,10 +17,11 @@ namespace CompiPascalC3D.Optimize.Languaje.Prints
 
         public bool IsEmpty { get => isEmpty; set => isEmpty = value; }
 
-        public Print(string cadena, Literal literal, int row, int column)
+        public Print(string cadena, string tipo, Literal literal, int row, int column)
             : base("Print")
         {
             this.formato = cadena;
+            this.tipo = tipo;
             this.literal = literal;
             this.row = row;
             this.column = column;
@@ -32,7 +34,7 @@ namespace CompiPascalC3D.Optimize.Languaje.Prints
         }
         public override string Code()
         {
-            var texto = (literal.IsString) ? literal.Value : "(int)" + literal.Value;
+            var texto = (literal.IsString) ? literal.Value : "(" + tipo + ")" + literal.Value;
             
             return "printf(" + formato + "," + texto + ");\n";
         }

@@ -201,7 +201,6 @@ namespace CompiPascalC3D.Optimize.Grammar
                 ;
             #endregion
 
-
             #region IF
             IF.Rule =
                 RESERV_If + PAR_IZQ + TERMINAL + SIMB + TERMINAL + PAR_DER + RESERV_GOTO + LABEL + PUNTO_COMA;
@@ -253,7 +252,9 @@ namespace CompiPascalC3D.Optimize.Grammar
                 ;
 
             PRINT_TERM.Rule
-                = PAR_IZQ + RESERV_INT + PAR_DER+ TERMINAL
+                = 
+                PAR_IZQ + RESERV_INT + PAR_DER+ TERMINAL
+                | PAR_IZQ + RESERV_FLOAT + PAR_DER + TERMINAL
                 | CADENA_SIMPLE
                 ;
 
