@@ -170,7 +170,8 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
                             newInstructions.Add(_if);
                         }
 
-                    } else
+                    } 
+                    else
                     {
                         if (i + 1 <= instrucciones.Count)
                         {
@@ -178,6 +179,7 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
 
                             if (instrucion2 is Goto)
                             {
+
 
                                 if (i + 2 <= instrucciones.Count)
                                 {
@@ -192,23 +194,70 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
                                         {
                                             Goto @goto = (Goto)instrucion2;
 
-                                            texto_eliminado =
-                                                _if.Code() + "<br>" + @goto.Code() + "<br>" + setLabel.Code();
+                                            var encontrado = false;
 
-                                            _if.Regla2 = true;
-                                            _if.Label = @goto.Label;
-                                            IF if_otimo = (IF)_if.Optimize();
+                                            if (i - 1 > 0)
+                                            {
+                                                for (int k = i-1; k >= 0; k--)
+                                                {
+                                                    var instruccion_evaual = instrucciones[k];
 
-                                            controller.set_optimizacion("Regla 2", texto_eliminado, if_otimo.Code(), if_otimo.Row, if_otimo.Column, id);
+                                                    if (instruccion_evaual is IF)
+                                                    {
+                                                        IF @if = (IF)instruccion_evaual;
+
+                                                        if (@if.Label.Name.Equals(setLabel.Label.Name))
+                                                        {
+                                                            encontrado = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                    else if (instruccion_evaual is Goto)
+                                                    {
+                                                        Goto @goto1 = (Goto)instruccion_evaual;
+                                                        if (@goto1.Label.Name.Equals(setLabel.Label.Name))
+                                                        {
+                                                            encontrado = true;
+                                                            break;
+                                                        }
+                                                    }
+
+                                                }
+                                            }
+                                            
+                                            
 
 
-                                            newInstructions.Add(if_otimo);
-                                            i = i + 2;
+
+
+                                            if (!encontrado)
+                                            {
+                                                texto_eliminado =
+                                                    _if.Code() + "<br>" + @goto.Code() + "<br>" + setLabel.Code();
+
+                                                _if.Regla2 = true;
+                                                _if.Label = @goto.Label;
+                                                IF if_otimo = (IF)_if.Optimize();
+
+                                                controller.set_optimizacion("Regla 2", texto_eliminado, if_otimo.Code(), if_otimo.Row, if_otimo.Column, id);
+
+
+                                                newInstructions.Add(if_otimo);
+                                                i = i + 2;
+                                            }
+                                            else
+                                            {
+                                                newInstructions.Add(_if);
+                                            }
                                         }
                                         else
                                         {
                                             newInstructions.Add(_if);
                                         }
+                                    }
+                                    else
+                                    {
+                                        newInstructions.Add(_if);
                                     }
                                 }
                                 else
