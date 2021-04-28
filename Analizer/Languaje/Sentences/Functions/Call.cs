@@ -135,7 +135,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
                 var temp = generator.newTemporal();
 
-                var index = (funcion_llamada.IsProcedure) ? ambit.Size * 2 + 1 : ambit.Size * 2 + 2;
+                var index = (funcion_llamada.IsProcedure) ? ambit.Size * 2 : ambit.Size * 2 + 1;
 
 
                 call_String += generator.addExpression(temp, "SP", (index).ToString(), "+", cant_tabs);

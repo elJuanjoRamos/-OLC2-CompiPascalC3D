@@ -139,7 +139,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 call_String += generator.save_comment("Inicia:Parametros, Cambio de ambito", cant_tabs, false);
 
                 var temp = generator.newTemporal();
-                call_String += generator.addExpression(temp, "SP", (ambit.Size * 2 + 1).ToString(), "+", cant_tabs);
+                var index = (funcion_llamada.IsProcedure) ? ambit.Size * 2 : ambit.Size * 2 + 1;
+                call_String += generator.addExpression(temp, "SP", (index).ToString(), "+", cant_tabs);
                 int i = 0;
                 foreach (Returned item in paramsValues)
                 {
@@ -162,7 +163,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             //COPIA DE LOS TEMPORALES
             call_String += generator.save_comment("Inicia Recuperado Temporales: " + ambit.Ambit_name, cant_tabs, false);
 
-            for(int i = ambit.Size * 2 - 1; i >= ambit.Size; i--)
+            for (int i = ambit.Size * 2 - 1; i >= ambit.Size; i--)
             {
                 call_String += generator.addExpression(temp_index, "SP", (i).ToString(), "+", cant_tabs);
                 call_String += generator.get_stack(temp_save, temp_index, cant_tabs);

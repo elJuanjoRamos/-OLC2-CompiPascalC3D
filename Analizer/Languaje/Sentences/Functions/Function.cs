@@ -78,6 +78,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 ambit_func.saveVarFunction(dec.Id, "0", "0", dec.Type, dec.isRefer, "Parameter", 0);
             }
 
+            funcion_total += generator.save_comment("Inicia Declaracion de variables", 1, false);
             //DECLARACIONES 
             foreach (var declas in declaraciones)
             {
@@ -88,6 +89,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 }
                 funcion_total += result;
             }
+            funcion_total += generator.save_comment("Fin Declaracion de variables", 1, false);
 
             //FUNCIONES HIJAS
             var funcion_hija = "";
@@ -105,22 +107,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             foreach (Instruction instruction in sentences)
             {               
                 var instruccion = instruction.Execute(ambit_func);
-
-                if (instruccion is Call)
-                {
-                    funcion_total += generator.save_comment("Inicia salvado de temporales ", 1, false);
-                    //DECLARACIONES 
-                    foreach (var declas in declaraciones)
-                    {
-                        var result = declas.Execute(ambit_func);
-                        if (result == null)
-                        {
-                            return null;
-                        }
-                        funcion_total += result;
-                    }
-                    funcion_total += generator.save_comment("Fin salvado de temporales ", 1, false);
-                }
 
                 if (instruccion == null)
                 {
