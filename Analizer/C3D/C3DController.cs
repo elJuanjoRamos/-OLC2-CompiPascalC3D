@@ -328,7 +328,7 @@ namespace CompiPascalC3D.Analizer.C3D
             foreach (char cha in str)
             {
                 //this.code.Add();
-                texto += tab_S + "printf(\"%" + "c" + "\"," + (int)cha + ");\n";
+                texto += tab_S + "printf(\"%" + "c" + "\",(int)" + (int)cha + ");\n";
             }
 
             return texto + "\n";
