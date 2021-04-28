@@ -30,11 +30,37 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
         public override Returned Execute(Ambit ambit)
         {
-            var varIz = this.left.Execute(ambit);
-            var valDer = this.right.Execute(ambit);
 
-            var arithmetic_string = varIz.Texto_anterior + valDer.Texto_anterior;
-            var texto_original = varIz.Valor_original + type + valDer.Valor_original;
+            var varIz = new Returned();
+            var valDer = new Returned();
+
+            var arithmetic_string = "";
+            var texto_original = "";
+
+            if ((this.left is CallFunction) && !(this.right is CallFunction))
+            {
+                varIz = this.left.Execute(ambit);
+                valDer = this.right.Execute(ambit);
+                arithmetic_string = varIz.Texto_anterior + valDer.Texto_anterior;
+                texto_original = varIz.Valor_original + type + valDer.Valor_original;
+            }
+            else if (!(this.left is CallFunction) && (this.right is CallFunction))
+            {
+                valDer = this.right.Execute(ambit);
+                varIz = this.left.Execute(ambit);
+                arithmetic_string =  valDer.Texto_anterior + varIz.Texto_anterior;
+                texto_original = varIz.Valor_original + type + valDer.Valor_original;
+
+            }
+            else
+            {
+                varIz = this.left.Execute(ambit);
+                valDer = this.right.Execute(ambit);
+                arithmetic_string = varIz.Texto_anterior + valDer.Texto_anterior;
+                texto_original = varIz.Valor_original + type + valDer.Valor_original;
+
+            }
+
 
             var generator = C3DController.Instance;
 
