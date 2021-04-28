@@ -29,6 +29,7 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
 
         public ArrayList Instrucciones { get => instrucciones; set => instrucciones = value; }
         public string Id { get => id; set => id = value; }
+        public LinkedList<Blocks> Block_instructions { get => block_instructions; set => block_instructions = value; }
 
         public override object Optimize()
         {
@@ -225,11 +226,6 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
                                                 }
                                             }
                                             
-                                            
-
-
-
-
                                             if (!encontrado)
                                             {
                                                 texto_eliminado =
@@ -379,20 +375,30 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
             #endregion
 
 
-            Blocks blocks = new Blocks();
+            int number_block = 1;
+            Blocks blocks = new Blocks(number_block);
             foreach (Instruction inst in instrucciones)
             {
+
                 if (inst.Name.Equals("If") || inst.Name.Equals("Goto"))
                 {
                     blocks.setInstruction(inst);
+                    blocks.OutLabel = ( (inst is IF) ? ((IF)inst).Label.Name : ((Goto)inst).Label.Name) ;
                     block_instructions.AddLast(blocks);
-                    blocks = new Blocks();
+                    number_block++;
+                    blocks = new Blocks(number_block);
                 }
+                
                 else if (inst.Name.Equals("SetLabel"))
                 {
-                    block_instructions.AddLast(blocks);
-                    blocks = new Blocks();
+                    if (blocks.Instructions.Count > 0)
+                    {
+                        block_instructions.AddLast(blocks);
+                        number_block++;
+                        blocks = new Blocks(number_block);
+                    }
                     blocks.setInstruction(inst);
+                    blocks.InLabel = ((SetLabel)inst).Label.Name;
                 } else
                 {
                     blocks.setInstruction(inst);
@@ -407,7 +413,7 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
 
         public override string Code()
         {
-            var cadena = tipo +" " + id + "(){\n\n";
+            var cadena = tipo +" " + id + "(){\n";
 
             foreach (Instruction instruction in instrucciones)
             {
@@ -425,7 +431,7 @@ namespace CompiPascalC3D.Optimize.Languaje.Function
                 }
             }
 
-            cadena += "\n}";
+            cadena += "\n}\n\n";
             return cadena;
         }
     }

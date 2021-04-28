@@ -44,6 +44,7 @@
             this.compilar = new System.Windows.Forms.Button();
             this.consola = new System.Windows.Forms.RichTextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.graph = new System.Windows.Forms.Button();
             this.consolaOptimizar = new System.Windows.Forms.RichTextBox();
             this.areaOptimizar = new System.Windows.Forms.RichTextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -204,6 +205,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.graph);
             this.tabPage2.Controls.Add(this.consolaOptimizar);
             this.tabPage2.Controls.Add(this.areaOptimizar);
             this.tabPage2.Controls.Add(this.label5);
@@ -219,6 +221,20 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Optimizer";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // graph
+            // 
+            this.graph.BackColor = System.Drawing.Color.White;
+            this.graph.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.graph.Image = ((System.Drawing.Image)(resources.GetObject("graph.Image")));
+            this.graph.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.graph.Location = new System.Drawing.Point(721, 425);
+            this.graph.Name = "graph";
+            this.graph.Size = new System.Drawing.Size(156, 50);
+            this.graph.TabIndex = 21;
+            this.graph.Text = "Graph";
+            this.graph.UseVisualStyleBackColor = false;
+            this.graph.Click += new System.EventHandler(this.graph_Click);
             // 
             // consolaOptimizar
             // 
@@ -349,6 +365,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button graph;
     }
 }
 

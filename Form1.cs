@@ -20,7 +20,7 @@ namespace CompiPascal
         public Form1()
         {
             InitializeComponent();
-            this.optimo.Enabled = this.tablasimbolos.Enabled = this.errores.Enabled = false;
+            this.optimo.Enabled = this.tablasimbolos.Enabled = this.graph.Enabled = this.errores.Enabled = false;
         }
 
         private void contextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -117,6 +117,7 @@ namespace CompiPascal
             } else
             {
                 this.optimo.Enabled = true;
+                this.graph.Enabled = true;
                 consolaOptimizar.Text = s.get_texto();
             }
 
@@ -128,6 +129,12 @@ namespace CompiPascal
             ReporteController.Instance.set_optimizacion_reporte();
 
  
+        }
+
+        private void graph_Click(object sender, EventArgs e)
+        {
+            ReporteController.Instance.set_path(Application.StartupPath);
+            ReporteController.Instance.graph_blocks();
         }
     }
 }

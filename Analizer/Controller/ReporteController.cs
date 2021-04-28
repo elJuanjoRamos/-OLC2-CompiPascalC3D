@@ -1,6 +1,7 @@
 ﻿using CompiPascalC3D.Analizer.Languaje.Ambits;
 using CompiPascalC3D.Analizer.Languaje.Sentences;
 using CompiPascalC3D.Analizer.Languaje.Symbols;
+using CompiPascalC3D.Optimize.Languaje.Block;
 using CompiPascalC3D.Optimize.Languaje.Symbols;
 using System;
 using System.Collections;
@@ -15,6 +16,8 @@ namespace CompiPascalC3D.Analizer.Controller
 
         Dictionary<string, Ambit> ambit_list;
         ArrayList optimizacionAritmetica = new ArrayList();
+        LinkedList<CompiPascalC3D.Optimize.Languaje.Abstract.Instruction> 
+            functions = new LinkedList<CompiPascalC3D.Optimize.Languaje.Abstract.Instruction>();
 
         Ambit general;
 
@@ -205,7 +208,7 @@ namespace CompiPascalC3D.Analizer.Controller
             "</html>";
 
 
-            print_file_report("2.Reporte Errores", html);
+            print_file_report("2.Reporte Errores.html", html);
 
         }
 
@@ -230,7 +233,7 @@ namespace CompiPascalC3D.Analizer.Controller
 
         public void print_file_report(string name_file, string text)
         {
-            string path1 = this.path + "\\" + name_file+".html";
+            string path1 = this.path + "\\" + name_file;
 
             try
             {
@@ -252,6 +255,72 @@ namespace CompiPascalC3D.Analizer.Controller
 
         //////////////////////////////////////////////
         //  REPORTES DE OPTIMIZACION
+
+        public void get_funciones(LinkedList<CompiPascalC3D.Optimize.Languaje.Abstract.Instruction> linkedList)
+        {
+            this.functions = linkedList;
+        }
+
+        public void graph_blocks()
+        {
+            var graph = "digraph G {\n\n";
+            int i = 1;
+            foreach (CompiPascalC3D.Optimize.Languaje.Function.Function func in functions)
+            {
+                graph += "\tsubgraph cluster_" + i+ " {\n\n \t\tblock" + i 
+                    + "_start" + i+ " [shape=Mdiamond; label=\"start\"];\n\t\tblock" + i + "_end" + i+ " [shape=Msquare; label=\"end\"];\n\t\tcolor=blue\n";
+
+                graph += "\t\tlabel = \" function " + func.Id +" \";\n";
+
+                //NODOS
+                foreach (Blocks blocks in func.Block_instructions)
+                {
+                    graph += "\t\tblock"+i+"_b" + blocks.Number + "[label =<" + blocks.get_instruction() + ">; shape=rectangle];\n";
+                }
+
+                //ENLACES SECUENCIALES
+                int j = 0;
+                var texo = "";
+                foreach (Blocks blocks in func.Block_instructions)
+                {
+                    j++;
+                    texo += (j == func.Block_instructions.Count) ? "block" + i + "_b" + blocks.Number + "->" + "block" + i + "_end" + i +";\n" : "block" + i + "_b" + blocks.Number + "->";
+                }
+                graph += "\t\t" + "block" + i + "_start" + i + "->" + texo;
+
+
+                //ENLACES A TAGS
+                texo = "";
+                foreach (Blocks blocks in func.Block_instructions)
+                {
+                    if (blocks.OutLabel != "")
+                    {
+                        int index = get_index_block(blocks.OutLabel, func.Block_instructions);
+                        texo += (index != -1) ? "block" + i + "_b" + blocks.Number + "->block" + i + "_b" + index+ ";" : ""; 
+                    }
+                }
+                graph += "\t\t" + texo;
+
+
+                graph += "\n\n\t}\n\n";
+                i++;
+            }
+            graph += "\n}";
+
+            print_file_report("4.Reporte Bloques.dot", graph);
+        }
+
+        public int get_index_block(string label_name, LinkedList<Blocks> blocks)
+        {
+            foreach (Blocks blocks1 in blocks)
+            {
+                if (blocks1.InLabel.Equals(label_name))
+                {
+                    return blocks1.Number;
+                }
+            }
+            return -1;
+        }
 
         public void Clean()
         {
@@ -297,7 +366,7 @@ namespace CompiPascalC3D.Analizer.Controller
             "</html>";
 
 
-            print_file_report("3.Reporte Optimizacion", html);
+            print_file_report("3.Reporte Optimizacion.html", html);
 
 
         }

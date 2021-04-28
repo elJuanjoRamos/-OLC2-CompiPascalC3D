@@ -1,0 +1,38 @@
+digraph G {
+
+	subgraph cluster_1 {
+
+ 		block1_start1 [shape=Mdiamond; label="start"];
+		block1_end1 [shape=Msquare; label="end"];
+		color=blue
+		label = " function test2 ";
+		block1_b1[label =<if(T7←T9) goto L1<BR/>>; shape=rectangle];
+		block1_b2[label =<T1 = T2<BR/>T9 = 0<BR/>if(T1←5) goto L1<BR/>>; shape=rectangle];
+		block1_b3[label =<goto L5<BR/>>; shape=rectangle];
+		block1_b4[label =<L1:<BR/>T8 = T2+T2<BR/>>; shape=rectangle];
+		block1_b5[label =<L5:<BR/>T7 = T2<BR/>>; shape=rectangle];
+		block1_start1->block1_b1->block1_b2->block1_b3->block1_b4->block1_b5->block1_end1;
+		block1_b1->block1_b4;block1_b2->block1_b4;block1_b3->block1_b5;
+
+	}
+
+	subgraph cluster_2 {
+
+ 		block2_start2 [shape=Mdiamond; label="start"];
+		block2_end2 [shape=Msquare; label="end"];
+		color=blue
+		label = " function test ";
+		block2_b1[label =<T1 = 2<BR/>T2 = 3<BR/>if(T1←T2) goto L1<BR/>>; shape=rectangle];
+		block2_b2[label =<T3 = 0<BR/>goto L2<BR/>>; shape=rectangle];
+		block2_b3[label =<L1:<BR/>T3 = 1<BR/>>; shape=rectangle];
+		block2_b4[label =<L2:<BR/>if(T3==1) goto L3<BR/>>; shape=rectangle];
+		block2_b5[label =<T4 = 2<BR/>printf(%i,(int)T4)<BR/>goto L4<BR/>>; shape=rectangle];
+		block2_b6[label =<L3:<BR/>T5 = 1<BR/>printf(%i,(int)T5)<BR/>>; shape=rectangle];
+		block2_b7[label =<L4:<BR/>>; shape=rectangle];
+		block2_start2->block2_b1->block2_b2->block2_b3->block2_b4->block2_b5->block2_b6->block2_b7->block2_end2;
+		block2_b1->block2_b3;block2_b2->block2_b4;block2_b4->block2_b6;block2_b5->block2_b7;
+
+	}
+
+
+}

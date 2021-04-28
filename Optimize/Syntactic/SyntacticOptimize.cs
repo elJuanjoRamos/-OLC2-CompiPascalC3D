@@ -77,6 +77,8 @@ namespace CompiPascalC3D.Optimize.Syntactic
                 texto_general += func.Code();
             }
 
+            ReporteController.Instance.get_funciones(lista_actual);
+
         }
 
         public string get_texto()

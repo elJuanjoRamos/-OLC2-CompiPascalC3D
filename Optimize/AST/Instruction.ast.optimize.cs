@@ -23,8 +23,6 @@ namespace CompiPascalC3D.Optimize.AST
         {
             ArrayList listaInstrucciones = new ArrayList();
 
-            Blocks blocks = new Blocks();
-            int i = 0;
             foreach (ParseTreeNode nodo in actual.ChildNodes)
             {
 
