@@ -120,7 +120,7 @@ namespace CompiPascalC3D.Analizer.Controller
 
 
 
-        public void generate_report()
+        public bool generate_report()
         {
            
             string body1 = 
@@ -174,12 +174,12 @@ namespace CompiPascalC3D.Analizer.Controller
 
             /*creando archivo html*/
 
-            print_file_report("1.Tabla_Simbolos.html", html);
+            return print_file_report("1.Tabla_Simbolos.html", html);
 
         }
 
 
-        public void generate_error_retort()
+        public bool generate_error_retort()
         {
             string table_head =
             "<th scope =\"col\">No</th>\n" +
@@ -208,7 +208,7 @@ namespace CompiPascalC3D.Analizer.Controller
             "</html>";
 
 
-            print_file_report("2.Reporte Errores.html", html);
+            return print_file_report("2.Reporte Errores.html", html);
 
         }
 
@@ -231,7 +231,7 @@ namespace CompiPascalC3D.Analizer.Controller
         }
 
 
-        public void print_file_report(string name_file, string text)
+        public bool print_file_report(string name_file, string text)
         {
             string path1 = this.path + "\\" + name_file;
 
@@ -244,11 +244,13 @@ namespace CompiPascalC3D.Analizer.Controller
                     // Add some information to the file.
                     fs.Write(info, 0, info.Length);
                 }
+                return true;
             }
 
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                return false;
             }
         }
 
@@ -261,7 +263,7 @@ namespace CompiPascalC3D.Analizer.Controller
             this.functions = linkedList;
         }
 
-        public void graph_blocks()
+        public bool graph_blocks()
         {
             var graph = "digraph G {\n\n";
             int i = 1;
@@ -307,7 +309,7 @@ namespace CompiPascalC3D.Analizer.Controller
             }
             graph += "\n}";
 
-            print_file_report("4.Reporte Bloques.dot", graph);
+            return print_file_report("4.Reporte Bloques.dot", graph);
         }
 
         public int get_index_block(string label_name, LinkedList<Blocks> blocks)
@@ -332,7 +334,7 @@ namespace CompiPascalC3D.Analizer.Controller
             this.optimizacionAritmetica.Add(new SymbolOptimizado("Bloque", rule, code_deleted, code_added, row, col, ambit));
         }
 
-        public void set_optimizacion_reporte()
+        public bool set_optimizacion_reporte()
         {
             string table_head =
             "<th scope =\"col\">No</th>\n" +
@@ -366,7 +368,7 @@ namespace CompiPascalC3D.Analizer.Controller
             "</html>";
 
 
-            print_file_report("3.Reporte Optimizacion.html", html);
+            return print_file_report("3.Reporte Optimizacion.html", html);
 
 
         }

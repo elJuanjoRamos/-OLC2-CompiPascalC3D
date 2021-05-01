@@ -81,13 +81,15 @@ namespace CompiPascal
         private void tablasimbolos_Click(object sender, EventArgs e)
         {
             ReporteController.Instance.set_path(Application.StartupPath);
-            ReporteController.Instance.generate_report();
+            var resultado = ReporteController.Instance.generate_report();
+            showPopUp(resultado, "tabla de simbolos");   
         }
 
         private void errores_Click(object sender, EventArgs e)
         {
             ReporteController.Instance.set_path(Application.StartupPath);
-            ReporteController.Instance.generate_error_retort();
+            var resultado = ReporteController.Instance.generate_error_retort();
+            showPopUp(resultado, "errores");
 
         }
 
@@ -126,15 +128,30 @@ namespace CompiPascal
         private void optimo_Click(object sender, EventArgs e)
         {
             ReporteController.Instance.set_path(Application.StartupPath);
-            ReporteController.Instance.set_optimizacion_reporte();
+            var resultado = ReporteController.Instance.set_optimizacion_reporte();
+            showPopUp(resultado, "optimizacion");
 
- 
+
         }
 
         private void graph_Click(object sender, EventArgs e)
         {
             ReporteController.Instance.set_path(Application.StartupPath);
-            ReporteController.Instance.graph_blocks();
+            var resultado = ReporteController.Instance.graph_blocks();
+            showPopUp(resultado, "bloques");
+        }
+
+
+        private void showPopUp(bool resultado, string report)
+        {
+            if (resultado)
+            {
+                MessageBox.Show("Reporte de " + report + " generado en la carpeta /bin");
+            }
+            else
+            {
+                MessageBox.Show("Error al generar el reporte " + report);
+            }
         }
     }
 }

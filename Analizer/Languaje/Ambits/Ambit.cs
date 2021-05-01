@@ -114,7 +114,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
 
         }
 
-        public void setVariableFuncion(string id, string valor, string valdef, DataType type, bool isrefe, string tipo_Dato, int reference_to)
+        public void setVariableFuncion(string id, string valor, string valdef, DataType type, bool isrefe, string tipo_Dato, int reference_to, 
+            bool isheap)
         {
             Ambit env = this;
 
@@ -122,7 +123,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
             {
                 var variable = env.Variables[id.ToLower()];
                 env.Variables[id.ToLower()] = new Identifier(valor, valdef, id, type, false, false, 
-                    variable.Position, false, false, isrefe, tipo_Dato, variable.Position_global, reference_to);
+                    variable.Position, false, isheap, isrefe, tipo_Dato, variable.Position_global, reference_to);
             }
         }
         public void setVariable(string id, string valor, string valdef, DataType type, bool isAssigned, 

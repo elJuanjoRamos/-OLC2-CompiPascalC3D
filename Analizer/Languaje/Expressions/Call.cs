@@ -94,13 +94,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
                 if (variable.Type == result.getDataType)
                 {
-                    if (variable.isRefer)
+                    if (variable.isRefer && !(parametros[i] is Literal))
                     {
                         result.Value = result.Pos_refer.ToString();
                     }
 
                     function_ambit.setVariableFuncion(variable.Id, result.Value,
-                        result.Valor_original, result.getDataType, variable.isRefer, "Parameter", result.Pos_refer);
+                        result.Valor_original, result.getDataType, variable.isRefer, "Parameter", result.Pos_refer, false);
 
                     paramsValues.Add(result);
                 }

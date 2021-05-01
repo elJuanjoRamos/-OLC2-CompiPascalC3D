@@ -38,6 +38,7 @@ namespace CompiPascalC3D.Analizer.C3D
         private string texto_general;
         private Stack micola;
         private int pos_global;
+        private string string_global = "";
 
         private C3DController()
         {
@@ -85,17 +86,10 @@ namespace CompiPascalC3D.Analizer.C3D
         //TEMPORALES
 
         public string newTemporal() {
-            var temp = "";
-
-            //if (micola.Count == 0)
-            //{
-                temp = "T" + this.temporal_number++;
-                this.tempStorage.Add(temp);
-            //} else
-            //{
-            //    temp = micola.Pop().ToString();
-            //}
-
+            var temp = "T" + this.temporal_number++;
+            this.tempStorage.Add(temp);
+            this.tempNatives.Add(temp);
+            
             return temp;
         }
 
@@ -113,17 +107,21 @@ namespace CompiPascalC3D.Analizer.C3D
 
         public void freeTemp(string temp)
         {
-            if (this.tempStorage.Contains(temp))
+            if (this.tempNatives.Contains(temp))
             {
-                this.tempStorage.Remove(temp);
+                this.tempNatives.Remove(temp);
             }
         }
 
         public ArrayList getTempStorage()
         {
-            return this.tempStorage;
+            return this.tempNatives;
         }
 
+        public void clearTempStorage()
+        {
+            this.tempNatives.Clear();
+        }
 
         public void free_temps(string temp)
         {
@@ -216,15 +214,6 @@ namespace CompiPascalC3D.Analizer.C3D
             }
 
             return texto;
-            /*for (int i = 0; i < this.code.Count; i++)
-            {
-                string element = this.code[i].ToString();
-                if (element.Contains(replace))
-                {
-                    var temp = element.Replace(replace, label);
-                    this.code[i] = temp;
-                }
-            }*/
         }
 
         ///STACK
@@ -337,7 +326,14 @@ namespace CompiPascalC3D.Analizer.C3D
         // OBTIENE LOS TEMPORALES
         public string getTemps()
         {
-            var text = "float T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14";
+
+           
+            string_global += (this.Native_str) ? "T1,T2," : "";
+            string_global += (this.native_equals) ? "T3,T4,T5,T6,T7,T8," : "";
+            string_global += (this.Native_compare) ? "T9,T10,T11,T12," : "";
+
+            var text = "float " + string_global + "T13,T14";
+
             var cont = 0;
 
             if (tempStorage.Count == 0)
@@ -411,7 +407,7 @@ namespace CompiPascalC3D.Analizer.C3D
             if (this.Native_str)
             {
                 //this.tempNatives.Add("T1,T2");
-                //NATIVA PARA IMRIMIR STRINGS
+                //NATIVA PARA IMRIMIR STRINGS'
                 nativa_print += save_code("void native_print_str(){", 0);
                 nativa_print += addLabel("L1", 1);
                 nativa_print += get_Heap("T2", "T1", 1);
@@ -427,8 +423,8 @@ namespace CompiPascalC3D.Analizer.C3D
             var nativa_igual = "";
             if (this.native_equals)
             {
-                
-                
+
+
                 //this.tempNatives.Add("T3,T4,T5,T6,T7");
                 //NATIVA PARA COMPARAR STRING
                 nativa_igual += save_code("int native_cmp_str(){", 0)
