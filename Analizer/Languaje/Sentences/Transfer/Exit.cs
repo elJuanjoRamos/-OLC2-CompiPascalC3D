@@ -65,11 +65,11 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 var res = "";
                 if (val.getDataType == DataType.BOOLEAN)
                 {
-                    res = (val.Value.ToString().ToLower().Equals("true") ? "1" : "0");
+                    res = (val.getValue().ToLower().Equals("true") ? "1" : "0");
                 } else
                 {
                     texto += val.Texto_anterior;
-                    res = val.Value.ToString();
+                    res = val.getValue();
                 }
 
                 texto += generator.set_stack(ambit.Temp_return, res, cant_tabs);

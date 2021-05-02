@@ -71,7 +71,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 if (valDer.getDataType == DataType.INTEGER || valDer.getDataType == DataType.REAL)
                 {
                     var temp = generator.newTemporal();
-                    arithmetic_string += generator.addExpression(temp, varIz.Value, valDer.Value, type, cant_tabs);
+                    arithmetic_string += generator.addExpression(temp, varIz.getValue(), valDer.getValue(), type, cant_tabs);
 
                     if (valDer.getDataType == DataType.REAL || varIz.getDataType == DataType.REAL)
                     {
@@ -86,11 +86,10 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             else if (varIz.getDataType == DataType.STRING && valDer.getDataType == DataType.STRING)
             {
 
-                arithmetic_string += generator.addExpression("T9", varIz.Value.ToString(), "", "", cant_tabs);
-                arithmetic_string += generator.addExpression("T10", valDer.Value.ToString(), "", "", cant_tabs);
+                arithmetic_string += generator.addExpression("T9", varIz.getValue(), "", "", cant_tabs);
+                arithmetic_string += generator.addExpression("T10", valDer.getValue(), "", "", cant_tabs);
                 arithmetic_string += generator.save_code("native_concat_str();", cant_tabs);
                 return new Returned("T12", DataType.STRING, true, "","", arithmetic_string, texto_original,0,0);
-
             }
 
 

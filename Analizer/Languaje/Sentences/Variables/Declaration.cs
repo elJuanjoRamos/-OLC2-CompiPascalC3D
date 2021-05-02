@@ -147,8 +147,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                         }
                         else
                         {
+                            generator.freeTemp(temp);
                             string_declaracion += generator.set_stack(temp, val.getValue(), 1);
-                            generator.free_temps(temp);
                         }
 
                     }

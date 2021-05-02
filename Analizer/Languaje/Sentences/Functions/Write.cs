@@ -65,7 +65,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 var element = el.Execute(ambit);
                 if (element.IsTemporal)
                 {
-                    ambit.free_temp(element.Value.ToString());
+                    ambit.free_temp(element.getValue());
                 }
 
                 write_Str += element.Texto_anterior;
@@ -83,7 +83,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                         
                         generator.Native_str = true;
 
-                        var temp_stack = element.Value.ToString();
+                        var temp_stack = element.getValue();
                         write_Str += generator.addExpression("T1", temp_stack, "", "", cant_tabs);
 
                         write_Str += generator.save_code("native_print_str();", cant_tabs);

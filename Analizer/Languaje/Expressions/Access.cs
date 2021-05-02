@@ -45,6 +45,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             if (variable.IsGlobal)
             {
                 ambit.set_temp(temp);
+                generator.freeTemp(temp);
                 access_string += generator.get_stack(temp, variable.Position.ToString(), cant_Tabs);
 
 
@@ -75,11 +76,12 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                 
                 access_string += generator.addExpression(tempAux, "SP", variable.Position.ToString(), "+", cant_Tabs);
                 access_string += generator.get_stack(temp, tempAux, cant_Tabs);
-
+                generator.freeTemp(tempAux);
                 if (variable.IsReference)
                 {
                     tempAux = generator.newTemporal();
                     access_string += generator.get_stack(tempAux, temp, cant_Tabs);
+                    generator.freeTemp(temp);
                     temp = tempAux;
                 }
 

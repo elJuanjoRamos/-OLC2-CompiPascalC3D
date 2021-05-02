@@ -102,6 +102,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                                     var newTemp = generator.newTemporal();
                                     ambit.set_temp(newTemp);
                                     ambit.free_temp(temp);
+                                    generator.freeTemp(temp);
                                     assignation_string += generator.get_stack(newTemp, temp, tabs);
                                     temp = newTemp;
                                 }
@@ -110,6 +111,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
                                 if (variableAmbit.DataType == DataType.BOOLEAN)
                                 {
+                                    generator.freeTemp(temp);
                                     var templabel = generator.newLabel();
                                     assignation_string += generator.addLabel(val.TrueLabel, tabs);
                                     assignation_string += generator.set_stack(temp, "1", tabs);
@@ -120,6 +122,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                                 }
                                 else
                                 {
+                                    generator.freeTemp(temp);
                                     assignation_string += generator.set_stack(temp, val.getValue(), tabs);
                                 }
 
@@ -152,7 +155,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                         */
                      if (function.Tipe == val.getDataType)
                         {
-                            function.Retorno = val.Value.ToString();
+                            function.Retorno = val.getValue();
                             ambit.setFunction(Id, function);
 
                             assignation_string += val.Texto_anterior;

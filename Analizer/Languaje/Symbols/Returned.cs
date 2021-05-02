@@ -68,7 +68,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Symbols
 
         public string getValue()
         {
-            //C3DController.Instance.freeTemp(this._value);
+            C3DController.Instance.freeTemp(this._value);
             return this._value;
         }
     }

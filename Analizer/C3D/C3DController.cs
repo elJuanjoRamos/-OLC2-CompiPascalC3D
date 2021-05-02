@@ -39,13 +39,15 @@ namespace CompiPascalC3D.Analizer.C3D
         private Stack micola;
         private int pos_global;
         private string string_global = "";
+        private int ambit_size = 0;
 
         private C3DController()
         {
             this.pos_global = 1;
             this.temporal_number = 15;
             this.code = this.code_function = new ArrayList();
-            this.tempStorage = this.tempNatives = new ArrayList();
+            this.tempStorage = new ArrayList();
+            this.tempNatives = new ArrayList();
             this.native_compare = this.native_str = false;
             this.micola = new Stack();
         }
@@ -97,9 +99,9 @@ namespace CompiPascalC3D.Analizer.C3D
         public  void add_temps(string temp)
         {
 
-            if (!this.tempStorage.Contains(temp))
+            if (!this.tempNatives.Contains(temp))
             {
-                this.tempStorage.Add(temp);
+                this.tempNatives.Add(temp);
             }
         }
 
@@ -107,6 +109,11 @@ namespace CompiPascalC3D.Analizer.C3D
 
         public void freeTemp(string temp)
         {
+
+            if (temp.Equals("T115"))
+            {
+                Console.WriteLine("");
+            }
             if (this.tempNatives.Contains(temp))
             {
                 this.tempNatives.Remove(temp);
@@ -123,67 +130,70 @@ namespace CompiPascalC3D.Analizer.C3D
             this.tempNatives.Clear();
         }
 
-        public void free_temps(string temp)
+
+        public int get_size()
         {
-            this.micola.Push(temp);
-        }  
-
-        public int save_Temps(Ambit ambit, int cant_tabs){
-
-            if(this.tempStorage.Count > 0){
+            return this.ambit_size;
+        }
+        public string save_Temps(Ambit ambit, int cant_tabs){
+            var string_save = "";
+            if(this.tempNatives.Count > 0){
 
                 var temp = this.newTemporal(); 
                 this.freeTemp(temp);
             
                 var size = 0;
 
-                this.save_comment("Inicia guardado de temporales", cant_tabs, false);
+                string_save+= this.save_comment("Inicia guardado de temporales", cant_tabs, false);
 
-                
-                this.addExpression(temp, "p", ambit.Size.ToString(), "+", cant_tabs);
 
-                foreach (var item in this.tempStorage)
+                string_save +=  this.addExpression(temp, "SP", ambit.Size.ToString(), "+", cant_tabs);
+
+                foreach (var item in this.tempNatives)
                 {
                     size++;
-                    this.set_stack(temp, item.ToString(), cant_tabs);
-                    if (size != this.tempStorage.Count)
+                    string_save += this.set_stack(temp, item.ToString(), cant_tabs);
+                    if (size != this.tempNatives.Count)
                     {
-                        this.addExpression(temp, temp, "1", "+", cant_tabs);
+                        string_save += this.addExpression(temp, temp, "1", "+", cant_tabs);
                     }
                         
                 }
-                this.save_comment("Fin guardado de temporales", cant_tabs, true);
+                string_save += this.save_comment("Fin guardado de temporales", cant_tabs, true);
             }
             var ptr = ambit.Size;
-            ambit.Size = ptr + this.tempStorage.Count;
-            return ptr;
+            ambit.Size = ptr + this.tempNatives.Count;
+            this.ambit_size = ptr;
+            return string_save;
         }
 
 
-        public void recoverTemps(Ambit ambit, int pos, int cant_tabs)
+        public string recoverTemps(Ambit ambit, int pos, int cant_tabs)
         {
-            if (this.tempStorage.Count > 0)
+            var strint_recover = "";
+            if (this.tempNatives.Count > 0)
             {
                 var temp = this.newTemporal(); 
                 this.freeTemp(temp);
                 var size = 0;
 
-                this.save_comment("Inicia recuperado de temporales", cant_tabs, false);
-                this.addExpression(temp, "p", pos.ToString(), "+", cant_tabs);
+                strint_recover += this.save_comment("Inicia recuperado de temporales", cant_tabs, false);
+                strint_recover += this.addExpression(temp, "SP", pos.ToString(), "+", cant_tabs);
 
                 foreach (string item in tempStorage)
                 {
                     size++;
-                    this.get_stack(item, temp, cant_tabs);
+                    strint_recover += this.get_stack(item, temp, cant_tabs);
                     if (size != this.tempStorage.Count)
                     {
-                        this.addExpression(temp, temp, "1", "+", cant_tabs);
+                        strint_recover += this.addExpression(temp, temp, "1", "+", cant_tabs);
                     }
                 }
-                
-                this.save_comment("Finaliza recuperado de temporales", cant_tabs, true);
+
+                strint_recover += this.save_comment("Finaliza recuperado de temporales", cant_tabs, true);
                 ambit.Size = pos;
             }
+            return strint_recover;
         }
 
 

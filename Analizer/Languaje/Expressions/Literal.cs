@@ -47,6 +47,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             var returned = new Returned();
             if (this.type == 1)
             {
+                generator.freeTemp(this.value.ToString());
                 returned = new Returned(this.value.ToString(), DataType.INTEGER, false, "","", literal_string,  this.value.ToString(),0,0);
             }
             else if (this.type == 2)
@@ -90,11 +91,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             }
             else if (this.type == 4)
             {
+                generator.freeTemp(this.value.ToString());
                 returned = new Returned(this.value.ToString(), DataType.REAL, false, "","", literal_string, this.value.ToString(),0,0);
             }
 
             else if (this.type == 7)
             {
+                generator.freeTemp(this.value.ToString());
                 returned = new Returned(this.value.ToString(), DataType.IDENTIFIER, false,"","", literal_string, this.value.ToString(),0,0);
             }
             return returned;
