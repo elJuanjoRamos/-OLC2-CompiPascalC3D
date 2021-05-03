@@ -150,11 +150,19 @@ namespace CompiPascalC3D.Analizer.Languaje.Ambits
         {
             Identifier identifier = new Identifier();
             Ambit amb = this;
+
+            if (amb.Variables.ContainsKey(id.ToLower()))
+            {
+                return amb.Variables[id.ToLower()];
+            }
+
+
             while (amb != null)
             {
                 if (amb.Variables.ContainsKey(id.ToLower()))
                 {
                     identifier = amb.Variables[id.ToLower()];
+                    identifier.IsGlobal = true;
                     break;
                 }
                 amb = amb.anterior;

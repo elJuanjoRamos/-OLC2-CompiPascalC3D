@@ -8,6 +8,7 @@ using CompiPascalC3D.Analizer.Languaje.Abstracts;
 using CompiPascalC3D.Analizer.AST;
 using CompiPascalC3D.Analizer.Languaje.Ambits;
 using CompiPascalC3D.Analizer.Controller;
+using CompiPascalC3D.Analizer.Languaje.Sentences;
 
 namespace CompiPascalC3D.Analizer.Syntactic
 {
@@ -116,18 +117,12 @@ namespace CompiPascalC3D.Analizer.Syntactic
             }
             main += C3D.C3DController.Instance.save_comment("Fin declaracion variables", 1, true);
 
-            var funcion_String = "";
-            foreach (var funcion in funciones)
+            foreach (Function funcion in funciones)
             {
-                var result = funcion.Execute(general);
-                if (result == null)
-                {
-                    continue;
-                }
-                funcion_String += result;
+                funcion.saveFunc(general);
             }
 
-
+           
             foreach (var item in instrucciones)
             {
                 try
@@ -146,6 +141,17 @@ namespace CompiPascalC3D.Analizer.Syntactic
                 }
             }
             main += C3D.C3DController.Instance.save_code("\n return 0;\n}", 0);
+
+            var funcion_String = "";
+            foreach (var funcion in funciones)
+            {
+                var result = funcion.Execute(general);
+                if (result == null)
+                {
+                    continue;
+                }
+                funcion_String += result;
+            }
 
 
             #region IMPRIMIR NATIVAS

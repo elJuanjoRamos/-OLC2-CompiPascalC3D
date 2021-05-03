@@ -13,6 +13,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         private string id;
         private LinkedList<Instruction> parametos;
         private LinkedList<Instruction> declaraciones;
+        private LinkedList<Instruction> variables_padres;
         private LinkedList<Instruction> funciones_hijas;
         private LinkedList<Instruction> sentences;
         private DataType tipe;
@@ -22,9 +23,10 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         private string uniqId;
         private string tipo;
         private bool isProcedure;
+        private bool esHija;
         public Function(string id, LinkedList<Instruction> parametos, LinkedList<Instruction> declas,
             LinkedList<Instruction> functs, string tipe, LinkedList<Instruction> sentences, bool isProcedure, 
-            string uniq_id, int row, int col)
+            string uniq_id, int row, int col, bool isChild)
         : base("Function")
         {
             this.retorno = "-";
@@ -38,20 +40,31 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             this.row = row;
             this.column = col;
             this.uniqId = uniq_id;
+            this.esHija = isChild;
             this.tipo = IsProcedure ? "Procedure" : "Function";
         }
-        public override object Execute(Ambit ambit)
-        {
 
+        public void saveFunc(Ambit ambit)
+        {
             if (ambit.Anterior != null)
             {
                 this.UniqId = ambit.Ambit_name + "_" + id;
             }
 
             ambit.saveFuncion(this.id, this);
+        }
+
+        public override object Execute(Ambit ambit)
+        {
+
+            
 
             var generator = C3D.C3DController.Instance;
-            generator.update_posision_global();
+
+            if (!this.isProcedure)
+            {
+                generator.update_posision_global();
+            }
 
             var funcion_total = generator.save_code("void " + uniqId + "(" + ") { \n", 0);
 
@@ -72,9 +85,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             Ambit ambit_func = new Ambit(ambit, this.uniqId, tipo, tempo_return, exit_label, !isProcedure, this.tipe, size);
 
 
-            foreach (var param in parametos)
+            foreach (Declaration dec in parametos)
             {
-                Declaration dec = (Declaration)param;
                 ambit_func.saveVarFunction(dec.Id, "0", "0", dec.Type, dec.isRefer, "Parameter", 0);
             }
 
@@ -92,9 +104,16 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             funcion_total += generator.save_comment("Fin Declaracion de variables", 1, false);
 
             //FUNCIONES HIJAS
-            var funcion_hija = "";
-            foreach (var fun_hija in funciones_hijas)
+            foreach (Function fun_hija in funciones_hijas)
             {
+                fun_hija.saveFunc(ambit_func);
+
+            }
+
+            var funcion_hija = "";
+            foreach (Function fun_hija in funciones_hijas)
+            {
+                fun_hija.Variables_padres = this.declaraciones;
                 var result = fun_hija.Execute(ambit_func);
                 if (result == null)
                 {
@@ -187,6 +206,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         public LinkedList<Instruction> Funciones_hijas { get => funciones_hijas; set => funciones_hijas = value; }
         public bool IsProcedure { get => isProcedure; set => isProcedure = value; }
         public DataType Tipe { get => tipe; set => tipe = value; }
-
+        public LinkedList<Instruction> Variables_padres { get => variables_padres; set => variables_padres = value; }
     }
 }

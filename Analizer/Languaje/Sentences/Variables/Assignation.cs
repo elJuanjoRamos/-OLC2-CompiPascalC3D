@@ -86,7 +86,17 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                                 }
                                 else
                                 {
-                                    assignation_string += generator.set_stack(variableAmbit.Position.ToString(), val.getValue(), tabs);
+                                    var tempAux = variableAmbit.Position_global.ToString();
+                                    if (variableAmbit.IsReference)
+                                    {
+                                        var temp = generator.newTemporal();
+                                        assignation_string += generator.get_stack(temp, variableAmbit.Position_global.ToString(), tabs);
+                                        generator.freeTemp(temp);
+                                        tempAux = temp;
+                                    }
+
+
+                                    assignation_string += generator.set_stack(tempAux, val.getValue(), tabs);
                                 }
                             }
                             else

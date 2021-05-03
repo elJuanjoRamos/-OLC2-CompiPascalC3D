@@ -32,6 +32,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
         }
 
 
+
         public override object Execute(Ambit ambit)
         {
             var call_String = "";
@@ -69,12 +70,12 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
             Ambit function_ambit = new Ambit(ambit, funcion_llamada.UniqId, tipo, "", "", !funcion_llamada.IsProcedure, funcion_llamada.Tipe, size);
 
 
-            //SE GUARDAN LOS PARAMETROS EN EL AMBITO
-            foreach (var param in funcion_llamada.Parametos)
+            ///SE GUARDAN LOS PARAMETROS EN EL AMBITO
+            /*foreach (var param in funcion_llamada.Parametos)
             {
                 Declaration dec = (Declaration)param;
                 function_ambit.saveVarFunction(dec.Id, "0", "0", dec.Type, dec.isRefer, "Parameter", 0);
-            }
+            }*/
 
             //SE ENVIAN LOS PARAMTETROS POR REFERENCIA Y VALOR
             for (int i = 0; i < parametros.Count; i++)

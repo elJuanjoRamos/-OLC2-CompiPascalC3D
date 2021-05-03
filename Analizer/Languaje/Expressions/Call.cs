@@ -58,20 +58,13 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             }
 
 
-            Ambit function_ambit = new Ambit();
-
-
             if (funcion_llamada.IsProcedure)
             {
                 set_error("El procedimiento'" + this.id + "' no puede asignarse como valor de retorno", row, column);
                 return new Returned();
 
             }
-            else
-            {
-                function_ambit = new Ambit(ambit, funcion_llamada.UniqId, "Function", ambit.Temp_return, ambit.Exit, ambit.IsFunction, ambit.Tipo_fun, ambit.Size);
-            }
-
+            
             //ETIQUETAS VERDADERAS Y FALSAS EN CASO DE QUE SEA BOOL
             if (funcion_llamada.Tipe == DataType.BOOLEAN)
             {
@@ -96,11 +89,11 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             
 
             //SE GUARDAN LOS PARAMETROS EN EL AMBITO
-            foreach (var param in funcion_llamada.Parametos)
+            /*foreach (var param in funcion_llamada.Parametos)
             {
                 Declaration dec = (Declaration)param;
                 function_ambit.saveVarFunction(dec.Id, "0", "0", dec.Type, dec.isRefer, "Parameter", 0);
-            }
+            }*/
 
             //SE ENVIAN LOS PARAMTETROS POR REFERENCIA Y VALOR
             for (int i = 0; i < parametros.Count; i++)
@@ -118,8 +111,8 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     {
                         result.Value = result.Pos_refer.ToString();
                     }
-                    function_ambit.setVariableFuncion(parametro.Id, result.Value,
-                        result.Valor_original, result.getDataType, parametro.isRefer, "Parameter", result.Pos_refer, false);
+                    /*function_ambit.setVariableFuncion(parametro.Id, result.Value,
+                        result.Valor_original, result.getDataType, parametro.isRefer, "Parameter", result.Pos_refer, false);*/
 
                     paramsValues.Add(result);
                 }
