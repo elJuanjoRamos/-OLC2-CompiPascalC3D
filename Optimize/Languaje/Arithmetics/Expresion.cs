@@ -67,8 +67,10 @@ namespace CompiPascalC3D.Optimize.Languaje.Arithmetics
 
             if (left.IsNumber && right.IsNumber)
             {
-                var res = Double.Parse(left.Value) + Double.Parse(right.Value);
-                controller.set_optimizacion("Regla 6", temp + "=" + iz + "+" + der, temp + "=" + res.ToString(), row, column, ambit_name);
+                
+                var res = get_expresion(left.Value, right.Value, simbol);
+
+                controller.set_optimizacion("Regla 6", temp + "=" + iz + simbol + der, temp + "=" + res.ToString(), row, column, ambit_name);
                 return new Expresion(temp, new Literal(res.ToString(), true, false, false), row, column); 
             }
 
@@ -217,6 +219,22 @@ namespace CompiPascalC3D.Optimize.Languaje.Arithmetics
             return cadena;
         }
 
+        public Double get_expresion(string left, string right, string simbol)
+        {
+            if (simbol.Equals("*"))
+            {
+                return Double.Parse(left) * Double.Parse(right);
+            }
+            else if (simbol.Equals("+"))
+            {
+                return Double.Parse(left) + Double.Parse(right);
+            }
+            else if (simbol.Equals("-"))
+            {
+                return Double.Parse(left) - Double.Parse(right);
+            }
+            return Double.Parse(left) / Double.Parse(right);
+        }
         public void set_ambit(string ambit)
         {
             this.ambit_name = ambit;
