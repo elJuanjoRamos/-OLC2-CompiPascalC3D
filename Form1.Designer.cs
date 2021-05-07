@@ -59,9 +59,9 @@
             // 
             // areaanalizar
             // 
-            this.areaanalizar.Location = new System.Drawing.Point(84, 86);
+            this.areaanalizar.Location = new System.Drawing.Point(90, 86);
             this.areaanalizar.Name = "areaanalizar";
-            this.areaanalizar.Size = new System.Drawing.Size(666, 693);
+            this.areaanalizar.Size = new System.Drawing.Size(660, 693);
             this.areaanalizar.TabIndex = 2;
             this.areaanalizar.Text = "";
             this.areaanalizar.SelectionChanged += new System.EventHandler(this.areaanalizar_SelectionChanged);
@@ -103,11 +103,13 @@
             // 
             this.linenumber.BackColor = System.Drawing.SystemColors.Menu;
             this.linenumber.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.linenumber.Cursor = System.Windows.Forms.Cursors.PanNE;
             this.linenumber.ForeColor = System.Drawing.Color.DarkBlue;
             this.linenumber.Location = new System.Drawing.Point(51, 86);
             this.linenumber.Name = "linenumber";
             this.linenumber.ReadOnly = true;
-            this.linenumber.Size = new System.Drawing.Size(34, 693);
+            this.linenumber.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.linenumber.Size = new System.Drawing.Size(33, 693);
             this.linenumber.TabIndex = 12;
             this.linenumber.Text = "";
             this.linenumber.MouseDown += new System.Windows.Forms.MouseEventHandler(this.linenumber_MouseDown);
@@ -228,10 +230,12 @@
             // 
             this.linenumber1.BackColor = System.Drawing.SystemColors.Menu;
             this.linenumber1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.linenumber1.Cursor = System.Windows.Forms.Cursors.PanNE;
             this.linenumber1.ForeColor = System.Drawing.Color.DarkBlue;
             this.linenumber1.Location = new System.Drawing.Point(51, 86);
             this.linenumber1.Name = "linenumber1";
             this.linenumber1.ReadOnly = true;
+            this.linenumber1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.linenumber1.Size = new System.Drawing.Size(34, 693);
             this.linenumber1.TabIndex = 22;
             this.linenumber1.Text = "";
@@ -263,9 +267,9 @@
             // 
             // areaOptimizar
             // 
-            this.areaOptimizar.Location = new System.Drawing.Point(84, 86);
+            this.areaOptimizar.Location = new System.Drawing.Point(91, 86);
             this.areaOptimizar.Name = "areaOptimizar";
-            this.areaOptimizar.Size = new System.Drawing.Size(666, 693);
+            this.areaOptimizar.Size = new System.Drawing.Size(659, 693);
             this.areaOptimizar.TabIndex = 19;
             this.areaOptimizar.Text = "";
             this.areaOptimizar.SelectionChanged += new System.EventHandler(this.areaOptimizar_SelectionChanged);

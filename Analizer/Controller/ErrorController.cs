@@ -65,49 +65,32 @@ class ErrorController
         {
             return this.semantycErrors;
         }
-        public string getLexicalError(string path_startup)
+        public string getLexicalError()
         {
-            //GraphController.Instance.printError(lexicalErrors, path_startup, "Lexico", "error_lexico");
             return getText(lexicalErrors, "Lexico");
         }
         public bool containLexicalError()
         {
-            if (lexicalErrors.Count > 0)
-            {
-                return true;
-            }
-            return false;
+            return (lexicalErrors.Count > 0);
         }
 
-        public string getSintactycError(string startup_path)
+        public string getSintactycError()
         {
-            //GraphController.Instance.printError(syntacticErrors, startup_path, "Sintactico", "error_sintactico");
             return getText(syntacticErrors, "Sintactico");
         }
 
         public bool containSyntacticError()
         {
-            if (syntacticErrors.Count > 0)
-            {
-                return true;
-            }
-            return false;
+            return (syntacticErrors.Count > 0);
         }
 
-
-
-        public string getSemantycError(string startup_path)
+        public string getSemantycError()
         {
-            //GraphController.Instance.printError(semantycErrors, startup_path, "Semantico", "error_semantico");
             return getText(semantycErrors, "Sintactico");
         }
         public bool containSemantycError()
         {
-            if (semantycErrors.Count > 0)
-            {
-                return true;
-            }
-            return false;
+            return (semantycErrors.Count > 0);
         }
 
 

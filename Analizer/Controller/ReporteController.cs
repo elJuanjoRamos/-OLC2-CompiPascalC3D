@@ -22,7 +22,6 @@ namespace CompiPascalC3D.Analizer.Controller
         Ambit general;
 
         string path = "";
-
         private readonly static ReporteController _instance = new ReporteController();
 
         private ReporteController()
@@ -38,9 +37,12 @@ namespace CompiPascalC3D.Analizer.Controller
             }
         }
 
+        public string Tipo_encabezado { get => tipo_encabezado; set => tipo_encabezado = value; }
+
+        string tipo_encabezado = "";
 
         //VARIABLES GLOBALES
-        private string head = "<!DOCTYPE html>\n" +
+        string head = "<!DOCTYPE html>\n" +
            "<html>\n" +
            "<head>\n" +
            "    <meta charset='utf-8'>\n" +
@@ -54,15 +56,11 @@ namespace CompiPascalC3D.Analizer.Controller
            "</head>" +
            "<body>\n" +
            "  <nav class=\"navbar navbar-light bg-light\">\n" +
-           "    <span class=\"navbar-brand mb-0 h1\">Lenguajes formales</span>\n" +
+           "    <span class=\"navbar-brand mb-0 h1\">Organizacion de Lenguajes y Compiladores 2</span>\n" +
            "  </nav>" + "<div class=\"container\">\n" +
             "    <div class=\"jumbotron jumbotron-fluid\">\n" +
-            "      <div class=\"container\">\n" +
-            "        <h1 class=\"display-4\"> Tabla de Simbolos</h1>\n" +
-            "        <p class=\"lead\">Listado de variables, funciones y procedimientos detectados por el analizador</p>\n" +
-            "      </div>\n" +
-            "    </div>\n";
-
+            "      <div class=\"container\">\n";
+            
         private string open_table =   
             "    <div class=\"row\">\n" +
             "    <table id=\"data\"  cellspacing=\"0\" style=\"width: 100 %\" class=\"table table-striped table-bordered table-sm\">\n" +
@@ -122,7 +120,13 @@ namespace CompiPascalC3D.Analizer.Controller
 
         public bool generate_report()
         {
-           
+            tipo_encabezado =
+            "        <h1 class=\"display-4\"> Tabla de Simbolos</h1>\n" +
+            "        <p class=\"lead\">Listado de variables, funciones y procedimientos detectados por el analizador</p>\n" +
+            "      </div>\n" +
+            "    </div>\n";
+
+
             string body1 = 
           "<th scope =\"col\">No</th>\n" +
             "          <th scope=\"col\">Nombre</th>\n" +
@@ -165,7 +169,7 @@ namespace CompiPascalC3D.Analizer.Controller
             
 
 
-            string html = head + open_table+ body1 + cadena + close_table +
+            string html = head + tipo_encabezado + open_table+ body1 + cadena + close_table +
             script +
             "</body>" +
             "</html>";
@@ -181,6 +185,12 @@ namespace CompiPascalC3D.Analizer.Controller
 
         public bool generate_error_retort()
         {
+            tipo_encabezado =
+            "        <h1 class=\"display-4\"> Listado de Errores</h1>\n" +
+            "        <p class=\"lead\">Listado de errores detectador por el analizador</p>\n" +
+            "      </div>\n" +
+            "    </div>\n";
+
             string table_head =
             "<th scope =\"col\">No</th>\n" +
               "          <th scope=\"col\">Error</th>\n" +
@@ -192,17 +202,28 @@ namespace CompiPascalC3D.Analizer.Controller
             "<tbody>";
 
 
-            ArrayList array_lexico = Controller.ErrorController.Instance.returnLexicalErrors();
-            string error_lexico = get_errors(array_lexico);
-            
+            var error_string = "";
 
-            ArrayList array_semant = Controller.ErrorController.Instance.returnSemanticErrors();
-            string error_seman = get_errors(array_semant); ;
 
-            ArrayList array_sint = Controller.ErrorController.Instance.returnSintacticErrors();
-            string error_sints = get_errors(array_sint); ;
+            if (Controller.ErrorController.Instance.containLexicalError())
+            {
+                ArrayList array_lexico = Controller.ErrorController.Instance.returnLexicalErrors();
+                error_string = get_errors(array_lexico, "Lexico");
+            }
+            else if (Controller.ErrorController.Instance.containSemantycError())
+            {
+                ArrayList array_semant = Controller.ErrorController.Instance.returnSemanticErrors();
+                error_string = get_errors(array_semant, "Semantico"); ;
+            } else
+            {
+                ArrayList array_sint = Controller.ErrorController.Instance.returnSintacticErrors();
+                error_string = get_errors(array_sint, "Sintactico"); ;
+            }
 
-            string html = head + open_table + table_head + array_lexico + close_table +
+
+
+
+            string html = head  + tipo_encabezado + open_table + table_head + error_string + close_table +
             script +
             "</body>" +
             "</html>";
@@ -212,7 +233,7 @@ namespace CompiPascalC3D.Analizer.Controller
 
         }
 
-        public string get_errors(ArrayList lista_error)
+        public string get_errors(ArrayList lista_error, string tipo)
         {
             var cadena = "";
 
@@ -222,7 +243,7 @@ namespace CompiPascalC3D.Analizer.Controller
             {
                 foreach (Error error in lista_error)
                 {
-                    cadena += "<tr><td>" + i + "</td><td>" + error.Message + "</td><td> Lexico </td><td>" + error.Row + "</td><td>" + error.Column + "</td></tr>";
+                    cadena += "<tr><td>" + i + "</td><td>" + error.Message + "</td><td> " + tipo +" </td><td>" + error.Row + "</td><td>" + error.Column + "</td></tr>";
                     i++;
                 }
             }
@@ -336,6 +357,14 @@ namespace CompiPascalC3D.Analizer.Controller
 
         public bool set_optimizacion_reporte()
         {
+
+            tipo_encabezado =
+            "        <h1 class=\"display-4\"> Listado de Optimizacion</h1>\n" +
+            "        <p class=\"lead\">Reglas de Optimizacion detectadas por el analizador</p>\n" +
+            "      </div>\n" +
+            "    </div>\n";
+
+
             string table_head =
             "<th scope =\"col\">No</th>\n" +
               "          <th scope=\"col\">Tipo Optimizacion</th>\n" +
@@ -362,7 +391,7 @@ namespace CompiPascalC3D.Analizer.Controller
                     i++;
                 }
             }
-            string html = head + open_table + table_head + cadena + close_table +
+            string html = head + tipo_encabezado + open_table + table_head + cadena + close_table +
             script +
             "</body>" +
             "</html>";

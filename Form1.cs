@@ -42,31 +42,31 @@ namespace CompiPascal
             C3DController.Instance.clearCode();
             ErrorController.Instance.Clean();
             s.analizer(areaanalizar.Text, Application.StartupPath);
+            this.errores.Enabled = this.tablasimbolos.Enabled = false;
 
-
+            consola.Text = "";
             if (ErrorController.Instance.containLexicalError())
             {
-                var texto = ErrorController.Instance.getLexicalError("");
-                consola.Text += texto;
-
+                consola.Text += ErrorController.Instance.getLexicalError();
+                this.errores.Enabled = true;
             }
             else if (ErrorController.Instance.containSemantycError())
             {
-                consola.Text += ErrorController.Instance.getSemantycError(""); 
+                consola.Text += ErrorController.Instance.getSemantycError();
+                this.errores.Enabled = true;
             }
             else if (ErrorController.Instance.containSyntacticError())
             {
-                consola.Text += ErrorController.Instance.getSintactycError("");
+                consola.Text += ErrorController.Instance.getSintactycError();
+                this.errores.Enabled = true;
             }
             else
             {
-                consola.Text = "";
                 consola.Text = "#include <stdio.h>\nfloat Heap[100000]; //estructura heap\nfloat Stack[100000]; //estructura stack\n\n";
                 consola.Text += "int SP = 0; //puntero Stack pointer\nint HP = 0; //puntero Heap pointer\n\n";
                 consola.Text += C3DController.Instance.getTemps();
                 consola.Text += C3DController.Instance.get_Genenal();
-                this.tablasimbolos.Enabled = this.errores.Enabled = true;
-
+                this.tablasimbolos.Enabled = true;
             }
 
         }
@@ -98,21 +98,20 @@ namespace CompiPascal
             consolaOptimizar.Text = "";
             if (ErrorController.Instance.containLexicalError())
             {
-                var texto = ErrorController.Instance.getLexicalError("");
-                consolaOptimizar.Text += texto;
-
+                consolaOptimizar.Text += ErrorController.Instance.getLexicalError();
             }
             else if (ErrorController.Instance.containSemantycError())
             {
-                consolaOptimizar.Text += ErrorController.Instance.getSemantycError("");
+                consolaOptimizar.Text += ErrorController.Instance.getSemantycError();
             }
             else if (ErrorController.Instance.containSyntacticError())
             {
-                consolaOptimizar.Text += ErrorController.Instance.getSintactycError("");
+                consolaOptimizar.Text += ErrorController.Instance.getSintactycError();
             } else
             {
                 this.optimo.Enabled = true;
                 this.graph.Enabled = true;
+                this.errores.Enabled = true;
                 consolaOptimizar.Text = s.get_texto();
             }
 
