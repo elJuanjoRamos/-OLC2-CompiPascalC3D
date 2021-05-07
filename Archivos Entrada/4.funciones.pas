@@ -12,6 +12,7 @@ begin
 end;
 
 function ackermann(m,n: integer): integer;
+var variable :integer = 0;
 begin
     if (m = 0) then
         begin
@@ -23,7 +24,8 @@ begin
         end
     else
         begin
-            ackermann := ackermann(m - 1, ackermann(m,n - 1));
+            x := ackermann(m,n - 1);
+            ackermann := ackermann(m - 1, x);
         end;
 end;
 
