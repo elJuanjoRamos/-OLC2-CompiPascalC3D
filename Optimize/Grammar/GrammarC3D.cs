@@ -13,7 +13,6 @@ namespace CompiPascalC3D.Optimize.Grammar
             #region Constantes
             CommentTerminal LINE_COMMENT = new CommentTerminal("LINE_COMMENT", "//", "\r", "\n", "\u2085", "\u2028", "\u2029");
             CommentTerminal MULTI_LINE_COMMENT = new CommentTerminal("MULTI_LINE_COMMENT", "/*", "*/");
-            CommentTerminal MULTI_LINE_COMMENT2 = new CommentTerminal("MULTI_LINE_COMMENT2", "(*", "*)");
 
             NonGrammarTerminals.Add(LINE_COMMENT);
             NonGrammarTerminals.Add(MULTI_LINE_COMMENT);
@@ -86,7 +85,9 @@ namespace CompiPascalC3D.Optimize.Grammar
             NonTerminal INSTRUCTIONS = new NonTerminal("INSTRUCTIONS");
 
             NonTerminal FUNCTION_LIST = new NonTerminal("FUNCTION_LIST", "FUNCTION_LIST");
+            
             NonTerminal TIPOFUNCTION = new NonTerminal("TIPOFUNCTION");
+            NonTerminal LISTA_TEMPORALES = new NonTerminal("LISTA_TEMPORALES", "LISTA_TEMPORALES");
 
             NonTerminal start = new NonTerminal("start");
 
@@ -133,6 +134,10 @@ namespace CompiPascalC3D.Optimize.Grammar
 
             #endregion
 
+            #region ENCABEZADO
+
+            #endregion
+
             #endregion
 
             RegisterOperators(1, Associativity.Left, PLUS, MIN);
@@ -148,9 +153,20 @@ namespace CompiPascalC3D.Optimize.Grammar
             init.Rule = start;
 
             start.Rule
-                = FUNCTION_LIST
+                = 
+                RESERV_INCLUDE + 
+                RESERV_FLOAT + RESERV_HEAP + COR_IZQ + NUMERO + COR_DER + PUNTO_COMA +
+                RESERV_FLOAT + RESERV_STACK + COR_IZQ + NUMERO + COR_DER + PUNTO_COMA +
+                RESERV_INT + IDENTIFIER + EQUALS + NUMERO + PUNTO_COMA +
+                RESERV_INT + IDENTIFIER + EQUALS + NUMERO + PUNTO_COMA +
+                RESERV_FLOAT + TEMPORAL +  LISTA_TEMPORALES + PUNTO_COMA +
+                FUNCTION_LIST
                 ;
 
+            LISTA_TEMPORALES.Rule
+                = COMA + TEMPORAL + LISTA_TEMPORALES
+                | Empty
+                ;
 
             FUNCTION_LIST.Rule
                = TIPOFUNCTION + IDENTIFIER + PAR_IZQ + PAR_DER + KEY_IZQ + INSTRUCTIONS + KEY_DER

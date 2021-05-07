@@ -109,11 +109,6 @@ namespace CompiPascalC3D.Analizer.C3D
 
         public void freeTemp(string temp)
         {
-
-            if (temp.Equals("T115"))
-            {
-                Console.WriteLine("");
-            }
             if (this.tempNatives.Contains(temp))
             {
                 this.tempNatives.Remove(temp);

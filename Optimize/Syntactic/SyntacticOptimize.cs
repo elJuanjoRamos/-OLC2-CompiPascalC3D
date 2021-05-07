@@ -52,15 +52,48 @@ namespace CompiPascalC3D.Optimize.Syntactic
             {
                 return;
             }
-            var funciones = root.ChildNodes[0].ChildNodes[0];
+
+            var start = root.ChildNodes[0];
+
+            var funciones = start.ChildNodes[27];
 
             LinkedList<Instruction> lista_funciones = new LinkedList<Instruction>();
             lista_funciones = (new FunctionOptimize()).FUNCTION_LIS(funciones, lista_funciones);
-
+            get_encabezado(start);
             get_code_to_optimize(lista_funciones);
 
         }
 
+
+        public void get_encabezado(ParseTreeNode actual)
+        {
+            texto_general += actual.ChildNodes[0].Token.Text + "\n";
+
+            for (int i = 1; i < 25; i++)
+            {
+                var result = actual.ChildNodes[i].Token.Text;
+
+                result += (actual.ChildNodes[i].Term.ToString().Contains("RESERV")) ? " " : "";
+
+                result += (result.Equals(";")) ? "\n" : "";
+
+                texto_general += result;
+            }
+
+            var lista_temp = actual.ChildNodes[25];
+            get_lista_temp(lista_temp);
+
+            texto_general += ";\n" + "\n";
+        }
+        public void get_lista_temp(ParseTreeNode actual)
+        {
+            if (actual.ChildNodes.Count > 0)
+            {
+                texto_general += actual.ChildNodes[0].Token.Text;
+                texto_general += actual.ChildNodes[1].Token.Text;
+                get_lista_temp(actual.ChildNodes[2]);
+            }
+        }
 
 
         public void get_code_to_optimize(LinkedList<Instruction> lista_actual)

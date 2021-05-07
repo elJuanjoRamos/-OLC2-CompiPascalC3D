@@ -20,23 +20,16 @@ namespace CompiPascal
         public Form1()
         {
             InitializeComponent();
+            linenumber.Font = areaanalizar.Font;
+            linenumber1.Font = areaOptimizar.Font;
+            areaanalizar.Select();
+            areaOptimizar.Select();
+            AddLineNumbers(areaanalizar, linenumber);
+            AddLineNumbers(areaOptimizar, linenumber1);
+
             this.optimo.Enabled = this.tablasimbolos.Enabled = this.graph.Enabled = this.errores.Enabled = false;
         }
 
-        private void contextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-            Console.WriteLine("Archivo Nuevo");
-        }
-
-        private void toolStripMenuItem2_Click(object sender, EventArgs e)
-        {
-            Console.WriteLine("Abrir Archivo");
-        }
-
-        private void toolStripMenuItem3_Click(object sender, EventArgs e)
-        {
-            Console.WriteLine("Guardar Archivo");
-        }
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -153,5 +146,128 @@ namespace CompiPascal
                 MessageBox.Show("Error al generar el reporte " + report);
             }
         }
+
+
+
+
+        public void AddLineNumbers(RichTextBox area, RichTextBox lineNumbers)
+        {
+            // create & set Point pt to (0,0)    
+            Point pt = new Point(0, 0);
+            // get First Index & First Line from richTextBox1    
+            int First_Index = area.GetCharIndexFromPosition(pt);
+            int First_Line = area.GetLineFromCharIndex(First_Index);
+            // set X & Y coordinates of Point pt to ClientRectangle Width & Height respectively    
+            pt.X = ClientRectangle.Width;
+            pt.Y = ClientRectangle.Height;
+            // get Last Index & Last Line from richTextBox1    
+            int Last_Index = area.GetCharIndexFromPosition(pt);
+            int Last_Line = area.GetLineFromCharIndex(Last_Index);
+            // set Center alignment to LineNumberTextBox    
+            lineNumbers.SelectionAlignment = HorizontalAlignment.Center;
+            // set LineNumberTextBox text to null & width to getWidth() function value    
+            lineNumbers.Text = "";
+            lineNumbers.Width = getWidth();
+            // now add each line number to LineNumberTextBox upto last line    
+            for (int i = First_Line; i <= Last_Line + 2; i++)
+            {
+                lineNumbers.Text += i + 1 + "\n";
+            }
+        }
+        #region ANALIZAR
+        private void areaanalizar_SelectionChanged(object sender, EventArgs e)
+        {
+            Point pt = areaanalizar.GetPositionFromCharIndex(areaanalizar.SelectionStart);
+            if (pt.X == 1)
+            {
+                AddLineNumbers(areaanalizar, linenumber);
+            }
+        }
+        private void areaanalizar_VScroll(object sender, EventArgs e)
+        {
+            linenumber.Text = "";
+            AddLineNumbers(areaanalizar, linenumber);
+            linenumber.Invalidate();
+        }
+        private void areaanalizar_TextChanged(object sender, EventArgs e)
+        {
+            if (areaanalizar.Text == "")
+            {
+                AddLineNumbers(areaanalizar, linenumber);
+            }
+        }
+
+        private void areaanalizar_FontChanged(object sender, EventArgs e)
+        {
+            linenumber.Font = areaanalizar.Font;
+            areaanalizar.Select();
+            AddLineNumbers(areaanalizar, linenumber);
+        }
+        private void linenumber_MouseDown(object sender, MouseEventArgs e)
+        {
+            linenumber.Select();
+            linenumber.DeselectAll();
+        }
+
+
+        #endregion
+
+        #region OPTIMIZAR
+        private void areaOptimizar_SelectionChanged(object sender, EventArgs e)
+        {
+            Point pt = areaOptimizar.GetPositionFromCharIndex(areaOptimizar.SelectionStart);
+            if (pt.X == 1)
+            {
+                AddLineNumbers(areaOptimizar, linenumber1);
+            }
+        }
+        private void areaOptimizar_VScroll(object sender, EventArgs e)
+        {
+            linenumber1.Text = "";
+            AddLineNumbers(areaOptimizar, linenumber1);
+            linenumber1.Invalidate();
+        }
+        private void areaOptimizar_TextChanged(object sender, EventArgs e)
+        {
+            if (areaOptimizar.Text == "")
+            {
+                AddLineNumbers(areaOptimizar, linenumber1);
+            }
+        }
+        private void areaOptimizar_FontChanged(object sender, EventArgs e)
+        {
+            linenumber1.Font = areaOptimizar.Font;
+            areaOptimizar.Select();
+            AddLineNumbers(areaOptimizar, linenumber1);
+        }
+        private void linenumber1_MouseDown(object sender, MouseEventArgs e)
+        {
+            linenumber1.Select();
+            linenumber1.DeselectAll();
+        }
+        #endregion
+
+        public int getWidth()
+        {
+            int w = 25;
+            // get total lines of richTextBox1    
+            int line = areaanalizar.Lines.Length;
+
+            if (line <= 99)
+            {
+                w = 20 + (int)areaanalizar.Font.Size;
+            }
+            else if (line <= 999)
+            {
+                w = 30 + (int)areaanalizar.Font.Size;
+            }
+            else
+            {
+                w = 50 + (int)areaanalizar.Font.Size;
+            }
+
+            return w;
+        }
+
     }
 }
