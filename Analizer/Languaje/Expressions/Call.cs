@@ -86,16 +86,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
             int size = generator.get_size();
 
 
-            
-
-            //SE GUARDAN LOS PARAMETROS EN EL AMBITO
-            /*foreach (var param in funcion_llamada.Parametos)
-            {
-                Declaration dec = (Declaration)param;
-                function_ambit.saveVarFunction(dec.Id, "0", "0", dec.Type, dec.isRefer, "Parameter", 0);
-            }*/
-
-            //SE ENVIAN LOS PARAMTETROS POR REFERENCIA Y VALOR
             for (int i = 0; i < parametros.Count; i++)
             {
 
@@ -111,9 +101,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
                     {
                         result.Value = result.Pos_refer.ToString();
                     }
-                    /*function_ambit.setVariableFuncion(parametro.Id, result.Value,
-                        result.Valor_original, result.getDataType, parametro.isRefer, "Parameter", result.Pos_refer, false);*/
-
                     paramsValues.Add(result);
                 }
                 else
@@ -159,161 +146,6 @@ namespace CompiPascalC3D.Analizer.Languaje.Expressions
 
 
             return new Returned("T14", funcion_llamada.Tipe, true, this.TrueLabel, this.FalseLabel, call_String, "", 0, 0);
-
-
-            /*var funcion_llamada = ambit.getFuncion(this.id);
-            if (funcion_llamada == null)
-            {
-                set_error("La funcion '" + this.id + "' no esta definido", row, column);
-                return new Returned();
-            }
-
-            if (funcion_llamada.Parametos.Count != parametros.Count)
-            {
-                set_error("La funcion '" + this.id + "' no recibe la misma cantidad de parametros", row, column);
-                return new Returned();
-
-            }
-
-
-
-            //GUARDAR LOS PARAMETROS EN LA TABLA DE SIMBOLOS
-
-            Ambit function_ambit = new Ambit();
-
-
-            if (funcion_llamada.IsProcedure)
-            {
-                set_error("El procedimiento'" + this.id + "' no puede asignarse como valor de retorno", row, column);
-                return new Returned();
-
-            }
-            else
-            {
-                function_ambit = new Ambit(ambit, funcion_llamada.UniqId, "Function", ambit.Temp_return, ambit.Exit, ambit.IsFunction, ambit.Tipo_fun, ambit.Size);
-            }
-
-            var generator = C3D.C3DController.Instance;
-
-
-            //ETIQUETAS VERDADERAS Y FALSAS EN CASO DE QUE SEA BOOL
-            if (funcion_llamada.Tipe == DataType.BOOLEAN)
-            {
-                if (this.TrueLabel == "")
-                {
-                    this.TrueLabel = generator.newLabel();
-                }
-                if (this.FalseLabel == "")
-                {
-                    this.FalseLabel = generator.newLabel();
-                }
-            }
-
-            var call_String = "";
-
-            var size = ambit.Size;
-
-
-            var paramsValues = new ArrayList();
-
-            for (int i = 0; i < parametros.Count; i++)
-            {
-                var variable = (Declaration)(funcion_llamada.getParameterAt(i));
-
-
-                var result = ((Expresion)parametros[i]).Execute(ambit);
-                call_String += result.Texto_anterior;
-
-                if (variable.Type == result.getDataType)
-                {
-                    if (variable.isRefer && !(parametros[i] is Literal))
-                    {
-                        result.Value = result.Pos_refer.ToString();
-                    }
-
-                    function_ambit.setVariableFuncion(variable.Id, result.Value,
-                        result.Valor_original, result.getDataType, variable.isRefer, "Parameter", result.Pos_refer, false);
-
-                    paramsValues.Add(result);
-                }
-                else
-                {
-                    set_error("El tipo " + result.getDataType + " no es asignable con " + variable.Type, row, column);
-                    return null;
-                }
-
-
-            }
-
-            call_String += generator.save_comment("Inicia Llamada: " + funcion_llamada.UniqId, cant_tabs, false);
-
-
-            //COPIA DE LOS TEMPORALES
-            call_String += generator.save_comment("Inicia Salvado Temporales: " + ambit.Ambit_name, cant_tabs, false);
-
-            var temp_save = generator.newTemporal();
-            var temp_index = generator.newTemporal();
-            for (int i = 0; i < ambit.Size; i++)
-            {
-                call_String += generator.addExpression(temp_index, "SP", i.ToString(), "+", cant_tabs);
-                call_String += generator.get_stack(temp_save, temp_index, cant_tabs);
-                call_String += generator.addExpression(temp_index, "SP", (ambit.Size + i).ToString(), "+", cant_tabs);
-                call_String += generator.set_stack(temp_index, temp_save, cant_tabs);
-            }
-            call_String += generator.save_comment("Fin Salvado Temporales: " + ambit.Ambit_name, cant_tabs, true);
-
-
-
-
-            //PASO DE PARAMETRO, CAMBIO SIMULADO
-            if (paramsValues.Count > 0)
-            {
-                call_String += generator.save_comment("Inicia:Parametros, Cambio de ambito", cant_tabs, false);
-
-                var temp = generator.newTemporal();
-                var index = (funcion_llamada.IsProcedure) ? ambit.Size * 2 : ambit.Size * 2 + 1;
-                call_String += generator.addExpression(temp, "SP", (index).ToString(), "+", cant_tabs);
-                int i = 0;
-                foreach (Returned item in paramsValues)
-                {
-                    i++;
-                    call_String += generator.set_stack(temp, item.Value, cant_tabs);
-                    if (i != paramsValues.Count)
-                    {
-                        call_String += generator.addExpression(temp, temp, "1", "+", cant_tabs);
-                    }
-                }
-                call_String += generator.save_comment("Fin:Parametros, Cambio de ambito", cant_tabs, false);
-            }
-            call_String += generator.next_Env(ambit.Size * 2, cant_tabs);
-            call_String += generator.save_code(funcion_llamada.UniqId + "();", cant_tabs);
-            call_String += generator.ant_Env(ambit.Size * 2, cant_tabs);
-
-            call_String += generator.get_stack("T14", "T13", cant_tabs);
-
-
-            //COPIA DE LOS TEMPORALES
-            call_String += generator.save_comment("Inicia Recuperado Temporales: " + ambit.Ambit_name, cant_tabs, false);
-
-            for (int i = ambit.Size * 2 - 1; i >= ambit.Size; i--)
-            {
-                call_String += generator.addExpression(temp_index, "SP", (i).ToString(), "+", cant_tabs);
-                call_String += generator.get_stack(temp_save, temp_index, cant_tabs);
-                call_String += generator.addExpression(temp_index, "SP", (i - ambit.Size).ToString(), "+", cant_tabs);
-                call_String += generator.set_stack(temp_index, temp_save, cant_tabs);
-            }
-
-            call_String += generator.save_comment("Fin Llamada: " + ambit.Ambit_name, cant_tabs, true);
-
-            if (funcion_llamada.Tipe == DataType.BOOLEAN)
-            {
-                call_String += generator.add_If("T14", "1", "==", this.TrueLabel, cant_tabs);
-                call_String += generator.add_Goto(this.FalseLabel, cant_tabs);
-
-            }
-
-            return new Returned("T14", funcion_llamada.Tipe, true, this.TrueLabel, this.FalseLabel, call_String, "", 0, 0);*/
-
         }
         public void set_error(string texto, int row, int column)
         {

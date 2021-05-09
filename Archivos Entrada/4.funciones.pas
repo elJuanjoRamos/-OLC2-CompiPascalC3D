@@ -12,7 +12,7 @@ begin
 end;
 
 function ackermann(m,n: integer): integer;
-var variable :integer = 0;
+var x :integer = 0;
 begin
     if (m = 0) then
         begin

@@ -81,7 +81,7 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
                 funcion_total += generator.addExpression(tempo_return, "SP", "0", "+", 1);
                 size = 1;
             }
-
+            //AMBITO DE LA FUNCION
             Ambit ambit_func = new Ambit(ambit, this.uniqId, tipo, tempo_return, exit_label, !isProcedure, this.tipe, size);
 
 
@@ -146,6 +146,9 @@ namespace CompiPascalC3D.Analizer.Languaje.Sentences
 
 
             ReporteController.Instance.save_ambit(ambit_func, ambit_func.Ambit_name);
+
+
+
 
             return funcion_hija + funcion_total;
         }
